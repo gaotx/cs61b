@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+       
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <link rel="stylesheet" href="/assets/css/resource.css">
+  <link rel="stylesheet" href="/assets/css/lab.css">
+  <link rel="stylesheet" href="/assets/css/project.css">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="resource">
+      <body style="font-family: Georgia,serif;">
+    <h1 id="title-main">Lab 6: Object-Oriented Programming and Inheritance</h1>
+
+    <p><i>Due at 11:59pm on 03/04/2015.</i></p>
+
+<h2>Starter Files</h2>
+
+<p>Download <a href="lab06.zip">lab06.zip</a>.
+Inside the archive, you will find starter files for the questions in this lab,
+  along with a copy of the <a href="ok">OK</a> autograder.</p>
+
+<h2>Submission</h2>
+
+<p>By the end of this lab, you should have submitted the lab with
+<code>python3 ok --submit</code>. You may submit more than once before the
+deadline; only the final submission will be graded.</p>
+
+
+<ul>
+  <li>To receive credit for this lab, you must complete Questions 2, 3, and 4  in
+  <a href="lab06.py">lab06.py</a> and submit through OK.</li>
+  <li>Questions 7, and 8 are <em>extra practice</em>. They can be found in the
+  <a href="lab06_extra.py">lab06_extra.py</a> file. It is recommended that you complete
+  these problems on your own time.</li>
+</ul>
+
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+  <li><a href="#object-oriented-programming">Object-Oriented Programming</a></li>
+  <ul>
+  <li><a href="#introduction">Introduction</a></li>
+  <ul>
+  <li><a href="#types-of-variables">Types of variables</a></li>
+</ul>
+
+  <li><a href="#q1">Question 1</a></li>
+  <li><a href="#q2">Question 2</a></li>
+  <li><a href="#q3">Question 3</a></li>
+  <li><a href="#property-decorator">Property Decorator</a></li>
+  <li><a href="#q4">Question 4</a></li>
+</ul>
+
+  <li><a href="#inheritance">Inheritance</a></li>
+  <ul>
+  <li><a href="#q5">Question 5</a></li>
+  <li><a href="#q6">Question 6</a></li>
+</ul>
+
+  <li><a href="#extra-questions">Extra Questions</a></li>
+  <ul>
+  <li><a href="#q7">Question 7</a></li>
+  <li><a href="#q8">Question 8</a></li>
+</ul>
+
+</ul>
+
+
+    
+
+
+<h2 id="object-oriented-programming">Object-Oriented Programming</h2>
+
+
+
+<h3 id="introduction">Introduction</h3>
+
+
+<p><strong>Object-oriented programming</strong> (OOP) is a style of programming that
+allows you to think of code in terms of "objects." Here's an example of
+a <code>Car</code> class:</p>
+
+<pre><code>class Car(object):
+    num_wheels = 4
+
+    def __init__(self, color):
+        self.wheels = Car.num_wheels
+        self.color = color
+
+    def drive(self):
+        if self.wheels &lt;= Car.num_wheels:
+            return self.color + ' car cannot drive!'
+        return self.color + ' car goes vroom!'
+
+    def pop_tire(self):
+        if self.wheels &gt; 0:
+            self.wheels -= 1</code></pre>
+
+<p>Here's some terminology:</p>
+
+<ul>
+  <li><strong>class</strong>: a blueprint for how to build a certain type of object.
+  The <code>Car</code> class (shown above) describes the behavior and data that
+  all <code>Car</code> objects have.</li>
+  <li><p><strong>instance</strong>: a particular occurrence of a class. In Python, we
+  create instances of a class like this:</p>
+
+<pre><code>&gt;&gt;&gt; my_car = Car('red')</code></pre>
+
+  <p><code>my_car</code> is an instance of the <code>Car</code> class.</p></li>
+  <li><p><strong>attribute</strong> or <strong>field</strong>: a variable that belongs to the class.
+  Think of an attribute as a quality of the object: cars have <em>wheels</em>
+  and <em>color</em>, so we have given our <code>Car</code> class <code>self.wheels</code> and
+  <code>self.color</code> attributes. We can access attributes using <strong>dot
+  notation</strong>:</p>
+
+<pre><code>&gt;&gt;&gt; my_car.color
+'red'
+&gt;&gt;&gt; my_car.wheels
+4</code></pre></li>
+  <li><p><strong>method</strong>: Methods are just like normal functions, except that they
+  are tied to an instance or a class. Think of a method as a "verb" of
+  the class: cars can <em>drive</em> and also <em>pop their tires</em>, so we have
+  given our <code>Car</code> class the methods <code>drive</code> and <code>pop_tire</code>. We call
+  methods using <strong>dot notation</strong>:</p>
+
+<pre><code>&gt;&gt;&gt; my_car = Car('red')
+&gt;&gt;&gt; my_car.drive()
+'red car goes vroom!'</code></pre></li>
+  <li><p><strong>constructor</strong>: As with data abstraction, constructors describe how
+  to build an instance of the class. Most classes have a constructor.
+  In Python, the constructor of the class defined as <code>__init__</code>.  For
+  example, here is the <code>Car</code> class's constructor:</p>
+
+<pre><code>def __init__(self, color):
+    self.wheels = Car.num_wheels
+    self.color = color</code></pre>
+
+  <p>The constructor takes in one argument, <code>color</code>. As you can see, the
+  constructor also creates the <code>self.wheels</code> and <code>self.color</code> attributes.</p></li>
+  <li><p><code>self</code>: in Python, <code>self</code> is the first parameter for many methods
+  (in this class, we will only use methods whose first parameter is
+  <code>self</code>). When a method is called, <code>self</code> is bound to an instance of
+  the class. For example:</p>
+
+<pre><code>&gt;&gt;&gt; my_car = Car('red')
+&gt;&gt;&gt; car.drive()</code></pre>
+
+  <p>Notice that the <code>drive</code> method takes in <code>self</code> as an argument, but it
+  looks like we didn't pass one in! This is because the dot notation
+  <em>implicitly</em> passes in <code>car</code> as <code>self</code> for us.</p></li>
+</ul>
+
+
+<h4 id="types-of-variables">Types of variables</h4>
+
+
+<p>When dealing with OOP, there are three types of variables you should be
+aware of:</p>
+
+<ul>
+  <li><strong>local variable</strong>: These are just like the variables you see in
+  normal functions — once the function or method is done being called,
+  this variable is no longer able to be accessed. For example, the
+  <code>color</code> variable in the <code>__init__</code> method is a local variable (not
+  the <code>self.color</code> variable).</li>
+  <li><p><strong>instance attribute</strong>: Unlike local variables, instance attributes
+  will still be accessible after method calls have finished. Each
+  instance of a class keeps its own version of the instance attribute
+  — for example, we might have two <code>Car</code> objects, where one's
+  <code>self.color</code> is red, and the other's <code>self.color</code> is blue.</p>
+
+<pre><code>&gt;&gt;&gt; car1 = Car('red')
+&gt;&gt;&gt; car2 = Car('blue')
+&gt;&gt;&gt; car1.color
+'red'
+&gt;&gt;&gt; car2.color
+'blue'
+&gt;&gt;&gt; car1.color = 'yellow'
+&gt;&gt;&gt; car1.color
+'yellow'
+&gt;&gt;&gt; car2.color
+'blue'</code></pre></li>
+  <li><p><strong>class attribute</strong>: As with instance attributes, class attributes
+  also persist across method calls. However, unlike instance
+  attributes, all instances of a class will share the same class
+  attributes. For example, <code>num_wheels</code> is a class attribute of the
+  <code>Car</code> class.</p>
+
+<pre><code>&gt;&gt;&gt; car1 = Car('red')
+&gt;&gt;&gt; car2 = Car('blue')
+&gt;&gt;&gt; car1.num_wheels
+4
+&gt;&gt;&gt; car2.num_wheels
+4
+&gt;&gt;&gt; Car.num_wheels = 2
+&gt;&gt;&gt; car1.num_wheels
+2
+&gt;&gt;&gt; car2.num_wheels
+2</code></pre>
+
+  <p>Notice that we can access class attributes by saying <code>&lt;class
+  name&gt;.&lt;attribute&gt;</code>, such as <code>Car.num_wheels</code>, or by saying
+  <code>&lt;instance&gt;.&lt;attribute&gt;</code>, such as <code>car1.num_wheels</code>.</p></li>
+</ul>
+
+<h3 class="question" id="q1">Question 1</h3>
+
+<p>Predict the result of evaluating the following calls in the
+interpreter. Then try them out yourself!</p>
+
+
+    <pre><code>&gt;&gt;&gt; class Account(object):
+...     interest = 0.02
+...     def __init__(self, account_holder):
+...         self.balance = 0
+...         self.holder = account_holder
+...     def deposit(self, amount):
+...         self.balance = self.balance + amount
+...         print("Yes!")
+...
+&gt;&gt;&gt; a = Account("Billy")
+&gt;&gt;&gt; a.account_holder
+<div class="alt 6">______</div><div class="solution 6">AttributeError: 'Account' object has no attribute 'account_holder'</div>
+&gt;&gt;&gt; a.holder
+<div class="alt 6">______</div><div class="solution 6">'Billy'</div>
+&gt;&gt;&gt; Account.holder
+<div class="alt 6">______</div><div class="solution 6">AttributeError: type object 'Account' has no attribute 'holder'</div>
+&gt;&gt;&gt; Account.interest
+<div class="alt 6">______</div><div class="solution 6">0.02</div>
+&gt;&gt;&gt; a.interest
+<div class="alt 6">______</div><div class="solution 6">0.02</div>
+&gt;&gt;&gt; Account.interest = 0.03
+&gt;&gt;&gt; a.interest
+<div class="alt 6">______</div><div class="solution 6">0.03</div>
+&gt;&gt;&gt; a.deposit(1000)
+<div class="alt 6">______</div><div class="solution 6">Yes!</div>
+&gt;&gt;&gt; a.balance
+<div class="alt 6">______</div><div class="solution 6">1000</div>
+&gt;&gt;&gt; a.interest = 9001
+&gt;&gt;&gt; Account.interest
+<div class="alt 6">______</div><div class="solution 6">0.03</div></code></pre>
+
+    <button id="6" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<h3 class="question" id="q2">Question 2</h3>
+
+<p>Modify the following <code>Person</code> class to add a <code>repeat</code> method, which
+repeats the last thing said. See the doctests for an example of its
+use.</p>
+
+<blockquote><p><em>Hint</em>: you will have to modify other methods as well, not just the
+<code>repeat</code> method.</p></blockquote>
+
+
+    <button id="0" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>class Person(object):
+    """Person class.
+
+    &gt;&gt;&gt; steven = Person("Steven")
+    &gt;&gt;&gt; steven.repeat()       # starts at whatever value you'd like
+    'I squirreled it away before it could catch on fire.'
+    &gt;&gt;&gt; steven.say("Hello")
+    'Hello'
+    &gt;&gt;&gt; steven.repeat()
+    'Hello'
+    &gt;&gt;&gt; steven.greet()
+    'Hello, my name is Steven'
+    &gt;&gt;&gt; steven.repeat()
+    'Hello, my name is Steven'
+    &gt;&gt;&gt; steven.ask("preserve abstraction barriers")
+    'Would you please preserve abstraction barriers'
+    &gt;&gt;&gt; steven.repeat()
+    'Would you please preserve abstraction barriers'
+    """
+    def __init__(self, name):
+        self.name = name
+<div class="alt 0">        "*** YOUR CODE HERE ***"
+</div><div class="solution 0">        self.previous = "I squirreled it away before it could catch on fire."</div>
+    def say(self, stuff):
+<div class="alt 0">        "*** YOUR CODE HERE ***"
+</div><div class="solution 0">        self.previous = stuff</div>        return stuff
+
+    def ask(self, stuff):
+        return self.say("Would you please " + stuff)
+
+    def greet(self):
+        return self.say("Hello, my name is " + self.name)
+
+    def repeat(self):
+<div class="alt 0">        "*** YOUR CODE HERE ***"
+</div><div class="solution 0">        return self.say(self.previous)</div></code></pre>
+
+
+
+<h3 class="question" id="q3">Question 3</h3>
+
+<p>Modify the <code>Account</code> class from lecture so that it has a new attribute,
+<code>transactions</code>, that is a list keeping track of any transactions
+performed. See the doctest for an example.</p>
+
+
+    <button id="1" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>class Account(object):
+    """A bank account that allows deposits and withdrawals.
+
+    &gt;&gt;&gt; eric_account = Account('Eric')
+    &gt;&gt;&gt; eric_account.deposit(1000000)   # depositing my paycheck for the week
+    1000000
+    &gt;&gt;&gt; eric_account.transactions
+    [('deposit', 1000000)]
+    &gt;&gt;&gt; eric_account.withdraw(100)      # buying dinner
+    999900
+    &gt;&gt;&gt; eric_account.transactions
+    [('deposit', 1000000), ('withdraw', 100)]
+    """
+
+    interest = 0.02
+
+    def __init__(self, account_holder):
+        self.balance = 0
+        self.holder = account_holder
+<div class="alt 1">        "*** YOUR CODE HERE ***"
+</div><div class="solution 1">        self.transactions = []</div>
+    def deposit(self, amount):
+        """Increase the account balance by amount and return the
+        new balance.
+        """
+<div class="alt 1">        "*** YOUR CODE HERE ***"
+</div><div class="solution 1">        self.transactions.append(('deposit', amount))</div>        self.balance = self.balance + amount
+        return self.balance
+
+    def withdraw(self, amount):
+        """Decrease the account balance by amount and return the
+        new balance.
+        """
+<div class="alt 1">        "*** YOUR CODE HERE ***"
+</div><div class="solution 1">        self.transactions.append(('withdraw', amount))</div>        if amount &gt; self.balance:
+            return 'Insufficient funds'
+        self.balance = self.balance - amount
+        return self.balance</code></pre>
+
+
+
+
+<h3 id="property-decorator">Property Decorator</h3>
+
+
+<p>Sometimes we need to run a calculation to determine the value for an instance
+attribute every time we look it up.  We can make a zero argument method behave
+like an instance attribute by using the property decorator:</p>
+
+<pre><code>class Purse():
+    """
+    A purse class with a bursting property method.
+
+    &gt;&gt;&gt; coin_purse = Purse(101)
+    &gt;&gt;&gt; coin_purse.bursting    # Look Mom! No Parentheses!
+    True
+    &gt;&gt;&gt; coin_purse.coins -= 10 # Paying taxes
+    &gt;&gt;&gt; coin_purse.bursting    # Not bursting anymore
+    False
+    """
+    def __init__(self, coins):
+        self.coins = coins
+
+    @property
+    def bursting(self):
+        return self.coins &gt; 100</code></pre>
+
+<p>The property method allows us to call a method that has no arguments without adding parentheses.</p>
+
+<h3 class="question" id="q4">Question 4</h3>
+
+<p>Implement the class <code>BadBankAccount</code>, which is a subclass of <code>Account</code>.
+<code>BadBankAccount</code> allows the account holder to withdraw more money than they
+have (i.e. overdraw). Once overdrawn, <code>BadBankAccount</code> prevents the account
+holder from withdrawing money again until the account has a positive balance.
+You should also implement the property method <code>overdrawn</code>, which returns
+a boolean that tells whether or not an account is currently locked due to being
+overdrawn.</p>
+
+
+    <button id="2" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>class BadBankAccount(Account):
+    """ A subclass of bank account that allows an account holder to overdraw
+    once, and then prevents them from withdrawing more money. You should also
+    implement the property method overdrawn, which allows an account holder to
+    check if they are overdrawn.
+
+    &gt;&gt;&gt; harold_account = BadBankAccount('Harold')
+    &gt;&gt;&gt; harold_account.deposit(100)   # depositing my paycheck for the week
+    100
+    &gt;&gt;&gt; harold_account.withdraw(101)  # buying dinner
+    -1
+    &gt;&gt;&gt; harold_account.overdrawn
+    True
+    &gt;&gt;&gt; harold_account.withdraw(100000)
+    You have overdrawn, please add more money!
+    -1
+    &gt;&gt;&gt; harold_account.deposit(10)
+    9
+    &gt;&gt;&gt; harold_account.overdrawn
+    False
+    """
+
+    def withdraw(self, amount):
+        """Decrease the account balance by amount and return the
+        new balance.
+        """
+<div class="alt 2">        "*** YOUR CODE HERE ***"
+</div><div class="solution 2">        if self.overdrawn:
+            print('You have overdrawn, please add more money!')
+            return self.balance</div>        self.balance = self.balance - amount
+        return self.balance
+
+<div class="alt 2">    "*** YOUR CODE HERE ***"
+</div><div class="solution 2">    @property
+    def overdrawn(self):
+        return self.balance &lt; 0</div></code></pre>
+
+
+
+
+<h2 id="inheritance">Inheritance</h2>
+
+
+<h3 class="question" id="q5">Question 5</h3>
+
+<p>Predict the result of evaluating the following calls in the
+interpreter. Then try them out yourself!</p>
+
+
+    <pre><code>&gt;&gt;&gt; class Account(object):
+...     interest = 0.02
+...     def __init__(self, account_holder):
+...         self.balance = 0
+...         self.holder = account_holder
+...     def deposit(self, amount):
+...         self.balance = self.balance + amount
+...         print("Yes!")
+...
+&gt;&gt;&gt; class CheckingAccount(Account):
+...     def __init__(self, account_holder):
+...         Account.__init__(self, account_holder)
+...     def deposit(self, amount):
+...         Account.deposit(self, amount)
+...         print("Have a nice day!")
+...
+&gt;&gt;&gt; a = Account("Billy")
+&gt;&gt;&gt; a.balance
+<div class="alt 7">______</div><div class="solution 7">0</div>
+&gt;&gt;&gt; c = CheckingAccount("Eric")
+&gt;&gt;&gt; c.balance
+<div class="alt 7">______</div><div class="solution 7">0</div>
+&gt;&gt;&gt; a.deposit(30)
+<div class="alt 7">______</div><div class="solution 7">Yes!</div>
+&gt;&gt;&gt; c.deposit(30)
+<div class="alt 7">______</div><div class="solution 7">Yes!
+Have a nice day!</div>
+&gt;&gt;&gt; c.interest
+<div class="alt 7">______</div><div class="solution 7">0.02</div></code></pre>
+
+    <button id="7" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<h3 class="question" id="q6">Question 6</h3>
+
+<p>Suppose now that we wanted to define a class called <code>DoubleTalker</code> to
+represent people who always say things twice:</p>
+
+<pre><code>&gt;&gt;&gt; steven = DoubleTalker("Steven")
+&gt;&gt;&gt; steven.say("hello")
+"hello hello"
+&gt;&gt;&gt; steven.say("the sky is falling")
+"the sky is falling the sky is falling"</code></pre>
+
+<p>Consider the following three definitions for <code>DoubleTalker</code> that
+inherit from the <code>Person</code> class:</p>
+
+<pre><code>class DoubleTalker(Person):
+    def __init__(self, name):
+        Person.__init__(self, name)
+    def say(self, stuff):
+        return Person.say(self, stuff) + " " + self.repeat()
+
+class DoubleTalker(Person):
+    def __init__(self, name):
+        Person.__init__(self, name)
+    def say(self, stuff):
+        return stuff + " " + stuff
+
+class DoubleTalker(Person):
+    def __init__(self, name):
+        Person.__init__(self, name)
+    def say(self, stuff):
+        return Person.say(self, stuff + " " + stuff)</code></pre>
+
+<p>Determine which of these definitions work as intended. Also determine
+for which of the methods the three versions would respond differently.
+(Don't forget about the <code>repeat</code> method!)</p>
+
+
+    <button id="3" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    <div class="solution 3">
+
+<p>The last one works as intended.  For the first and second ones,
+calling <code>repeat</code> would fail.</p>
+
+</div>
+
+
+<h2 id="extra-questions">Extra Questions</h2>
+
+
+<p>The following questions are for <strong>extra practice</strong> — they can be found in the
+the <a href="lab06_extra.py">lab06_extra.py</a> file. It is recommended that you complete
+these problems as well, but you do not need to turn them in for credit.</p>
+
+<h3 class="question" id="q7">Question 7</h3>
+
+<p>We'd like to be able to cash checks, so let's add a <code>deposit_check</code>
+method to our <code>CheckingAccount</code> class. It will take a <code>Check</code> object
+as an argument, and check to see if the <code>payable_to</code> attribute matches
+the <code>CheckingAccount</code>'s holder. If so, it marks the <code>Check</code> as
+deposited, and adds the amount specified to the <code>CheckingAccount</code>'s
+total.</p>
+
+<p>Write an appropriate <code>Check</code> class, and add the <code>deposit_check</code> method
+to the <code>CheckingAccount</code> class. Make sure not to copy and paste code!
+Use inheritance whenever possible.</p>
+
+<p>See the doctests for examples of how this code should work.</p>
+
+
+    <button id="4" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>class CheckingAccount(Account):
+    """A bank account that charges for withdrawals.
+
+    &gt;&gt;&gt; check = Check("Steven", 42)  # 42 dollars, payable to Steven
+    &gt;&gt;&gt; steven_account = CheckingAccount("Steven")
+    &gt;&gt;&gt; eric_account = CheckingAccount("Eric")
+    &gt;&gt;&gt; eric_account.deposit_check(check)  # trying to steal steven's money
+    The police have been notified.
+    &gt;&gt;&gt; eric_account.balance
+    0
+    &gt;&gt;&gt; check.deposited
+    False
+    &gt;&gt;&gt; steven_account.balance
+    0
+    &gt;&gt;&gt; steven_account.deposit_check(check)
+    42
+    &gt;&gt;&gt; check.deposited
+    True
+    &gt;&gt;&gt; steven_account.deposit_check(check)  # can't cash check twice
+    The police have been notified.
+    """
+    withdraw_fee = 1
+    interest = 0.01
+
+    def withdraw(self, amount):
+        return Account.withdraw(self, amount + self.withdraw_fee)
+
+<div class="solution 4">    def deposit_check(self, check):
+        if check.payable_to != self.holder or check.deposited:
+            print("The police have been notified.")
+        else:
+            self.deposit(check.amount)
+            check.deposited = True
+            return self.balance</div>
+class Check(object):
+<div class="alt 4">    "*** YOUR CODE HERE ***"
+</div><div class="solution 4">    def __init__(self, payable_to, amount):
+        self.payable_to = payable_to
+        self.amount = amount
+        self.deposited = False</div></code></pre>
+
+
+
+<h3 class="question" id="q8">Question 8</h3>
+
+<p>We'd like to create a <code>Keyboard</code> class that takes in an arbitrary
+number of <code>Button</code>s and stores these <code>Button</code>s in a dictionary. The
+keys in the dictionary will be ints that represent the postition on the
+<code>Keyboard</code>, and the values will be the respective <code>Button</code>. Fill out
+the methods in the <code>Keyboard</code> class according to each description,
+using the doctests as a reference for the behavior of a <code>Keyboard</code>.</p>
+
+
+    <button id="5" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>class Keyboard:
+    """A Keyboard takes in an arbitrary amount of buttons, and has a
+    dictionary of positions as keys, and values as Buttons.
+
+    &gt;&gt;&gt; b1 = Button(0, "H")
+    &gt;&gt;&gt; b2 = Button(1, "I")
+    &gt;&gt;&gt; k = Keyboard(b1, b2)
+    &gt;&gt;&gt; k.buttons[0].key
+    'H'
+    &gt;&gt;&gt; k.press(1)
+    'I'
+    &gt;&gt;&gt; k.typing([0, 1])
+    'HI'
+    &gt;&gt;&gt; k.typing([1, 0])
+    'IH'
+    &gt;&gt;&gt; b1.pressed
+    2
+    &gt;&gt;&gt; b2.pressed
+    3
+    """
+
+    def __init__(self, *args):
+<div class="alt 5">        "*** YOUR CODE HERE ***"
+</div><div class="solution 5">        self.buttons = {}
+        for button in args:
+            self.buttons[button.pos] = button</div>
+    def press(self, info):
+        """Takes in a position of the button pressed, and
+        returns that button's output"""
+<div class="alt 5">        "*** YOUR CODE HERE ***"
+</div><div class="solution 5">        if info in self.buttons.keys():
+            b = self.buttons[info]
+            b.pressed += 1
+            return b.key
+        return ''</div>
+    def typing(self, typing_input):
+        """Takes in a list of positions of buttons pressed, and
+        returns the total output"""
+<div class="alt 5">        "*** YOUR CODE HERE ***"
+</div><div class="solution 5">        accumulate = ''
+        for pos in typing_input:
+            accumulate+=self.press(pos)
+        return accumulate</div>
+class Button:
+    def __init__(self, pos, key):
+        self.pos = pos
+        self.key = key
+        self.pressed = 0</code></pre>
+
+
+
+
+  
+
+  <script src="//code.jquery.com/jquery-latest.js"></script>
+<script>
+  $(function() {
+    if (new Date("03/05/2015") < new Date()) {
+      $('.toggleButton').css('display', 'inline-block');
+      $('.toggleButton').click(function() {
+        var solution_id = $(this).attr('id');
+        $('div.' + solution_id).slideToggle(600);
+      });
+    }
+    // Always display these toggle buttons
+    $('.toggleButtonShow').click(function() {
+      var solution_id = $(this).attr('id');
+      $('div.' + solution_id).slideToggle(600);
+    });
+  });
+</script>
+
+</body>
+    </div>
+
+    <div id="disqus_thread"></div>
+                    <script type="text/javascript">
+                        /* * * CONFIGURATION VARIABLES * * */
+                        var disqus_shortname = 'gaotx';
+                        
+                        /* * * DON'T EDIT BELOW THIS LINE * * */
+                        (function() {
+                            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                        })();   
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  </body>
+</html>

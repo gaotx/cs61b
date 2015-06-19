@@ -1,0 +1,511 @@
+---
+layout: resource
+title: Lab 1
+---
+
+<div style="font-family: Georgia,serif;">
+    <h1 id="title-main">Lab 1: Setting up a productive workflow</h1>
+
+    
+
+<h2>Starter Files</h2>
+
+<p>Download <a href="{{ site.baseurl }}/lab/lab01/lab01.zip">lab01.zip</a>.
+Inside the archive, you will find starter files for the questions in this lab,
+  along with a copy of the <a href="{{ site.baseurl }}/lab/ok">OK</a> autograder.</p>
+
+<h2>Submission</h2>
+
+<p>By the end of this lab, you should have submitted the lab with
+<code>python3 ok --submit</code>. You may submit more than once before the
+deadline; only the final submission will be graded.</p>
+
+
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#getting-started">Getting Started</a></li>
+  <ul>
+  <li><a href="#opening-a-terminal">Opening a terminal</a></li>
+  <li><a href="#logging-into-your-class-account">Logging into your class account</a></li>
+  <li><a href="#registering-your-account">Registering your account</a></li>
+  <li><a href="#changing-your-password">Changing your password</a></li>
+  <li><a href="#logging-out">Logging out</a></li>
+</ul>
+
+  <li><a href="#installing-python">Installing Python</a></li>
+  <li><a href="#organizing-your-files">Organizing your files</a></li>
+  <ul>
+  <li><a href="#directories">Directories</a></li>
+  <li><a href="#making-new-directories">Making New Directories</a></li>
+  <li><a href="#moving-to-other-directories">Moving to other directories</a></li>
+  <li><a href="#downloading-the-assignment">Downloading the assignment</a></li>
+  <li><a href="#moving-files">Moving files</a></li>
+</ul>
+
+  <li><a href="#installing-a-text-editor">Installing a text editor</a></li>
+  <li><a href="#a-first-look-at-lab01-py">A first look at <code>lab01.py</code></a></li>
+  <li><a href="#running-doctests">Running doctests</a></li>
+</ul>
+
+
+    
+
+
+<h2 id="introduction">Introduction</h2>
+
+
+<p><a href="../lab00/" title="Lab 0">Lab 0</a> walked you through how to use the school computers for CS
+61A. This lab explains how to use your own computer to complete
+assignments!</p>
+
+
+<h2 id="getting-started">Getting Started</h2>
+
+
+
+<h3 id="opening-a-terminal">Opening a terminal</h3>
+
+
+<p>The terminal is a program that allows you to interact with your computer
+by entering commands. No matter what operating system you use (Windows,
+MacOS, Linux), the terminal will be an essential tool for CS 61A.</p>
+
+<blockquote class="help-mac">
+
+<p>If you're on a Mac or are using a form of Linux (such as Ubuntu), you already
+have a program called <code>Terminal</code> on your computer.  Open that up and you should
+be good to go.</p>
+
+</blockquote>
+
+<blockquote class="help-windows">
+
+<p>For Windows users, we recommend downloading a terminal called <a href="http://git-scm.com/downloads">GitBash</a>.</p>
+
+</blockquote>
+
+
+<h3 id="logging-into-your-class-account">Logging into your class account</h3>
+
+
+<p>At the start of your first lab section, you should have received a
+class account form. At the top left of the form should be your
+<strong>username</strong> and your temporary <strong>password</strong>:</p>
+
+<pre><code>Login: cs61a-aaa
+Password: ...</code></pre>
+
+<p>Most of the work in this class can be done without logging into your
+account.  However, you will periodically login to your class account to
+check your grades.</p>
+
+<p>Let's login in now. Open up your terminal and type in the following
+command:</p>
+
+<pre><code>ssh cs61a-??@cory.eecs.berkeley.edu</code></pre>
+
+<p>where <code>??</code> is replaced with your two (or three) letter login.</p>
+
+<blockquote><p>If you're interested, here's an explanation of what the command does:</p>
+
+<ol>
+  <li><code>ssh</code> is a <strong>s</strong>ecure <strong>sh</strong>ell (i.e. terminal) that connects to remote
+  servers</li>
+  <li><code>cs61a-??</code> is the username on the remote server</li>
+  <li><code>cory.eecs.berkeley.edu</code> is the name of the remote server. Again, here is a
+  list of <a href="http://inst.eecs.berkeley.edu/cgi-bin/clients.cgi?choice=13&amp;string=">servers</a> that belong to Berkeley's CS department</li>
+</ol></blockquote>
+
+<p>You can also watch this <a href="http://www.youtube.com/watch?v=irwlU7esODA">video</a> for help.</p>
+
+<p>Once you press enter, the following message will appear:</p>
+
+<pre><code>The authenticity of host 'cory.eecs.berkeley.edu' can't be established.
+RSA key fingerprint is ...
+Are you sure you want to continue connecting (yes/no)?</code></pre>
+
+<p>Type in <code>yes</code> and press enter. Next, you will be prompted for your
+password. If you haven't changed your password yet, use the temporary
+password on your class account form.</p>
+
+<blockquote><p>When you type your password, nothing will show up! This is a security
+feature, not a bug. Continue typing and press enter to login.</p></blockquote>
+
+<p>Once you are logged in, you'll see something like this:</p>
+
+<p><img src="{{ site.baseurl }}/assets/ssh.png" alt="inst login"></p>
+
+
+<h3 id="registering-your-account">Registering your account</h3>
+
+
+<p>The first time you login to your class account, your terminal will ask
+you some registration questions about the following:</p>
+
+<ul>
+  <li>Last name</li>
+  <li>First name</li>
+  <li>Student ID</li>
+  <li>Email (please use your berkeley.edu email!)</li>
+  <li>Code name (we don't use this information, you can enter anything you
+  want)</li>
+</ul>
+
+<blockquote><p>If your terminal doesn't prompt you for this information the first
+time you login, you can type <code>register</code> to begin the process. You
+don't need to do this again if you've already registered before.</p></blockquote>
+
+<p>If you find errors (e.g. you typed your last name as "ssh update"), fix them
+immediately by running the command:</p>
+
+<pre><code>re-register</code></pre>
+
+
+<h3 id="changing-your-password">Changing your password</h3>
+
+
+<p>The temporary password is not the easiest thing to remember. While
+still logged in, you should change your password by typing in</p>
+
+<pre><code>ssh update</code></pre>
+
+<p>You will be prompted for the temporary password again. After that,
+following the instructions for changing your password.</p>
+
+
+<h3 id="logging-out">Logging out</h3>
+
+
+<p>Once you've registered your account and changed your password, you can
+log out by pressing <code>Ctrl-D</code>.</p>
+
+
+<h2 id="installing-python">Installing Python</h2>
+
+
+<p>You can get Python <a href="https://www.python.org/downloads/release/python-342/">here</a>. Download one of the installers (for example,
+"Windows x86-64 MSI installer" or "Mac OS X 64-bit installer"). If your computer
+is a 64-bit machine, you should download the 64-bit installer. (In general, if
+your computer is new within the past 2 years, it is likely 64-bit. Ask a TA or
+lab assistant if you're not sure.)</p>
+
+<blockquote class="help-mac">
+
+<p>MacOS users can refer to this <a href="https://www.youtube.com/watch?v=smHuBHxJdK8">video</a> for additional help on setting
+up Python.</p>
+
+<p>If you're having trouble opening the installer, you can right-click the icon and
+select "Open".</p>
+
+</blockquote>
+
+<blockquote class="help-windows">
+
+<p>Windows users can refer to this <a href="https://www.youtube.com/watch?v=54-wuFsPi0w">video</a> for additional help on
+setting up Python (up to 1:09 into the video).</p>
+
+<p>You will also need to configure your <code>PATH</code> environment variable; the same
+<a href="https://www.youtube.com/watch?v=54-wuFsPi0w#t=300">video</a> describes how to do this from 5:00 to 5:54.</p>
+
+</blockquote>
+
+
+<h2 id="organizing-your-files">Organizing your files</h2>
+
+
+<p>First, open up a terminal, if you haven't already. Since we're learning
+how to work on your personal computer, make sure you are <strong>not</strong> logged
+in to your class account.</p>
+
+<p><img src="{{ site.baseurl }}/assets/terminal (1).png" alt="starting the terminal"></p>
+
+<p>Right now, I'm in my home directory. The <strong>home directory</strong> is represented
+by the <code>~</code> symbol. When you first open your terminal, you will start in
+the home directory.</p>
+
+<blockquote><p>Don't worry if your terminal window doesn't look exactly the
+same; the important part is that the text on the left hand side is
+relatively the same (with a different name) and you should definitely
+see a <code>~</code> (tilde).</p></blockquote>
+
+
+<h3 id="directories">Directories</h3>
+
+
+<p>Throughout this lab, we will be using terminal commands (like in <a href="../lab00/" title="Lab 0">lab
+0</a>) to manage our files. The first command we'll use is <code>ls</code> (the
+letter <code>l</code> and the letter <code>s</code>). Try typing it in the terminal:</p>
+
+<pre><code>ls</code></pre>
+
+<p>The <code>ls</code> command <strong>l</strong>i<strong>s</strong>ts all the files and folders in the current
+directory. A <strong>directory</strong> is another name for a folder (such as the
+<code>Documents</code> folder). Since we're in the home directory right now, you
+should see the contents of your home directory.</p>
+
+
+<h3 id="making-new-directories">Making New Directories</h3>
+
+
+<p>Our next command is called <code>mkdir</code>, which <strong>m</strong>a<strong>k</strong>es new
+<strong>dir</strong>ectories. Let's make a directory called <code>cs61a</code> to store all of
+the assignments for this class:</p>
+
+<pre><code>mkdir cs61a</code></pre>
+
+<p>A folder called <code>cs61a</code> will appear in our home directory.</p>
+
+
+<h3 id="moving-to-other-directories">Moving to other directories</h3>
+
+
+<p>To move into another directory, we use the <code>cd</code> command. Try typing the
+following command into your terminal:</p>
+
+<pre><code>cd cs61a</code></pre>
+
+<p>The <code>cd</code> command will <strong>c</strong>hange <strong>d</strong>irectories — in other words, it
+moves you into the specified folder. In the example above, we chose to
+move into the <code>cs61a</code> directory.</p>
+
+<p>If we want to go back to our home directory, there are a few ways to do
+so:</p>
+
+<ul>
+  <li>Type <code>cd ..</code> (two dots). The <code>..</code> means "the parent directory". In
+  this case, the parent directory of <code>lab0</code> happens to be our home
+  directory, so we can use <code>cd ..</code> to go up one directory.</li>
+  <li>Type <code>cd ~</code> (the tilde). Remember that <code>~</code> means home directory, so
+  this command tells your terminal to change to the home directory,
+  no matter where you currently are.</li>
+  <li>Type <code>cd</code> (that is, the <code>cd</code> command with no arguments). In UNIX,
+  typing just <code>cd</code> is a shortcut for typing <code>cd ~</code>.</li>
+</ul>
+
+<p>At this point, let's create some more directories. Make sure you are in
+the <code>~/cs61a</code> directory, using the necessary <code>cd</code> commands. Then create
+<code>projects</code>, <code>lab</code>, and <code>lab01</code> folders inside of our <code>lab</code> folder:</p>
+
+<pre><code>cd ~/cs61a
+mkdir projects
+mkdir lab
+mkdir lab/lab01</code></pre>
+
+<p>Now if we list the contents of the directory (using <code>ls</code>), we'll see two
+folders, <code>projects</code> and <code>lab</code>.</p>
+
+<p><img src="{{ site.baseurl }}/assets/terminal_commands.png" alt="cs61a directory"></p>
+
+
+<h3 id="downloading-the-assignment">Downloading the assignment</h3>
+
+
+<p>Next, download the template file for this lab, <a href="{{ site.baseurl }}/lab/lab01/lab01.py">lab01.py</a>. Once
+you've done that, let's find our downloaded file.  On most computers,
+<code>lab01.py</code> is probably located in a directory called <code>Downloads</code> in
+your home directory. Let's use the <code>ls</code> command to check:</p>
+
+<pre><code>ls ~/Downloads</code></pre>
+
+<p>If you don't see <code>lab01.py</code>, ask a TA or lab assistant for help.</p>
+
+
+<h3 id="moving-files">Moving files</h3>
+
+
+<p>Let's move our starter file into our new lab directory. From the
+terminal use the following command:</p>
+
+<pre><code>mv ~/Downloads/lab01.py ~/cs61a/lab/lab01</code></pre>
+
+<p>The <code>mv</code> command will <strong>m</strong>o<strong>v</strong>e the file located at
+<code>~/Downloads/lab01.py</code> to the directory <code>~/cs61a/lab/lab01</code>.</p>
+
+<p>Now, go back into the <code>lab01</code> folder that we made earlier.</p>
+
+<pre><code>cd ~/cs61a/lab/lab01</code></pre>
+
+<p>We're ready to start editing a file. Don't worry if this seems
+complicated — it will get much easier over time.  Just keep
+practicing! You can also take a look at <a href="../lab00/" title="Lab 0">Lab 0</a> for a more detailed
+explanation of terminal commands.</p>
+
+
+<h2 id="installing-a-text-editor">Installing a text editor</h2>
+
+
+<p>The <strong>Python interpreter</strong> that you installed earlier allows you to <em>run</em> Python
+code. You will also need a <strong>text editor</strong>, which will help you <em>write</em> Python
+code.</p>
+
+<p>A text editor is similar to Microsoft Word — a program that allows you to write
+in one or more languages. You will be using a text editor to create, modify, and
+save files.</p>
+
+<p>There are many editors out there, each with its own set of features.  You can
+choose your own editor, but for the purpose of this class, your text editor must</p>
+
+<ul>
+  <li>Have an easy way to open and edit new files</li>
+  <li>Work well with Python files and plain text in general</li>
+  <li>Have line numbers</li>
+</ul>
+
+<p>In addition, almost all useful editors have</p>
+
+<ul>
+  <li>Syntax highlighting</li>
+  <li>Keyboard shortcuts</li>
+</ul>
+
+<p>Here are the text editors that we recommend. We've written short guides for each
+one to get you started:</p>
+
+<ul>
+  <li><a href="../sublime/">Sublime Text</a> (a popular choice among students)</li>
+  <li><a href="../emacs/">Emacs</a></li>
+  <li><a href="../vim/">Vim</a></li>
+</ul>
+
+<p>Each guide has a section on installing the text editor to your personal
+computer. For the sake of this lab, you can just jump to there, but come back to
+finish up the lab!</p>
+
+<blockquote><p><strong>Note</strong>: Please, please, <em>please</em> do not use Microsoft Word to edit
+programs. Word is designed to edit natural languages like English — trouble
+will ensue if you try to write Python with Word!</p>
+
+<p><strong>Note</strong>: Python usually comes with a text editor called IDLE. We <strong>do not</strong>
+recommend it because you won't gain as much experience using the command line
+to run your Python programs. This is very important once you start working on
+the projects for this class so we highly recommend that you use the command
+line to run your files from day 1!</p></blockquote>
+
+
+<h2 id="a-first-look-at-lab01-py">A first look at <code>lab01.py</code></h2>
+
+
+<p>Notice the various blocks of yellow text that are wrapped within three quotation
+marks <code>"""</code>. That text is called a <strong>docstring</strong>, which is a description of what
+the function is supposed to do.</p>
+
+<p>Within the docstring, there are lines that begin with <code>&gt;&gt;&gt;</code>. These lines are
+called <strong>doctests</strong>. Doctests are a great way to explain what the function does
+by showing actual Python code: "if we input this Python code (the lines that say
+<code>&gt;&gt;&gt;</code>), what should the expected output be (the lines underneath the <code>&gt;&gt;&gt;</code>)?"</p>
+
+<p>In particular, let's look at the <code>my_email()</code> function:</p>
+
+<p><img src="{{ site.baseurl }}/assets/email.png" alt="<code>my_name</code> function"></p>
+
+<p>The doctest checks that you changed the return value (<code>return ...</code>) from the
+default <code>'oski@berkeley.edu'</code>.</p>
+
+<blockquote><p><strong>Note</strong>: You should never change the doctests in your assignments!  The only
+part of your assignments that you'll need to edit is the code.</p></blockquote>
+
+<p>How do we use these tests? Glad you asked!</p>
+
+
+<h2 id="running-doctests">Running doctests</h2>
+
+
+<p>To run our doctests, switch over to our terminal and type in the following
+command:</p>
+
+<pre><code>python3 -m doctest lab01.py</code></pre>
+
+<blockquote class="help-windows">
+
+<p>If you are using Windows and the <code>python3</code> command doesn't work, try using just
+<code>python</code> or <code>py</code>. If neither of those work, take another look at the video in
+the section on <a href="#installing-python">installing Python</a> to make sure you are
+setting up your PATH correctly. Ask a TA or lab assistant for help if you get
+stuck!</p>
+
+</blockquote>
+
+<p>This will print out a lot of output that shows which tests we are currently
+failing. You should see something like this:</p>
+
+<p><img src="{{ site.baseurl }}/assets/doctests.png" alt="doctest output"></p>
+
+<p>Oh man, we had 2 failures! :( Before we begin fixing our bugs, let's see what
+this output says. In particular, look at the <code>my_email</code> test that we failed:</p>
+
+<p><img src="{{ site.baseurl }}/assets/email_failure.png" alt="my name test failure"></p>
+
+<p>Notice it says we had an error in <code>lab01.py</code> on line 4, in the function
+<code>my_email</code>. Now we know exactly where to look for the bug!  (This is why line
+numbers are a must for text editors.)</p>
+
+<p>After we find line 4, let's try to understand what the test is saying: the
+function <code>my_email</code>, when called with zero inputs, should <strong>not</strong> return the
+string <code>'oski@berkeley.edu'</code>. The problem is, ours is returning that string!
+Change that to your berkeley.edu email:</p>
+
+<pre><code>def my_email():
+    """Return your last name as a string.
+
+    &gt;&gt;&gt; my_email() != 'oski@berkeley.edu'
+    True
+    """
+    return 'jane.doe@berkeley.edu'</code></pre>
+
+<p>Once you've changed the return value of the function <code>my_email</code> (make sure that
+you're returning a string, which has quotes around it), try running the doctests
+again from your terminal:</p>
+
+<pre><code>python3 -m doctest lab01.py</code></pre>
+
+<p>The test for <code>my_email</code> should pass. One down, one to go!</p>
+
+<p>For the second function, <code>twenty_fifteen</code>, replace the blank line with an
+expression that evaluates to the number 2015, using only integers and the
+functions <code>add</code> and <code>mul</code>. There are many simple ways to do this — try to come
+up with the most creative solution! Make sure your doctests pass once you're
+done.</p>
+
+<blockquote><p>You might run your doctests and see that there is no output. This is actually
+good — it means all the tests passed. By default, doctests only print output
+when you have <strong>failures</strong> in your tests.</p>
+
+<p>However, if you want to double-check that you are passing all of the tests,
+you can add a command line flag <code>-v</code> to see <em>all</em> the output, including the
+tests that passed:</p>
+
+<pre><code>python3 -m doctest -v lab01.py</code></pre>
+
+<p>This is called "verbose" mode.</p></blockquote>
+
+<p>Once all of your tests pass, the verbose output of the doctests (<code>python3 -m
+doctest -v lab01.py</code>) should look something like this:</p>
+
+<p><img src="{{ site.baseurl }}/assets/passed_tests.png" alt="successful"></p>
+
+<blockquote><p>For more help throughout the semester on fixing bugs, take a look at
+<a href="http://albertwu.org/cs61a/notes/debugging">Albert's debugging guide</a>.</p></blockquote>
+
+  
+
+  <script src="//code.jquery.com/jquery-latest.js"></script>
+<script>
+  $(function() {
+    if (new Date("01/22/2015") < new Date()) {
+      $('.toggleButton').css('display', 'inline-block');
+      $('.toggleButton').click(function() {
+        var solution_id = $(this).attr('id');
+        $('div.' + solution_id).slideToggle(600);
+      });
+    }
+    // Always display these toggle buttons
+    $('.toggleButtonShow').click(function() {
+      var solution_id = $(this).attr('id');
+      $('div.' + solution_id).slideToggle(600);
+    });
+  });
+</script>
+
+</div>

@@ -1,0 +1,340 @@
+---
+layout: resource
+title: hw09-sol
+---
+<body style="font-family: Georgia,serif;">
+    <h1 id="title-main">CS 61A: Solutions for Homework 9</h1>
+
+    <p><strong>Solutions:</strong> You can find the file with
+solutions for all questions <a href="hw09.sql">here</a>.</p>
+
+
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+  <li><a href="#data">Data</a></li>
+  <li><a href="#q1">Question 1</a></li>
+  <li><a href="#q2">Question 2</a></li>
+  <li><a href="#q3">Question 3</a></li>
+  <li><a href="#q4">Question 4</a></li>
+  <li><a href="#q5">Question 5</a></li>
+  <li><a href="#q6">Question 6</a></li>
+</ul>
+
+
+    
+
+<p>To complete this homework assignment, you will need to use Sqlite version
+3.8.3 or greater. See <a href="http://cs61a.org/lab/lab12">Lab 12</a> for setup and usage instructions.</p>
+
+<p>To check your progress, you can run <code>sqlite3</code> directly by running:</p>
+
+<pre><code>sqlite3 -init hw09.sql</code></pre>
+
+<p>You should also check your work using <code>ok</code>:</p>
+
+<pre><code>python3 ok</code></pre>
+
+<p>If OK is not able to use <code>sqlite3</code> to verify your work directly, OK
+will at least show you the output of the test cases, like the
+following:</p>
+
+<pre><code>size &gt; Suite 1 &gt; Case 1
+
+Unfortunately, OK is unable to use sqlite3 to test your code directly.
+Here is a transcript of what your code does in the sqlite3 interpreter.
+
+TEST:
+    .read hw09.sql
+    select name from size_of_dogs where size="toy" or size="mini";
+EXPECTED (order does not matter):
+    abraham
+    eisenhower
+    fillmore
+    grover
+    herbert
+OUTPUT:
+
+Please manually check if your solution's output is correct.</code></pre>
+
+<p>As long as the displayed <code>OUTPUT</code> matches the <code>EXPECTED</code> output, your
+solution will be considered correct (even though OK will report a test
+failure).</p>
+
+
+<h3 id="data">Data</h3>
+
+
+<p>In each question below, you will define a new table based on the following
+tables.</p>
+
+<pre><code>create table parents as
+  select "abraham" as parent, "barack" as child union
+  select "abraham"          , "clinton"         union
+  select "delano"           , "herbert"         union
+  select "fillmore"         , "abraham"         union
+  select "fillmore"         , "delano"          union
+  select "fillmore"         , "grover"          union
+  select "eisenhower"       , "fillmore";
+
+create table dogs as
+  select "abraham" as name, "long" as fur, 26 as height union
+  select "barack"         , "short"      , 52           union
+  select "clinton"        , "long"       , 47           union
+  select "delano"         , "long"       , 46           union
+  select "eisenhower"     , "short"      , 35           union
+  select "fillmore"       , "curly"      , 32           union
+  select "grover"         , "short"      , 28           union
+  select "herbert"        , "curly"      , 31;
+
+create table sizes as
+  select "toy" as size, 24 as min, 28 as max union
+  select "mini",        28,        35        union
+  select "medium",      35,        45        union
+  select "standard",    45,        60;</code></pre>
+
+<p>Your tables should still perform correctly even if the values in these tables
+change. For example, if you are asked to list all dogs with a name that starts
+with h, you should write:</p>
+
+<pre><code>select name from dogs where "h" &lt;= name and name &lt; "i";</code></pre>
+
+<p>Instead of assuming that the <code>dogs</code> table has only the data above and writing</p>
+
+<pre><code>select "herbert";</code></pre>
+
+<p>The former query would still be correct if the name <code>grover</code> were changed to
+<code>hoover</code> or a row was added with the name <code>harry</code>.</p>
+
+<h3 class="question" id="q1">Question 1</h3>
+The Fédération Cynologique Internationale classifies a standard poodle as over
+45 cm and up to 60 cm. The <code>sizes</code> table describes this and other such
+classifications, where a dog must be over the <code>min</code> and less than or equal to
+the <code>max</code> in height to qualify as a <code>size</code>.
+
+<p>Create a <code>size_of_dogs</code> table with two columns, one for each dog's <code>name</code> and
+another for its <code>size</code>.</p>
+
+<pre><code>-- The size of each dog
+create table size_of_dogs as
+<span class="sol-highlight">  select name, size from dogs, sizes
+    where height &gt; min and height &lt;= max;</span>
+
+-- Example:
+select name from size_of_dogs where size="toy" or size="mini";
+-- Expected output:
+--   abraham
+--   eisenhower
+--   fillmore
+--   grover
+--   herbert</code></pre>
+
+<p>Test your solution with OK:</p>
+
+<pre><code>python3 ok -q small</code></pre>
+
+<h3 class="question" id="q2">Question 2</h3>
+Create a table <code>by_height</code> that has a column of the names of all dogs that have
+a <code>parent</code>, ordered by the height of the parent from tallest parent to shortest
+parent.
+
+<pre><code>-- All dogs with parents ordered by decreasing height of their parent
+create table by_height as
+<span class="sol-highlight">  select child from parents, dogs where name = parent order by -height;</span></code></pre>
+
+<p>For example, <code>fillmore</code> has a parent (<code>eisenhower</code>) with height 35, and so
+should appear before <code>grover</code> who has a parent (<code>fillmore</code>) with height 32.
+The names of dogs with parents of the same height should appear together in any
+order. For example, <code>barack</code> and <code>clinton</code> should both appear at the end, but
+either one can come before the other.</p>
+
+<pre><code>-- Example:
+select * from by_height;
+-- Expected output:
+--   herbert
+--   fillmore
+--   abraham
+--   delano
+--   grover
+--   barack
+--   clinton</code></pre>
+
+<p>Test your solution with OK:</p>
+
+<pre><code>python3 ok -q parent-height</code></pre>
+
+<h3 class="question" id="q3">Question 3</h3>
+Create a single string for every pair of siblings that have the same size.
+Each value should be a sentence describing the siblings by their size, as shown
+in the expected output below.
+
+<pre><code>-- Sentences about siblings that are the same size
+create table sentences as
+<span class="sol-highlight">  with
+    siblings(first, second) as (
+      select a.child, b.child from parents as a, parents as b
+        where a.parent = b.parent and a.child &lt; b.child
+    )
+  select first || " and " || second || " are " || a.size || " siblings"
+    from siblings, size_of_dogs as a, size_of_dogs as b
+    where a.size = b.size and a.name = first and b.name = second;</span></code></pre>
+
+<p>Each sibling pair should appear only once in alphabetical order.</p>
+
+<pre><code>-- Example:
+select * from sentences;
+-- Expected output:
+--   barack and clinton are standard siblings
+--   abraham and grover are toy siblings</code></pre>
+
+<p><em>Hint</em>: First use a <code>with</code> clause to create a local table of siblings.
+Comparing the size of siblings will be simplified.</p>
+
+<p><em>Hint</em>: If you join a table with itself, use <code>as</code> within the <code>from</code> clause to
+give each table an alias.</p>
+
+<p><em>Hint</em>: In order to concatenate two strings into one, use the <code>||</code> operator.</p>
+
+<p>Test your solution with OK:</p>
+
+<pre><code>python3 ok -q size-siblings</code></pre>
+
+<h3 class="question" id="q4">Question 4</h3>
+When dogs are stacked on top of one another, the total height of the stack is
+the sum of the heights of the dogs.
+
+<p>Create a two-column table describing all stacks of dogs at least 170 cm high.
+The first column should contains a comma-separated list of dogs in the stack,
+and the second column should contain the total height of the stack. Order the
+stacks in increasing order of total height.</p>
+
+<pre><code>-- Ways to stack 4 dogs to a height of at least 170, ordered by total height
+create table stacks as
+<span class="sol-highlight">  with
+    sums(names, total, n, max) as (
+      select name, height, 1, height from dogs union
+      select names || ", " || name, total+height, n+1, height
+        from sums, dogs
+        where n &lt; 4 and max &lt; height
+    )
+  select names, total from sums where n=4 and total&gt;=170 order by total;</span></code></pre>
+
+<p>A valid stack of dogs includes each dog only once, and the dogs should be
+listed in increasing order of height within the stack.
+<strong>Assume that no two dogs have the same height</strong>.</p>
+
+<pre><code>-- Example:
+select * from stacks;
+-- Expected output:
+--   abraham, delano, clinton, barack|171
+--   grover, delano, clinton, barack|173
+--   herbert, delano, clinton, barack|176
+--   fillmore, delano, clinton, barack|177
+--   eisenhower, delano, clinton, barack|180</code></pre>
+
+<p><em>Hint</em>: Use a <code>with</code> clause to create a recursive table with additional
+columns, such as the number of dogs that have been stacked and information
+about the last dog added (to control the dog order). Then, select the
+rows and columns from this larger table to generate the final solution.</p>
+
+<p><em>Hint</em>: Use height comparisons to ensure that dogs are not repeated in a stack.</p>
+
+<p><em>Hint</em>: Generating the comma-separated list of dogs is easier if your base
+case includes the name of one dog without any commas before or after it,
+rather than no dogs at all.</p>
+
+<p>Test your solution with OK:</p>
+
+<pre><code>python3 ok -q stack</code></pre>
+
+<h3 class="question" id="q5">Question 5</h3>
+
+<p>Create a table <code>tallest</code> that includes the <code>height</code> and <code>name</code> of every dog
+that shares the 10's digit of its <code>height</code> with at least one other dog and has
+the highest 1's digit of all dogs that have the same 10's digit.</p>
+
+<pre><code>create table tallest as
+<span class="sol-highlight">  select max(height), name from dogs group by height/10 having count(*) &gt; 1;</span>
+
+-- Example:
+select * from tallest;
+-- Expected output:
+--   28|grover
+--   35|eisenhower
+--   47|clinton</code></pre>
+
+<p><em>Explanation</em>: <code>grover</code> is the tallest 20-something dog. <code>eisenhower</code> is the
+tallest 30-something dog. <code>clinton</code> is the tallest 40-something dog. <code>barack</code>
+is not included because there are no other 50-something dogs.</p>
+
+<p>Test your solution with OK:</p>
+
+<pre><code>python3 ok -q tallest</code></pre>
+
+<h3 class="question" id="q6">Question 6</h3>
+
+<p><strong>This question is optional but recommended for practice. You can
+receive full credit for the homework without attempting this problem.</strong></p>
+
+<p>A non-parent relation is either an ancestor that is not a parent (such as a
+grandparent or great-grandparent) or a descendent that is not a child (such
+as a grandchild or great-grandchild). Siblings are <em>not</em> relations under this
+definition.</p>
+
+<p>Select all pairs that form non-parent relations ordered by the difference in
+height between one dog and the other.</p>
+
+<pre><code>-- All non-parent relations ordered by height difference
+create table non_parents as
+<span class="sol-highlight">  with
+    grandparents(grandog, grandpup) as (
+      select a.parent, b.child from parents as a, parents as b
+        where a.child = b.parent
+    ),
+    ancestors(ancestor, descendent) as (
+      select grandog, grandpup from grandparents union
+      select ancestor, child from ancestors, parents
+        where parent = descendent
+    ),
+    relations(first, second) as (
+      select ancestor, descendent from ancestors union
+      select descendent, ancestor from ancestors
+    )
+  select first, second from relations, dogs as f, dogs as s
+    where first = f.name and second = s.name order by f.height-s.height;</span></code></pre>
+
+<p>The shortest paired with the tallest should appear first, and the tallest
+paired with the shortest should appear last. If two pairs have the same height
+difference, they may appear together in any order.</p>
+
+<pre><code>-- Example:
+select * from non_parents;
+-- Expected output:
+--   fillmore|barack
+--   eisenhower|barack
+--   fillmore|clinton
+--   eisenhower|clinton
+--   eisenhower|delano
+--   abraham|eisenhower
+--   grover|eisenhower
+--   herbert|eisenhower
+--   herbert|fillmore
+--   fillmore|herbert
+--   eisenhower|herbert
+--   eisenhower|grover
+--   eisenhower|abraham
+--   delano|eisenhower
+--   clinton|eisenhower
+--   clinton|fillmore
+--   barack|eisenhower
+--   barack|fillmore</code></pre>
+
+<p>Test your solution with OK:</p>
+
+<pre><code>python3 ok -q relations</code></pre>
+
+  
+
+  
+
+</body>

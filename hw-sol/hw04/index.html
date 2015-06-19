@@ -1,0 +1,332 @@
+---
+layout: resource
+---
+<body style="font-family: Georgia,serif;">
+    <h1 id="title-main">CS 61A: Solutions for Homework 4</h1>
+
+    <p><strong>Solutions:</strong> You can find the file with
+solutions for all questions <a href="hw04.py">here</a>.</p>
+
+
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+  <li><a href="#q1">Question 1</a></li>
+  <li><a href="#q2">Question 2</a></li>
+  <li><a href="#q3">Question 3</a></li>
+  <li><a href="#q4">Question 4</a></li>
+  <li><a href="#q5">Question 5</a></li>
+  <li><a href="#q6">Question 6</a></li>
+  <li><a href="#q7">Question 7: Challenge Problem (optional)</a></li>
+</ul>
+
+
+    
+
+<p><strong>Acknowledgements.</strong> This interval arithmetic example is based on
+Structure and Interpretation of Computer Programs,
+<a href="http://mitpress.mit.edu/sicp/full-text/book/book-Z-H-14.html#%_sec_2.1.4">Section 2.1.4</a>.</p>
+
+<p><strong>Introduction.</strong> Alyssa P. Hacker is designing a system to help people
+solve engineering problems. One feature she wants to provide in her
+system is the ability to manipulate inexact quantities (such as
+measured parameters of physical devices) with known precision, so that
+when computations are done with such approximate quantities the results
+will be numbers of known precision.</p>
+
+<p>Alyssa's idea is to implement interval arithmetic as a set of
+arithmetic operations for combining "intervals" (objects that represent
+the range of possible values of an inexact quantity). The result of
+adding, subracting, multiplying, or dividing two intervals is itself an
+interval, representing the range of the result.</p>
+
+<p>Alyssa postulates the existence of an abstract object called an
+"interval" that has two endpoints: a lower bound and an upper bound.
+She also presumes that, given the endpoints of an interval, she can
+construct the interval using the data constructor interval.   Using the
+constructor and selectors, she defines the following operations:</p>
+
+<pre><code>def str_interval(x):
+    """Return a string representation of interval x.
+
+    &gt;&gt;&gt; str_interval(interval(-1, 2))
+    '-1 to 2'
+    """
+    return '{0} to {1}'.format(lower_bound(x), upper_bound(x))
+
+def add_interval(x, y):
+    """Return an interval that contains the sum of any value in interval x and
+    any value in interval y.
+
+    &gt;&gt;&gt; str_interval(add_interval(interval(-1, 2), interval(4, 8)))
+    '3 to 10'
+    """
+    lower = lower_bound(x) + lower_bound(y)
+    upper = upper_bound(x) + upper_bound(y)
+    return interval(lower, upper)
+
+def mul_interval(x, y):
+    """Return the interval that contains the product of any value in x and any
+    value in y.
+
+    &gt;&gt;&gt; str_interval(mul_interval(interval(-1, 2), interval(4, 8)))
+    '-8 to 16'
+    """
+    p1 = lower_bound(x) * lower_bound(y)
+    p2 = lower_bound(x) * upper_bound(y)
+    p3 = upper_bound(x) * lower_bound(y)
+    p4 = upper_bound(x) * upper_bound(y)
+    return interval(min(p1, p2, p3, p4), max(p1, p2, p3, p4))</code></pre>
+
+<h3 class="question" id="q1">Question 1</h3>
+
+<p>Alyssa's program is incomplete because she has not specified the
+implementation of the interval abstraction. Define the constructor and
+selectors in terms of two-element lists:</p>
+
+<pre><code>def interval(a, b):
+    """Construct an interval from a to b."""
+<span class="sol-highlight">    return [a, b]</span>
+
+def lower_bound(x):
+    """Return the lower bound of interval x."""
+<span class="sol-highlight">    return x[0]</span>
+
+def upper_bound(x):
+    """Return the upper bound of interval x."""
+<span class="sol-highlight">    return x[1]</span></code></pre>
+
+<h3 class="question" id="q2">Question 2</h3>
+
+<p>Alyssa implements division below, by multiplying by the reciprocal of
+<code>y</code>. Ben Bitdiddle, an expert systems programmer, looks over Alyssa's
+shoulder and comments that it is not clear what it means to divide by
+an interval that spans zero. Add an assert statement to Alyssa's code
+to ensure that no such interval is used as a divisor:</p>
+
+<pre><code>def div_interval(x, y):
+    """Return the interval that contains the quotient of any value in x divided
+    by any value in y.
+
+    Division is implemented as the multiplication of x by the reciprocal of y.
+
+    &gt;&gt;&gt; str_interval(div_interval(interval(-1, 2), interval(4, 8)))
+    '-0.25 to 0.5'
+    """
+<span class="sol-highlight">    assert lower_bound(y) &gt; 0 or upper_bound(y) &lt; 0, 'Divide by zero'</span>
+    reciprocal_y = interval(1/upper_bound(y), 1/lower_bound(y))
+    return mul_interval(x, reciprocal_y)</code></pre>
+
+<h3 class="question" id="q3">Question 3</h3>
+
+<p>Using reasoning analogous to Alyssa's, define a subtraction function
+for intervals:</p>
+
+<pre><code>def sub_interval(x, y):
+    """Return the interval that contains the difference between any value in x
+    and any value in y.
+
+    &gt;&gt;&gt; str_interval(sub_interval(interval(-1, 2), interval(4, 8)))
+    '-9 to -2'
+    """
+<span class="sol-highlight">    negative_y = interval(-upper_bound(y), -lower_bound(y))
+    return add_interval(x, negative_y)</span></code></pre>
+
+<h3 class="question" id="q4">Question 4</h3>
+
+<p>After considerable work, Alyssa P. Hacker delivers her finished system.
+Several years later, after she has forgotten all about it, she gets a
+frenzied call from an irate user, Lem E. Tweakit. It seems that Lem has
+noticed that the formula for parallel resistors can be written in two
+algebraically equivalent ways:</p>
+
+<pre><code>par1(r1, r2) = (r1 * r2) / (r1 + r2)</code></pre>
+
+<p>or</p>
+
+<pre><code>par2(r1, r2) = 1 / (1/r1 + 1/r2)</code></pre>
+
+<p>He has written the following two programs, each of which computes the
+<code>parallel_resistors</code> formula differently::</p>
+
+<pre><code>def par1(r1, r2):
+    return div_interval(mul_interval(r1, r2), add_interval(r1, r2))
+
+def par2(r1, r2):
+    one = interval(1, 1)
+    rep_r1 = div_interval(one, r1)
+    rep_r2 = div_interval(one, r2)
+    return div_interval(one, add_interval(rep_r1, rep_r2))</code></pre>
+
+<p>Lem complains that Alyssa's program gives different answers for the two
+ways of computing. This is a serious complaint.</p>
+
+<p>Demonstrate that Lem is right. Investigate the behavior of the system
+on a variety of arithmetic expressions. Make some intervals <code>a</code> and
+<code>b</code>, and show that <code>par1</code> and <code>par2</code> can give different results. You
+will get the most insight by using intervals whose width is a small
+percentage of the center value:</p>
+
+<pre><code># These two intervals give different results for parallel resistors:
+<span class="sol-highlight">a = make_center_percent(1, 1)
+b = make_center_percent(2, 1)
+print(str_interval(par1(a, b)), '!=', str_interval(par2(a, b)))</span></code></pre>
+
+<p><em>Note</em>: No tests will be run on your solution to this problem. Any answer will
+be accepted, but please attempt to answer the question correctly.</p>
+
+<h3 class="question" id="q5">Question 5</h3>
+
+<p>Eva Lu Ator, another user, has also noticed the different intervals
+computed by different but algebraically equivalent expressions. She
+says that the problem is multiple references to the same interval.</p>
+
+<p>The Multiple References Problem: a formula to compute with intervals
+using Alyssa's system will produce tighter error bounds if it can be
+written in such a form that no variable that represents an uncertain
+number is repeated.</p>
+
+<p>Thus, she says, <code>par2</code> is a better program for parallel resistances
+than <code>par1</code>. Is she right? Why? Write a function that returns a string
+containing a written explanation of your answer:</p>
+
+<pre><code>def multiple_references_explanation():
+<span class="sol-highlight">    return """The multiple reference problem exists.  The true value
+    within a particular interval is fixed (though unknown).  Nested
+    combinations that refer to the same interval twice may assume two different
+    true values for the same interval, which is an error that results in
+    intervals that are larger than they should be.
+
+    Consider the case of i * i, where i is an interval from -1 to 1.  No value
+    within this interval, when squared, will give a negative result.  However,
+    our mul_interval function will allow us to choose 1 from the first
+    reference to i and -1 from the second, giving an erroneous lower bound of
+    -1.
+
+    Hence, a program like par2 is better than par1 because it never combines
+    the same interval more than once.
+    """</span></code></pre>
+
+<p><em>Note</em>: No tests will be run on your solution to this problem. Any answer will
+be accepted, but please attempt to answer the question correctly.</p>
+
+<h3 class="question" id="q6">Question 6</h3>
+
+<p>Write a function <code>quadratic</code> that returns the interval of all values
+<code>f(t)</code> such that <code>t</code> is in the argument interval <code>x</code> and <code>f(t)</code> is a
+<a href="http://en.wikipedia.org/wiki/Quadratic_function">quadratic function</a>:</p>
+
+<pre><code>f(t) = a*t*t + b*t + c</code></pre>
+
+<p>Make sure that your implementation returns the smallest such interval,
+one that does not suffer from the multiple references problem.</p>
+
+<p><em>Hint</em>: the derivative <code>f'(t) = 2*a*t + b</code>, and so the extreme
+point of the quadratic is <code>-b/(2*a)</code>:</p>
+
+<pre><code>def quadratic(x, a, b, c):
+    """Return the interval that is the range of the quadratic defined by
+    coefficients a, b, and c, for domain interval x.
+
+    &gt;&gt;&gt; str_interval(quadratic(interval(0, 2), -2, 3, -1))
+    '-3 to 0.125'
+    &gt;&gt;&gt; str_interval(quadratic(interval(1, 3), 2, -3, 1))
+    '0 to 10'
+    """
+<span class="sol-highlight">    extremum = -b / (2*a)
+    f = lambda x: a * x * x + b * x + c
+    l, u, e = map(f, (lower_bound(x), upper_bound(x), extremum))
+    if extremum &gt;= lower_bound(x) and extremum &lt;= upper_bound(x):
+        return interval(min(l, u, e), max(l, u, e))
+    else:
+        return interval(min(l, u), max(l, u))</span></code></pre>
+
+<h3 class="question" id="q7">Question 7: Challenge Problem (optional)</h3>
+
+<p>Write a function polynomial that takes an interval <code>x</code> and a list of
+coefficients <code>c</code>, and returns the interval containing all values of
+<code>f(t)</code> for <code>t</code> in interval <code>x</code>, where:</p>
+
+<pre><code>f(t) = c[k-1] * pow(t, k-1) + c[k-2] * pow(t, k-2) + ... + c[0] * 1</code></pre>
+
+<p>Like quadratic, your polynomial function should return the smallest
+such interval, one that does not suffer from the multiple references
+problem.</p>
+
+<p><em>Hint</em>: You can approximate this result. Try using Newton's method.</p>
+
+<pre><code>def polynomial(x, c):
+    """Return the interval that is the range of the polynomial defined by
+    coefficients c, for domain interval x.
+
+    &gt;&gt;&gt; str_interval(polynomial(interval(0, 2), [-1, 3, -2]))
+    '-3 to 0.125'
+    &gt;&gt;&gt; str_interval(polynomial(interval(1, 3), [1, -3, 2]))
+    '0 to 10'
+    &gt;&gt;&gt; str_interval(polynomial(interval(0.5, 2.25), [10, 24, -6, -8, 3]))
+    '18.0 to 23.0'
+    """
+<span class="sol-highlight">    def add_fn(coeff, k, f):
+        return lambda x: coeff * pow(x, k) + f(x)
+
+    def add_dfn(coeff, k, df):
+        return lambda x: k * coeff * pow(x, k-1) + df(x)
+
+    def add_ddfn(coeff, k, ddf):
+        return lambda x: k * (k-1) * coeff * pow(x, k-2) + ddf(x)
+
+    # Define the polynomial and its first and second derivatives.
+    f = lambda x: 0
+    df = lambda x: 0
+    ddf = lambda x: 0
+    for k, coeff in enumerate(c):
+        f = add_fn(coeff, k, f)
+        if k &gt; 0:
+            df = add_dfn(coeff, k, df)
+        if k &gt; 1:
+            ddf = add_ddfn(coeff, k, ddf)
+
+    # Find as many extreme points as we can using Newton's method
+    lower, upper = lower_bound(x), upper_bound(x)
+    num_steps = 20
+    step = (upper - lower) / num_steps
+    starts = [lower + k * step for k in range(num_steps)]
+    extremums = [find_zero(df, ddf, n) for n in starts]
+
+    # Filter for the interval x and return
+    ns = [n for n in extremums if n &gt; lower and n &lt; upper] + [lower, upper]
+    values = [f(n) for n in ns]
+    return interval(min(values), max(values))</span>
+
+<span class="sol-highlight"># Newton's method from lecture
+
+def improve(update, close, guess=1, max_updates=100):
+    """Iteratively improve guess with update until close(guess) is true or
+    max_updates have been applied."""
+    k = 0
+    while not close(guess) and k &lt; max_updates:
+        guess = update(guess)
+        k = k + 1
+    return guess
+
+def approx_eq(x, y, tolerance=1e-15):
+    return abs(x - y) &lt; tolerance
+
+def find_zero(f, df, guess=1):
+    """Return a zero of the function f with derivative df."""
+    def near_zero(x):
+        return approx_eq(f(x), 0)
+    return improve(newton_update(f, df), near_zero, guess)
+
+def newton_update(f, df):
+    """Return an update function for f with derivative df,
+    using Newton's method."""
+    def update(x):
+        return x - f(x) / df(x)
+    return update</span></code></pre>
+
+  
+
+  
+
+</body>

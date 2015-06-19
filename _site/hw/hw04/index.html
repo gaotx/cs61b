@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+       
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <link rel="stylesheet" href="/assets/css/resource.css">
+  <link rel="stylesheet" href="/assets/css/lab.css">
+  <link rel="stylesheet" href="/assets/css/project.css">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="resource">
+      <body style="font-family: Georgia,serif;">
+    <h1 id="title-main">CS 61A: Homework 4</h1>
+
+    <p><em>Due by 11:59pm on Monday, 2/23</em></p>
+
+<h2>Instructions</h2>
+
+<p>Download <a href="hw04.zip">hw04.zip</a>.  Inside the archive, you
+will find a file called <a href="hw04.py">hw04.py</a>, along with a copy of the <a href="ok">OK</a> autograder.</p>
+
+
+
+<p><strong>Submission:</strong> When you are done, submit with
+<code>python3 ok --submit</code>. You may submit more than once before
+the deadline; only the final submission will be scored.</p>
+
+<h2>Using OK</h2>
+
+<p>The <code>ok</code> program helps you test your code and track your progress.
+The first time you run the autograder, you will be asked to log in with your
+@berkeley.edu account using your web browser. Please do so. Each time you run
+ok, it will back up your work and progress on our servers.
+
+You can run all the doctests with the following command:</p>
+
+<pre><code>python3 ok</code></pre>
+
+<p>To test a specific question, use the <code>-q</code> option with the
+name of the function:</p>
+
+<pre><code>python3 ok -q &lt;function&gt;</code></pre>
+
+<p>By default, only tests that <strong>fail</strong> will appear. If you
+want to see how you did on all tests, you can use the <code>-v</code>
+option:</p>
+
+<pre><code>python3 ok -v</code></pre>
+
+<p>If you do not want to send your progress to our server or you have any
+problems logging in, add the <code>--local</code> flag to block all
+communication:</p>
+
+<pre><code>python3 ok --local</code></pre>
+
+<p>When you are ready to submit, run <code>ok</code> with the
+<code>--submit</code> option:</p>
+
+<pre><code>python3 ok --submit</code></pre>
+
+<p><strong>Readings:</strong> You might find the following references
+useful:</p>
+
+<ul>
+  <li><a href="http://composingprograms.com/pages/22-data-abstraction.html">Section 2.2</a></li>
+</ul>
+
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+  <li><a href="#q1">Question 1</a></li>
+  <li><a href="#q2">Question 2</a></li>
+  <li><a href="#q3">Question 3</a></li>
+  <li><a href="#q4">Question 4</a></li>
+  <li><a href="#q5">Question 5</a></li>
+  <li><a href="#q6">Question 6</a></li>
+  <li><a href="#q7">Question 7: Challenge Problem (optional)</a></li>
+</ul>
+
+
+    
+
+<p><strong>Acknowledgements.</strong> This interval arithmetic example is based on
+Structure and Interpretation of Computer Programs,
+<a href="http://mitpress.mit.edu/sicp/full-text/book/book-Z-H-14.html#%_sec_2.1.4">Section 2.1.4</a>.</p>
+
+<p><strong>Introduction.</strong> Alyssa P. Hacker is designing a system to help people
+solve engineering problems. One feature she wants to provide in her
+system is the ability to manipulate inexact quantities (such as
+measured parameters of physical devices) with known precision, so that
+when computations are done with such approximate quantities the results
+will be numbers of known precision.</p>
+
+<p>Alyssa's idea is to implement interval arithmetic as a set of
+arithmetic operations for combining "intervals" (objects that represent
+the range of possible values of an inexact quantity). The result of
+adding, subracting, multiplying, or dividing two intervals is itself an
+interval, representing the range of the result.</p>
+
+<p>Alyssa postulates the existence of an abstract object called an
+"interval" that has two endpoints: a lower bound and an upper bound.
+She also presumes that, given the endpoints of an interval, she can
+construct the interval using the data constructor interval.   Using the
+constructor and selectors, she defines the following operations:</p>
+
+<pre><code>def str_interval(x):
+    """Return a string representation of interval x.
+
+    &gt;&gt;&gt; str_interval(interval(-1, 2))
+    '-1 to 2'
+    """
+    return '{0} to {1}'.format(lower_bound(x), upper_bound(x))
+
+def add_interval(x, y):
+    """Return an interval that contains the sum of any value in interval x and
+    any value in interval y.
+
+    &gt;&gt;&gt; str_interval(add_interval(interval(-1, 2), interval(4, 8)))
+    '3 to 10'
+    """
+    lower = lower_bound(x) + lower_bound(y)
+    upper = upper_bound(x) + upper_bound(y)
+    return interval(lower, upper)
+
+def mul_interval(x, y):
+    """Return the interval that contains the product of any value in x and any
+    value in y.
+
+    &gt;&gt;&gt; str_interval(mul_interval(interval(-1, 2), interval(4, 8)))
+    '-8 to 16'
+    """
+    p1 = lower_bound(x) * lower_bound(y)
+    p2 = lower_bound(x) * upper_bound(y)
+    p3 = upper_bound(x) * lower_bound(y)
+    p4 = upper_bound(x) * upper_bound(y)
+    return interval(min(p1, p2, p3, p4), max(p1, p2, p3, p4))</code></pre>
+
+<h3 class="question" id="q1">Question 1</h3>
+
+<p>Alyssa's program is incomplete because she has not specified the
+implementation of the interval abstraction. Define the constructor and
+selectors in terms of two-element lists:</p>
+
+<pre><code>def interval(a, b):
+    """Construct an interval from a to b."""
+    "*** YOUR CODE HERE ***"
+
+def lower_bound(x):
+    """Return the lower bound of interval x."""
+    "*** YOUR CODE HERE ***"
+
+def upper_bound(x):
+    """Return the upper bound of interval x."""
+    "*** YOUR CODE HERE ***"</code></pre>
+
+<h3 class="question" id="q2">Question 2</h3>
+
+<p>Alyssa implements division below, by multiplying by the reciprocal of
+<code>y</code>. Ben Bitdiddle, an expert systems programmer, looks over Alyssa's
+shoulder and comments that it is not clear what it means to divide by
+an interval that spans zero. Add an assert statement to Alyssa's code
+to ensure that no such interval is used as a divisor:</p>
+
+<pre><code>def div_interval(x, y):
+    """Return the interval that contains the quotient of any value in x divided
+    by any value in y.
+
+    Division is implemented as the multiplication of x by the reciprocal of y.
+
+    &gt;&gt;&gt; str_interval(div_interval(interval(-1, 2), interval(4, 8)))
+    '-0.25 to 0.5'
+    """
+    "*** YOUR CODE HERE ***"
+    reciprocal_y = interval(1/upper_bound(y), 1/lower_bound(y))
+    return mul_interval(x, reciprocal_y)</code></pre>
+
+<h3 class="question" id="q3">Question 3</h3>
+
+<p>Using reasoning analogous to Alyssa's, define a subtraction function
+for intervals:</p>
+
+<pre><code>def sub_interval(x, y):
+    """Return the interval that contains the difference between any value in x
+    and any value in y.
+
+    &gt;&gt;&gt; str_interval(sub_interval(interval(-1, 2), interval(4, 8)))
+    '-9 to -2'
+    """
+    "*** YOUR CODE HERE ***"</code></pre>
+
+<h3 class="question" id="q4">Question 4</h3>
+
+<p>After considerable work, Alyssa P. Hacker delivers her finished system.
+Several years later, after she has forgotten all about it, she gets a
+frenzied call from an irate user, Lem E. Tweakit. It seems that Lem has
+noticed that the formula for parallel resistors can be written in two
+algebraically equivalent ways:</p>
+
+<pre><code>par1(r1, r2) = (r1 * r2) / (r1 + r2)</code></pre>
+
+<p>or</p>
+
+<pre><code>par2(r1, r2) = 1 / (1/r1 + 1/r2)</code></pre>
+
+<p>He has written the following two programs, each of which computes the
+<code>parallel_resistors</code> formula differently::</p>
+
+<pre><code>def par1(r1, r2):
+    return div_interval(mul_interval(r1, r2), add_interval(r1, r2))
+
+def par2(r1, r2):
+    one = interval(1, 1)
+    rep_r1 = div_interval(one, r1)
+    rep_r2 = div_interval(one, r2)
+    return div_interval(one, add_interval(rep_r1, rep_r2))</code></pre>
+
+<p>Lem complains that Alyssa's program gives different answers for the two
+ways of computing. This is a serious complaint.</p>
+
+<p>Demonstrate that Lem is right. Investigate the behavior of the system
+on a variety of arithmetic expressions. Make some intervals <code>a</code> and
+<code>b</code>, and show that <code>par1</code> and <code>par2</code> can give different results. You
+will get the most insight by using intervals whose width is a small
+percentage of the center value:</p>
+
+<pre><code># These two intervals give different results for parallel resistors:
+"*** YOUR CODE HERE ***"</code></pre>
+
+<p><em>Note</em>: No tests will be run on your solution to this problem. Any answer will
+be accepted, but please attempt to answer the question correctly.</p>
+
+<h3 class="question" id="q5">Question 5</h3>
+
+<p>Eva Lu Ator, another user, has also noticed the different intervals
+computed by different but algebraically equivalent expressions. She
+says that the problem is multiple references to the same interval.</p>
+
+<p>The Multiple References Problem: a formula to compute with intervals
+using Alyssa's system will produce tighter error bounds if it can be
+written in such a form that no variable that represents an uncertain
+number is repeated.</p>
+
+<p>Thus, she says, <code>par2</code> is a better program for parallel resistances
+than <code>par1</code>. Is she right? Why? Write a function that returns a string
+containing a written explanation of your answer:</p>
+
+<pre><code>def multiple_references_explanation():
+    return """The mulitple reference problem..."""</code></pre>
+
+<p><em>Note</em>: No tests will be run on your solution to this problem. Any answer will
+be accepted, but please attempt to answer the question correctly.</p>
+
+<h3 class="question" id="q6">Question 6</h3>
+
+<p>Write a function <code>quadratic</code> that returns the interval of all values
+<code>f(t)</code> such that <code>t</code> is in the argument interval <code>x</code> and <code>f(t)</code> is a
+<a href="http://en.wikipedia.org/wiki/Quadratic_function">quadratic function</a>:</p>
+
+<pre><code>f(t) = a*t*t + b*t + c</code></pre>
+
+<p>Make sure that your implementation returns the smallest such interval,
+one that does not suffer from the multiple references problem.</p>
+
+<p><em>Hint</em>: the derivative <code>f'(t) = 2*a*t + b</code>, and so the extreme
+point of the quadratic is <code>-b/(2*a)</code>:</p>
+
+<pre><code>def quadratic(x, a, b, c):
+    """Return the interval that is the range of the quadratic defined by
+    coefficients a, b, and c, for domain interval x.
+
+    &gt;&gt;&gt; str_interval(quadratic(interval(0, 2), -2, 3, -1))
+    '-3 to 0.125'
+    &gt;&gt;&gt; str_interval(quadratic(interval(1, 3), 2, -3, 1))
+    '0 to 10'
+    """
+    "*** YOUR CODE HERE ***"</code></pre>
+
+<h3 class="question" id="q7">Question 7: Challenge Problem (optional)</h3>
+
+<p>Write a function polynomial that takes an interval <code>x</code> and a list of
+coefficients <code>c</code>, and returns the interval containing all values of
+<code>f(t)</code> for <code>t</code> in interval <code>x</code>, where:</p>
+
+<pre><code>f(t) = c[k-1] * pow(t, k-1) + c[k-2] * pow(t, k-2) + ... + c[0] * 1</code></pre>
+
+<p>Like quadratic, your polynomial function should return the smallest
+such interval, one that does not suffer from the multiple references
+problem.</p>
+
+<p><em>Hint</em>: You can approximate this result. Try using Newton's method.</p>
+
+<pre><code>def polynomial(x, c):
+    """Return the interval that is the range of the polynomial defined by
+    coefficients c, for domain interval x.
+
+    &gt;&gt;&gt; str_interval(polynomial(interval(0, 2), [-1, 3, -2]))
+    '-3 to 0.125'
+    &gt;&gt;&gt; str_interval(polynomial(interval(1, 3), [1, -3, 2]))
+    '0 to 10'
+    &gt;&gt;&gt; str_interval(polynomial(interval(0.5, 2.25), [10, 24, -6, -8, 3]))
+    '18.0 to 23.0'
+    """
+    "*** YOUR CODE HERE ***"
+
+</code></pre>
+
+  
+
+  
+
+</body>
+    </div>
+
+    <div id="disqus_thread"></div>
+                    <script type="text/javascript">
+                        /* * * CONFIGURATION VARIABLES * * */
+                        var disqus_shortname = 'gaotx';
+                        
+                        /* * * DON'T EDIT BELOW THIS LINE * * */
+                        (function() {
+                            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                        })();   
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  </body>
+</html>

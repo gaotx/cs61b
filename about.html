@@ -1,0 +1,476 @@
+---
+layout: page
+title: Course Information
+---
+
+<div>
+        <div class="segment">
+            <h2 class="segmenttitle">Welcome to CS 61B</h2>
+            <div class="text">
+                The CS 61 series is an introduction to computer science, with particular
+                emphasis on software and machines from a programmer's point of view.
+                CS 61A covered high-level approaches to problem-solving, providing you with
+                a variety of ways to organize solutions to programming problems as
+                compositions of functions, collections of objects, or sets of rules. In
+                CS 61B, we move to a somewhat more detailed (and to some extent, more basic)
+                level of programming.
+            </div>
+            <div class="text">
+                In 61A, the <i>correctness</i> of a program was our primary goal. In CS61B,
+                we're concerned also with <i>engineering</i>. An engineer, it is
+                said, is someone who can do for a dime what any fool can do for a dollar.
+                Much of 61B will be concerned with the tradeoffs in time and memory for
+                a variety of methods for structuring data.  We'll also be concerned with the
+                engineering knowledge and skills needed to build and maintain moderately
+                large programs.
+            </div>
+        </div>
+        <!--
+        <div class="segment">
+            <div class="segmenttitle">FAQ for the First Two Weeks</div>
+            <div class="text">
+                <b>Q: Are they labs and discussions during the first week?</b></br>
+                Yes to both. The first discussion will be January 20th. 
+            </div>
+            <div class="text">
+                <b>Q: Can I attend a different section than the one I'm registered for in Telebears?</b></br>
+                Ideally, you should attend the sections for which you are officially registered (if any). If you choose to attend a different section than your official section, please wait outside the room until two minutes before the section starts (XX:08). If there is still room, you are welcome to crash the section. You're welcome to do this to shop around and find your favorite GSI. You do not need to officially switch on Telebears, though we recommend that you let the GSIs in charge know that you're switching.
+            </div>
+            <div class="text">
+                <b>Q: I'm on the waitlist, what should I do?</b></br>
+                We will with near certainty be able to enroll everyone who meets the prerequisites. If you are wait-listed and
+                do meet the prerequisites (61A, 61AS, or E7), stick around and work on everything as if you are enrolled in the class. People generally drop within the first few weeks, which will give you a chance to snipe their spot. Those of you who intend to drop: <tt>please</tt> inform Tele-BEARS
+                as soon as possible. Do not contact us by email with registration issues, but feel free to post on Piazza. If you are a concurrent enrollment student, your application will probably take at least a week to resolve.
+            </div>            
+            <div class="text">
+                <b>Q: Do I need to buy any books, equipment, or special outfits to wear for the course?</b></br>
+                The textbook for the first six weeks of this course is <a href="https://www.google.com/search?q=head+first+java&oq=head+first+java&aqs=chrome..69i57j69i59.870j0j1&sourceid=chrome&es_sm=91&ie=UTF-8"><i>Head First Java, 2nd Edition</i> by Sierra
+                and Bates (O'Reilly, 2005).</a> This book is highly recommended (but not absolutely required) for those of you without Java experience. It's a great book, and really cheap for a textbook. Please don't Pirate Bay the book. This is not nice. You'll want this ASAP.
+            </div>
+            <div class="text">
+                Similar to Dan Garcia's EPA system, we will bump students at grading boundaries based on Effort, Participation, and Altruism. One way to Participate is answering in-class questions in class. Questions can be answered using an iClicker device, a mobile app, or a laptop. iClickers are not required for the course.
+            </div>
+            <div class="text">
+                <b>Q: Is attendance required?</b></br>
+                Lecture attendance is not required. One of the two lectures will be webcast. Time permitting, I may also provide supplementary videos. EPA points can be acquired by commenting on our videos using the lect.io platform (details coming soon). This will count as an alternative to clicker-type questions for those of you who like watching lecture on your own time. Discussion section attendance is not required. Lab attendance is required unless you submit the lab early. See below for more details.
+            </div>
+        </div>
+    -->
+        <div class="segment">
+            <h2 class="segmenttitle">Background Knowledge</h2>
+            <div class="text">
+                This class assumes you have taken CS61A, CS61AS, or E7, or have equivalent background to a student who has taken one of these courses. The course is largely built upon the assumption that you have taken CS61A or CS61AS, and E7 students may find the beginning of the course to be a bit scarier, particularly when it comes to object oriented programming and linked list manipulation.
+            </div>
+            <div class="text">
+                We assume you are coming in with zero Java experience. Nonetheless, we will move through basic Java syntax very quickly. Though the syntaxes of Java, Python, MATLAB, Scheme, etc. are enormously different, the underlying computational models are surprisingly similar.
+            </div>
+            <div class="text">
+                If you already have Java experience, great! We hope that you'll help out your fellow students in discussion, lab, and on Piazza, particularly in the opening weeks when everyone is catching up on Java.
+            </div>
+            <div class="text">
+                It would be nice, though not absolutely necessary, to have some UNIX experience before the semester starts.
+                All the instructional machines for this course will be running various flavors of the
+                UNIX operating system (generally, Ubuntu) and it's a really good idea for you to become familiar
+                with it. There will be online resources for learning Unix linked from the 1st lab. We will also announce on-campus help sessions on the announcements section of this website. If you'd like a physical reference, Paul Hilfinger suggests <a href="http://www.amazon.com/gp/offer-listing/0805375651/ref=dp_olp_used?ie=UTF8&amp;condition=used">"A Practical Guide to The Unix System (3rd edition)" by Mark Sobell
+                (Addison-Wesley, 1994)</a>. 
+            </div>
+        </div>
+
+
+        <div class="segment">
+            <h2 class="segmenttitle">Is this the right course for me?</h2>
+            <div class="text">
+                This is a course about data structures and programming methods. It happens to also teach Java,
+                since it is hard to teach programming without a language. However, it is not intended
+                as an exhaustive course on Java, the World-Wide Web, creating applets, user interfaces,
+                graphics, or any of that fun stuff.
+            </div>
+            <div class="text">
+                Some of you may have already had a data structures course, and simply want to learn
+                Java or C++. For you, self-study may be a better option. CS 9F (C++ for programmers) and
+                CS 9G (Java for programmers) are both one-unit self-paced courses that will teach you more
+                of what you want to know in less time. There is no enrollment limit for that course, and
+                you work through it at your own pace after the first and only lecture.
+            </div>
+            <div class="text">
+                Finally, the 1-unit self-paced course CS 47B is for students "with sufficient partial credit
+                in 61B," allowing them (with instructor's permission) to complete the 61B course requirement
+                without taking the full course.
+            </div>
+        </div>
+
+        <div class="segment">
+            <h2 class="segmenttitle">Discussion and Lab Sections</h2>
+            <div class="text">
+                Each week there is a 1 hour discussion section and a 2 hour lab section headed by a GSI, and supported by volunteer lab assistants. Information about the staff running each section can be found on the <a href="staff.html">staff page</a>.
+            </div>
+            <div class="text">
+                If you decide to permanently switch sections, it'd be best to switch in Telebears. However, if the section is officially full or doing so would somehow cause you significant grief, it's OK to simply clear it with the two TAs involved.
+            </div>
+            <div class="text">
+                Attendance is optional for discussion, but may be taken into account if you're on a grading boundary. Lab attendance is mandatory and missing a lab will result in a 10% penalty to that week's lab, though if you submit the lab early (by 10:00 PM on Wednesday), you may skip lab that week. You may skip any number of labs via early submission. During weeks in which labs are not graded, attendance is not required.
+            </div>   
+            <div class="text">
+                Labs will be online, so you will be able to do much of the work ahead of time. Nonetheless, we encourage you to attend your scheduled lab time. 
+                One major purpose of the labs is to give your TA a chance to check up on you and to find
+                out what people are and are not understanding. We've found that with the increasing
+                ability to work anywhere has come an increasing tendency for students to go off by themselves
+                and fall behind.  Don't make this mistake. Keep up with homework and lab work and above
+                all <i>let us know when you don't understand something!</i>
+            </div>                
+        </div>    
+
+        <div class="segment">
+            <h2 class="segmenttitle">Online Resources</h2>
+            <div class="text">
+                The <a href="{{site.baseurl}}/">course home page</a> will provide one-stop shopping for course information.
+                The course schedule as well as all handouts, homework, labs, FAQs, etc., will be posted there.
+            </div>
+            <div class="text">
+                Our discussion forum this semester will be <a href="https://piazza.com/class/hx9h4t96ea8qv">Piazza</a>.
+                For most questions about the course, Piazza is the right place to ask them. The course staff
+                read it regularly, so you will get a quick answer. Furthermore, by posting online
+                as opposed to emailing us directly, other students benefit by seeing the question and
+                the answer. Don't forget to check Piazza before asking your question, just in case
+                someone else has already posted it.
+            </div>
+            <div class="text">
+                The e-mail address <a href="mailto:cs61b@inst.eecs.berkeley.edu">cs61b@inst.eecs.berkeley.edu</a>
+                will send a message to the course staff (Josh and the TAs). You can use it for
+                correspondence that you don't want to send to Piazza. We all read it, so you will usually
+                get a quick reply. If you send a question that is of general interest, we may post the
+                response on Piazza (we will keep personal information out of it, of course).
+            </div>
+            <div class="text">
+                To talk with us, the best way is to come during regular office hours (posted on the home page).
+                Many of us are available at other times by appointment.  Please don't be shy. Web pages, email,
+                and Piazza are useful, but it's still much easier to understand something when you can
+                talk about it face-to-face.
+            </div>
+        </div>
+
+        <div class="segment">
+            <h2 class="segmenttitle">Course Materials</h2>
+            <div class="text">
+                The textbook for the first six weeks of this course is <a href="https://www.google.com/search?q=head+first+java&amp;oq=head+first+java&amp;aqs=chrome..69i57j69i59.870j0j1&amp;sourceid=chrome&amp;es_sm=91&amp;ie=UTF-8"><i>Head First Java, 2nd Edition</i> by Sierra
+                and Bates (O'Reilly, 2005).</a>. This book is highly recommended to those of you with no Java experience. It's an easy read, and is super cheap for a textbook.
+            </div>
+            <div class="text">
+                The textbook for the weeks 7-13 of the course is <a href="https://www.google.com/search?q=algorithms+4th+edition&amp;oq=algorithms+4th+edition&amp;aqs=chrome..69i57j69i61l3.1950j0j1&amp;sourceid=chrome&amp;es_sm=91&amp;ie=UTF-8"><i>Algorithms, 4th Edition</i></a> by Wayne and Sedgewick. 
+            </div>
+            <div class="text">
+                Both textbooks for this course are optional. Homework will not be assigned from them, and alternate readings will be provided when possible.
+            </div>
+            <div class="text">
+                Head First Java is not a reference book (it says so on page xxii). The official
+                description of the Java core language is available online in
+                <a href="http://docs.oracle.com/javase/specs/jls/se7/html">The Java Language Specification</a> 
+                (Java SE 7 Edition) by James Gosling, Bill Joy, Guy Steele, Gilad Bracha, and Alex Buckley. It's extremely thorough and easy to read (once you understand how to read it).
+            </div>
+        </div>
+
+        <div class="segment">
+            <h2 class="segmenttitle">Software</h2>
+            <div class="text">
+                This course does not have an official text editor. You may use Vim, Emacs, Sublime, or
+                IDEs like Eclipse, Netbeats, IntelliJ, Sublime, etc. Whatever you use, however, your
+                submitted solutions must conform to our expected layouts, as indicated in the assignments.
+            </div>
+            <div class="text">
+                This semester, we will be using Java 7. It is already installed on the lab computers, and it
+                may be provided with your computer as well. If it is not already installed you can download
+                JDK 7 from the <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Oracle site</a>. Information for setting up Java on your home computer will be linked in lab 1B.
+            </div>
+            <div class="text">
+                You will be able to do any work you'd like on any Windows, Mac OS X, or Linux computer. You may also remotely log into the instructional machines remotely. Information for doing so will be linked in lab 1B. All of the tools we use in the course should be relatively easy to set up, except for the gjdb debugger, which will only work on Mac OS X or Linux. More on this in a later lab. Rather than working natively on your own computer, you may find it more convenient to simply use the instructional machines remotely by logging in from home. Details will provided in lab 1B.
+            </div>
+            <div class="text">
+                We'll be using the version-control system Git for keeping and tracking your work.
+                Version-control systems allow you maintain a series of "snapshots" of your files at
+                various points in their development. Used properly, this provides you some back-up
+                protection, so that you can recover previous states of your work when something goes wrong.
+                Also, in later, team-oriented courses (as well as the real world), version-control systems
+                help manage collaborative work.
+            </div>
+            <div class="text">
+                You will be learning and using Git for this course to tracking and submit your work for
+                grading. The first lab will teach you the basics of what you will need to know. Feel free to
+                also read <a href="http://git-scm.com/doc">Git documentation</a>.
+            </div>
+        </div>
+        <div class="segment">
+            <h2 class="segmenttitle">Computer Accounts</h2>
+            <div class="text">
+                Every student will receive a computer account form in the first week. More information on
+                obtaining these forms will be announced on the course site.
+            </div>
+            <div class="text">
+                You must electronically register the account you intend to use for handing in assignments
+                (only one account, please) by the second week (by Friday's lecture).
+                The class web page contains a link with which you can register your
+                account and perform other adminstrative actions. Please use it to
+                give your registration information and to generate the keys you need
+                to work remotely and hand in homework assignments.
+            </div>
+            <div class="text">
+                When logged into our instructional systems for CS 61B work, please make
+                sure that you are using the standard configuration for the
+                class -- that is, the files <tt>.bashrc</tt>, <tt>.emacs</tt>,
+                etc., that should have been in your accounts initially. If you do modify these
+                files, you are on your own.
+            </div>
+        </div>
+        <div class="segment">
+            <h2 class="segmenttitle">HWs and Labs</h2>
+            <div class="text">
+            There will be 14 labs and 9 homeworks. Labs will take approximately two hours to complete, though some may run slightly longer. HWs will vary from 3 to 10 hours of work. You will turn in everything electronically using git (as described in lab 1). All homeworks and labs are individual efforts.
+            </div>
+            <div class="text">
+            Homeworks will be graded on correctness. Most homeworks will have two sets of automated tests. The 'release' test will be available immediately upon release of the assignment. When you submit your homework to the ag branch, you will receive an email with feedback from the 'release' test. When you are satisfied with your performance, submit your code to the submit branch. To hopefully save you from painful debugging session, your homework only needs to pass 80% of the autograder tests for full credit, except for HW7 which requires only 50%.
+            <!--There will also be a set of 'secret' tests that will be run two days after the homework is officially due. You will have until the end of the semester to correctly pass the secret tests. Half of each homework will be based on passing the 'release' test, and half on the 'secret' tests. <i>Note: This policy is under revision and is going to be made somewhat friendlier. Details soon (noted on: Feb 25th, 2015).</i>-->
+            </div>
+             <div class="text">Edit 4/10/15: After the due date, hw may be submitted to the submit branch. Unlike hw submitted before the due date, your score will be the exact autograder score (i.e. no 80% rule) as judged by the more rigorous secret grader, with the exception of hw1/hw2/hw3 which require only 50% passage on secret tests for full credit.
+             </div>
+            <div class="text">
+                We grade projects and homework <i>on the instructional machines.</i> Very often, you
+                will find that for various reasons (different software versions, different
+                operating systems), a Java program will work on your home machine, but not on ours.
+                Be sure to test your software on the instructional machines before submission.
+            </div>             
+            <div class="text">
+            Lab grading schemas vary. Most labs will be on correctness, but there will be no secret tests. Some of the labs are freebies (during project weeks). <b>Edit 4/10/15:</b> Like HW, labs can be submitted after the deadline for full credit. Unlike HW, there are no secret tests.
+            </div>
+            <div class="text">
+                Homeworks will be due at 10 PM on their respective due dates. Labs are due by 10:00 PM each Sunday after they are assigned. There is a short (unspecified) grace period for homeworks. There are no slip hours or slip days for homeworks. Your two lowest homeworks/labs will be dropped (for a total of two drops, not four). <b>Edit 4/10/15:</b> Any HW or lab can be resubmitted by May 4th at 11:59 PM.
+            </div>
+            <div class="text"> <b>Edit 4/10/15:</b> To summarize our overly complex grading scheme:
+            <ul><li>A HW or lab submitted to the submit branch by its deadline requires 80% correctness on the release tests for full credit, except HW7, which requires 50% correctness for full credit.
+            </li>
+            <li>A HW submitted after its deadline requires 100% correctness on the secret tests for full credit, except HW1/HW2/HW3 which require 50%.
+            </li>
+            <li>A lab submitted after its deadline requires 100% correctness on the release tests (no secret tests exist) for full credit, except lab1/lab2/lab3 which require 50%. If you forgot to submit the magic word, you can submit it now (but you should not submit magic words for labs which you did not attend).
+            </li>
+            <li>Projects are graded manually by humans, and must be submitted by their respective deadlines, subject to late points if turned in late.</li>
+            </ul>
+
+            </div>
+        </div>
+
+        <div class="segment">
+            <h2 class="segmenttitle">Programming Projects</h2>  
+            <div class="text">
+                There will be 4 larger programming projects. Projects are individual efforts, with the same collaboration rules as HW. You'll have later classes in which to build your teamwork skills. For 61B, our goal is to help you build the independence and fundamental skills that you'll need to thrive when building large programs.
+            </div>
+            <div class="text">            
+                Project 0 and 1 will be relatively easier than projects 2 and 3, taking less time and with greater levels of scaffolding. Project 2 will be a very difficult project (on par with what you might expect from Hilfinger's harder projects). Project 3 will be challenging, but not as time consuming as project 2.
+            </div>
+            <div class="text">
+                Each project will have three graders: 'basics', 'release', and 'secret'. The basics autograder will be running as soon as the assignment is out, and will provide verbose output. Successful completion of the basics autograder before the basics deadline will yield a point of extra credit.
+            </div>
+            <div class="text">
+                The release autograder will run once per day in the days leading up to an assignment. Typically, the release tests will provide less feedback. Release tests will switch from running once per day to running continuously after the assignment deadline. The results of the secret autograder tests will not be given out, and are only used for grading purposes. As the semester progresses, the number of tests that are given as 'basic' and 'release' tests will decrease.
+            </div>
+            <div class="text">
+                Projects 0, 1, 2, and 3 will be worth 10, 18, 24, and 18 points respectively. Projects 2 and 3 will each have 5 points worth of gold points. These will be especially challenging parts of the assignment. If you opt not to do the gold point parts of the projects, we will reweight your exams by 14/13ths.  <b>Edit (5/27/2015):</b> To incentivize people who want to do only one project's gold points, we'll give you Math.max(gold2 + gold3 + exams, max(gold2, gold3) + 27/26 * exams, 14/13 * exams).
+
+            </div>
+        </div>
+
+        <div class="segment">
+            <h2 class="segmenttitle">Exams</h2>  
+            <div class="text">
+                There will be two evening midterms on February 18th and April 1st, and a final exam on May 12th. You will be allowed to bring one page of handwritten notes (front and back) to midterm 1, two pages to midterm 2, and three pages to the final. Pages must be of reasonable physical dimensions. You will not be required to turn in these sheets, and you may reuse them from exam to exam.
+            <div class="text">
+            </div>
+                Inspired by the great Paul Hilfinger tradition, exams
+                may cover any material whatsoever. For fear of our lives, exams will almost exclusively test material covered in the course.
+            </div>
+            <div class="text">
+                Inevitably, some of you will have conflicts with the scheduled exam times. We will
+                arrange for alternative test times for those people who have sufficient cause.
+                Sufficient cause includes conflicting exams for other courses, medical or family
+                emergencies, or important religious holidays (however, we believe we have avoided all of
+                those).
+            </div>     
+            <div class="text">
+                Popular reasons that are <i>not</i> sufficient cause include having job interviews, 
+                having a plane ticket that you (or your parents) bought without consulting the schedule,
+                having exams or assignments in other courses at nearby times, being behind in your reading,
+                being tired, or being hung over.
+            </div>   
+            <div class="text">
+                We release grades for exams on <a href="https://gradescope.com/">Gradescope</a>.
+                If you believe we have misgraded an exam, request a regrade on the same site with
+                a note explaining your complaint. You should check the online solutions first to
+                make sure that this regrade will make your total score go up as it is possible to lose
+                points from a regrade request.
+            </div>
+            <div class="text">
+                <!-- Midterm grades can be "shadowed". This is the only place in the course where something like curving occurs. It works thus: Suppose you are SM standard deviations above the mean on a midterm and SF standard deviations above the mean on the final. If (SF - 0.5 > SM), then your midterm score will be completely replaced so that you are SF - 0.5 standard deviations above the original (pre-shadowed) midterm mean. For example, suppose you are 1.6 stdevs above the mean on the final and 1.2 stdev BELOW the mean on the midterm, then SF = 1.6 and SM = -1.2. Since SF - 0.5 > -1.2, your midterm score will be adjusted so you are now 1.1 stdevs above the mean. -->
+                Midterm (both MT1 and MT2) grades can be "shadowed" (aka a weaker version of "clobbered") by the final. The way it works is that if you are X standard deviations from the mean, your midterm scores will be replaced by a score equivalent to X - 0.5 standard deviations from the mean. This policy can only help, and cannot hurt your score.
+
+                <p>Effectively, this only applies if you improve substantially on your final: an improvement of over 0.5 standard deviations. 
+
+                </p><p>For example, suppose Bilbo scored 0.4 standard deviations above the mean on MT1, 0.9 standard deviations above the mean on MT2, and 1.1 standard deviations above the mean on the final. Then Bilbo's midterm scores will be replaced by 1.1 - 0.5 = 0.6 standard deviations above the mean, as long as this is an improvement.
+
+                </p><p>Since Bilbo already got 0.4 above the mean on MT1, his score would be replaced by 0.6. However, his score on MT2 would not be changed (since he is already 0.9 above the mean).
+
+                </p><p>As another example, suppose Bilbo is -1.1 above the mean on MT1, -0.1 on MT2, and 0.3 on the final, his midterm scores would be replaced by -0.2 (0.3 - 0.5) if that helps. In Bilbo's case, his MT1 score would be replaced by -0.2, and MT2 score would be untouched (since it is already better).
+
+               
+                <!-- his MT1 score would be replaced with the equivalent of 0.6 standard deviations (1.1 - 0.4 = 0.6) above (pre-shadowed) the original mean. Bilbo's MT2 score remains untouched (1.1 - 0.9 = 0.2, which is not greater than 0.5). In conclusion, you can shadow a bad midterm if you show substantial improvement, but that shadowing can only help you to a certain degree.-->
+            </p></div>                                                
+              <div class="text">
+                With the obvious exception of emergencies, you must arrange alternative exam times well
+                in advance. Information will be provided on how to request alternate times before each exam.
+            </div>
+        </div>
+        <div class="segment">
+            <h2 class="segmenttitle">Grades</div>
+            <h2 class="text">
+                Your letter grade will be determined by the total points out of the possible 233.
+                In other words, <i>there is no curve.</i> Your grade will depend solely on how well you do,
+                and not on how well everyone else does. Your final score will be the greater of the two columns shown below.
+
+<!--<table id="grading-bins">
+
+<tr><td>226<td>210<td>196<td>184<td>170<td>161<td>151<td>138<td>126<td>115<td>103<td>90<td>&lt; 90</tr>
+<tr><td>A+<td>A<td>A-<td>B+<td>B<td>B-<td>C+<td>C<td>C-<td>D+<td>D<td>D-<td>F</tr></table>-->
+
+
+<!--            </div>-->
+            <div class="text">
+                <table id="grade-breakdown">
+                    <thead>
+                        <tr>
+                          <th>Category</th>
+                          <th>Points (Track 1)</th>
+                          <th>Points (Track 2)</th>
+                        </tr>
+                    </thead>
+                    <tbody><tr><td>Projects (~30%)</td> <td>70</td> <td>70</td>
+                    </tr><tr><td>Homework/Labs (~10%)</td> <td>23</td> <td>23</td> 
+                    </tr><tr><td>Midterms (~30%-32%)</td> <td>70</td>  <td>70 * 14/13</td> 
+                    </tr><tr><td>Final Exam (~26%-28%)</td> <td>60</td> <td>60 * 14/13</td> 
+                            
+                    </tr><tr><td>Project Gold Points (0-4%)</td> <td>10</td> <td>0</td>
+                    </tr><tr><td>Total</td> <td>233</td>  <td>233</td>
+                </tr></tbody></table>
+            </div>
+            <div class="text">
+                <table id="letter-grades">
+                    <tbody><tr>
+                        <td>A+</td><td>A</td><td>A-</td><td>B+</td><td>B</td><td>B-</td><td>C+</td><td>C</td><td>C-</td><td>D+</td><td>D</td><td>D-</td><td>F
+                    </td></tr>
+                    <tr>
+                        <td>226</td><td>210</td><td>196</td><td>184</td><td>170</td><td>161</td><td>151</td><td>138</td><td>126</td><td>115</td><td>?103</td><td>90</td><td>&lt; 90</td>
+                    </tr>
+                </tbody></table>
+            </div>
+            <div class="text">
+                University guidelines suggest that the average 
+                GPA for a lower-division required course be in the range 2.5 - 2.9,
+                with 2.7 (B-) being typical. This corresponds to getting 60% on
+                tests (typical for past exams), 75% on projects, and 100% on homework and lab assignments. 
+
+            </div>
+
+            <div class="text">
+                We will grant grades of Incomplete <i>only</i> for dire medical or personal
+                emergencies that cause you to miss the final, and only if your work up to
+                that point has been satisfactory.  Do <i>not</i> try to get an
+                incomplete simply as a way to have more time to study or do a project.
+                That is contrary to University policy.
+            </div>
+
+        </div>
+        <div class="segment">
+            <h2 class="segmenttitle">Extra Credit</h2>
+            <div class="text">
+                There will be a total of 8.1 points of extra credit in the course:
+                <ol><li>1 point each for projects 0, 1, 2, and 3 basics autograders.</li>
+                <li>1 point for mid-semester survey.</li>
+                <li>3 points for taking the HKN survey.</li>
+                <li>0.1 points for fast put operation in project 1 (spec error)</li>
+                </ol>
+            </div>
+        </div>
+        <div id="collaboration" class="segment">
+            <h2 class="segmenttitle">Policy on Collaboration and Cheating</h2>
+                <div class="text">Deadlines can be stressful, and we know that under extreme pressure, it becomes tempting to start rationalizing actions that you would otherwise yourself consider inappropriate. Perhaps you'll find yourself facing a 61B project deadline, and under all this stress you'll convince yourself that you're just going to cheat for the moment so you can get the points, and that you'll come back later and really learn the thing you were supposed to have learned in order to restore your karmic balance (I've heard something along these lines a few times).
+
+                </div><div class="text">This is a terrible idea. Obviously it's important to learn how to deal with deadlines, but far more important than that, giving into this sort of pressure under not-so-dire circumstances is going to do some damage to your moral compass. Someday, when the consequences are higher than potentially losing a 1/3rd of a letter grade, you may find yourself committing dishonest acts at the cost of someone else's livelihood or life.
+
+                </div><div class="text">In CS61B, we have three types of assignments: homeworks, labs, and projects. The entire point of homeworks and labs is to learn. You should feel free to collaborate with others, though keep in mind that greater independence is likely to give you a better learning experience (as long as you aren't totally stuck).
+
+                </div><div class="text">By contrast, the projects were designed for learning (particularly how to be self-reliant in the context of large unfamiliar systems), as well as for the dual purpose of evaluating of your mastery of the course material. As such, they are intended to be completed primarily on your own, particularly when it comes to writing the actual code. 
+
+                </div><div class="text">Cheating on a project will earn you a negative score for that project, i.e. if a project is worth 127 points of your course grade, you will instead lose 127 points from your final point total. Cheating a second time or on an exam will earn you an F in the course. All incidents of cheating will be referred to the Office of Student Conduct.
+
+                </div><div class="text">What constitutes cheating? The golden rule of academic dishonesty is that you should not claim to be responsible for work that is not yours. 
+
+                </div><div class="text">This is obviously open to some interpretation, and you'll be getting some help from instructors, the internet, other students, and more throughout the course. This is OK, and we hope that the class is an open, welcoming, collaborative environment where we can help each other build the highest possible understanding of the course material.
+
+                </div><div class="text">To help (but not entirely define) the bounds of acceptable behavior, we have three important rules for projects:
+
+                </div><div class="text">1. <b>By You Alone</b>: All project code that you submit (other than skeleton code) should be written by you alone, except for small snippets that solve tiny subproblems (examples in the Permitted section below). 
+
+                </div><div class="text">2. <b>Do Not Possess or Share Code</b>: Before a project deadline, you should never be in possession of solution code that you did not write. You will be equally culpable if you distribute such code to other students or future students of 61B (within reason). DO NOT GIVE ANYONE YOUR CODE -- EVEN IF THEY ARE DESPERATELY ASKING. DO NOT POST SOLUTIONS TO PROJECTS ONLINE (on GitHub or anywhere else)! If you're not sure what you're doing is OK, please ask.
+
+                </div><div class="text">3. <b>Cite Your Sources</b>: When you receive significant assistance on a project from someone else, you should cite that assistance somewhere in your source code. We leave it to you to decide what constitutes 'significant'.
+
+                </div><div class="text">For clarity, examples of specific activities are listed below:
+
+                </div><div class="text">Permitted:<ul>
+                <li>Discussion of approaches for solving a problem. 
+                </li><li>Giving away or receiving significant conceptual ideas towards a problem solution. Such help should be cited as comments in your code. We ask that you try not to give away anything juicy, and instead try to lead people to such solutions.
+                </li><li>Discussion of specific syntax issues and bugs in your code.
+                </li><li>Using small snippets of code that you find online for solving tiny problems (e.g. googling "uppercase string java" may lead you to some sample code that you copy and paste into your solution). Such usages should be cited as comments in your hw, lab, and especially project code!</li></ul>
+
+                </div><div class="text">Permitted with Extreme Caution:
+                 <ul>
+
+                <li> Looking at someone else's project code to assist with debugging. Typing or dictacting code into someone else's computer is a violation of the "By You Alone" rule. 
+
+                </li><li> Looking at someone else's project code to understand a particular idea or part of a project. This is strongly discouraged due to the danger of plagiarism, but not absolutely forbidden. We are very serious about the "By You Alone" rule!</li></ul>
+
+                </div><div class="text"> Absolutely Forbidden:<ul>
+                <li> Possessing another student's project code in any form before a final deadline, be it electronic or on paper. This includes the situation where you're trying to help someone debug. Distributing such code is equally forbidden.
+                </li><li> Possessing project solution code that you did not write yourself (from online (e.g. GitHub), staff solution code found somewhere on a server it should not have been, etc.) before a final deadline. Distributing such code is equally forbidden.</li></ul>
+
+                </div><div class="text">We have advanced cheating detection software, and we will routinely run this code to detect cheating. Every semester, we catch and penalize a significant number of people. Do not be one of them. If you find yourself at such a point of total desperation that cheating begins to look attractive, contact one of the instructors and we can maybe help somehow. Likewise, if 61B is causing massive disruption to your personal life, please contact us directly.
+
+                </div><div class="text">Submissions that are someone else's work, but which are appropriately cited, will be given zero points (as opposed to a negative score and a referral to the administration).
+
+                </div><div class="text">Obviously, the expressive power of Java is a subset of the English language. And yes, you can obviously obey the letter of this entire policy while completely violating its spirit. However, this policy is not a game to be defeated, and such circumventions will be seen as plagiarism.
+
+                </div><div class="text">The above rules apply for projects. When it comes to HW and labs, you should strive to do as much as you can alone, but it is OK to work with others (even sharing code, although we recommend that you do this very sparingly) if you feel that you'll learn better that way. Nonetheless, you should not submit other student's HW or lab code as your own, and identical or near identical submissions will be treated as plagiarism. Though we have not enumerated a specific penalty for plagiarising HW and labs in this document, we reserve the right to enact an appropriate penalty from the <a href="http://www.eecs.berkeley.edu/Policies/acad.dis.shtml">departmental policy</a> on academic dishonesty. 
+            </div>
+        </div>
+        <div class="segment" ,="" id="lateness">
+            <h2 class="segmenttitle">Lateness</h2>
+            <div class="text">
+                We will give no credit for homeworks or labs after the deadline. Your lowest two scores on hw/labs are dropped (for a total of two drops, not four). This is intended to handle any contingencies. With 1200 students, we cannot afford to handle individual cases, though if you have a more extreme situation that warrants our attention, contact one of the head TAs.
+            </div>
+            <div class="text">
+                On programming projects, we'll penalize an assignment 5/12 percent
+                (0.417%) for each hour it is late, rounded off in some unspecified fashion.
+            </div>
+            <div class="text">
+                For each of your four projects, you'll receive 24 grace hours. Any hours unused will roll over to the next project. Thus, if you don't use any of your grace hours until the final project, you'll have 96 grace hours to use on that project. What a deal!
+            </div>
+        </div>
+        <div class="segment">
+            <h2 class="segmenttitle">Acknowledgements</h2>
+            <div class="text">
+                Some course handout material derived froms <a href="https://inst.eecs.berkeley.edu/~cs61b/fa14/handout0.pdf">Paul Hilfinger's CS61B handout</a>.
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+</div>

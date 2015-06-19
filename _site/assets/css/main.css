@@ -1,0 +1,15 @@
+div#disqus_thread {
+  margin: 30px;
+}
+
+.announcements {
+	margin-bottom: 200px;
+}
+
+.announcements ul ul {
+	 list-style: disc;
+}
+
+strong {
+	color: #0072c1;
+}

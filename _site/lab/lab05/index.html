@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+       
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <link rel="stylesheet" href="/assets/css/resource.css">
+  <link rel="stylesheet" href="/assets/css/lab.css">
+  <link rel="stylesheet" href="/assets/css/project.css">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="resource">
+      <body style="font-family: Georgia,serif;">
+    <h1 id="title-main">Lab 5: Trees, Dictionaries, Mutable Values</h1>
+
+    <p><i>Due at 11:59pm on 02/25/2015.</i></p>
+
+<h2>Starter Files</h2>
+
+<p>Download <a href="lab05.zip">lab05.zip</a>.
+Inside the archive, you will find starter files for the questions in this lab,
+  along with a copy of the <a href="ok">OK</a> autograder.</p>
+
+<h2>Submission</h2>
+
+<p>By the end of this lab, you should have submitted the lab with
+<code>python3 ok --submit</code>. You may submit more than once before the
+deadline; only the final submission will be graded.</p>
+
+
+<ul>
+  <li>To receive credit for this lab, you must complete Questions 1, 2, 3, and 4
+  in <a href="lab05.py">lab05.py</a> and submit through OK.</li>
+  <li>Questions 6, 7, 8, and 9 are <em>extra practice</em>. They can be found in
+  the <a href="lab05_extra.py">lab05_extra.py</a> file. It is recommended that you
+  complete these problems on your own time.</li>
+</ul>
+
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+  <li><a href="#trees">Trees</a></li>
+  <ul>
+  <li><a href="#terminology">Terminology</a></li>
+  <li><a href="#implementation">Implementation</a></li>
+  <li><a href="#q1">Question 1</a></li>
+  <li><a href="#q2">Question 2</a></li>
+</ul>
+
+  <li><a href="#dictionaries">Dictionaries</a></li>
+  <ul>
+  <li><a href="#q3">Question 3</a></li>
+</ul>
+
+  <li><a href="#mutable-values">Mutable Values</a></li>
+  <ul>
+  <li><a href="#q4">Question 4</a></li>
+</ul>
+
+  <li><a href="#extra-questions">Extra Questions</a></li>
+  <li><a href="#more-trees">More Trees</a></li>
+  <ul>
+  <li><a href="#q5">Question 5</a></li>
+  <li><a href="#q6">Question 6</a></li>
+  <li><a href="#q7">Question 7</a></li>
+</ul>
+
+  <li><a href="#dictionaries-shakespeare">Dictionaries + Shakespeare</a></li>
+  <ul>
+  <li><a href="#q8">Question 8</a></li>
+  <li><a href="#q9">Question 9</a></li>
+  <li><a href="#putting-it-all-together">Putting it all together</a></li>
+</ul>
+
+</ul>
+
+
+    
+
+
+<h2 id="trees">Trees</h2>
+
+
+<p>Trees are a way to represent a hierarchy of information. A
+file directory is a good example of a tree structure.
+There is a <code>root</code> folder that contains several other folders — <code>home</code>,
+<code>bin</code>, <code>user</code>, etc.  — and within each of these there exists a similar
+hierarchy.</p>
+
+<p>The name "tree" comes from the branching structure, like real trees in
+nature — except that CS trees are drawn with the root at the top and the
+leaves at the bottom.</p>
+
+
+<h3 id="terminology">Terminology</h3>
+
+
+<ul>
+  <li><strong>node</strong>: a point in the tree. In these pictures, each node includes
+  a datum (value at each node).</li>
+  <li><strong>root</strong>: the node at the top of a tree. Every tree has one root node.</li>
+  <li><strong>branches</strong>: the branches of a node are the trees directly beneath
+  the node.</li>
+  <li><strong>leaf</strong>: a node that has no branches.</li>
+  <li><strong>depth</strong>: the depth of a node is the number of levels below the root
+  node of the tree. The depth of the root is 0, and the depth of its
+  branches is 1.</li>
+</ul>
+
+
+<h3 id="implementation">Implementation</h3>
+
+
+<p>For this lab, we will be using trees according to the following
+specification: a tree consists of a root and a list of branches. Each
+of these branches is itself a tree. A leaf is represented as a tree
+whose list of branches is an empty list.</p>
+
+<p>Our implementation of trees can be found in <code>lab05.py</code>,
+though since it is an Data Abstraction, the implementation is not important. You can
+treat the object returned as a <code>tree</code>-type object, no matter what its
+actual type is.  The interface for our trees consists of the following
+functions:</p>
+
+<ul>
+  <li><p>Constructor</p>
+
+  <ul>
+    <li><code>tree(root, branches=[])</code>: Creates a tree object with the given data.</li>
+  </ul></li>
+  <li><p>Selectors</p>
+
+  <ul>
+    <li><code>root(tree)</code>: Returns the value at the root of the <code>tree</code>.</li>
+    <li><code>branches(tree)</code>: Returns a list of tree objects that are the
+    branches of the given <code>tree</code>.</li>
+  </ul></li>
+</ul>
+
+<p>For example, the tree generated by</p>
+
+<pre><code>t = tree(1, [tree(2),
+             tree(3, [tree(4), tree(5)]),
+             tree(6, [tree(7)])])</code></pre>
+
+<p>would look like this:</p>
+
+<pre><code>   1
+ / | \
+2  3  6
+  / \  \
+ 4   5  7</code></pre>
+
+<p>It may be easier to visualize this translation by formatting the code
+like this:</p>
+
+<pre><code>t = tree(1,
+         [tree(2),
+          tree(3,
+               [tree(4),
+                tree(5)]),
+          tree(6,
+               [tree(7)])])</code></pre>
+
+<p>To extract the number <code>3</code> from this tree, we would do this:</p>
+
+<pre><code>root(branches(t)[1])</code></pre>
+
+<p>The <code>print_tree</code> function prints out a tree in a
+human-readable form. The exact form follows the pattern illustrated
+above, where the root is unindented, and each of its branches is
+indented one level further.</p>
+
+<pre><code>def print_tree(t, indent=0):
+    """Print a representation of this tree in which each node is
+    indented by two spaces times its depth from the root.
+
+    &gt;&gt;&gt; print_tree(tree(1))
+    1
+    &gt;&gt;&gt; print_tree(tree(1, [tree(2)]))
+    1
+      2
+    &gt;&gt;&gt; print_tree(numbers)
+    1
+      2
+      3
+        4
+        5
+      6
+        7
+    """
+    print('  ' * indent + str(root(t)))
+    for branch in branches(t):
+        print_tree(branch, indent + 1)</code></pre>
+
+<h3 class="question" id="q1">Question 1</h3>
+
+<p>Define the function <code>countdown_tree</code> so that it returns the specific
+tree below. Make sure to use the tree constructor from the Data Abstraction!</p>
+
+<pre><code>    10
+   / \
+  /   \
+ 9     7
+ |     |
+ 8     6
+       |
+       5</code></pre>
+
+<p>The doctest below shows the <code>print_tree</code> representation:</p>
+
+
+    <button id="0" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>def countdown_tree():
+    """Return a tree that has the following structure.
+
+    &gt;&gt;&gt; print_tree(countdown_tree())
+    10
+      9
+        8
+      7
+        6
+          5
+    """
+<div class="alt 0">    "*** YOUR CODE HERE ***"
+</div><div class="solution 0">    return tree(10, [tree(9, [tree(8)]),
+                    tree(7, [tree(6, [tree(5)])])])</div></code></pre>
+
+
+
+<h3 class="question" id="q2">Question 2</h3>
+
+<p>Define the function <code>size_of_tree</code>, which takes in a tree as an
+argument and returns the number of entries in the tree.</p>
+
+
+    <button id="1" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>def size_of_tree(t):
+    """Return the number of entries in the tree.
+
+    &gt;&gt;&gt; print_tree(numbers)
+    1
+      2
+      3
+        4
+        5
+      6
+        7
+    &gt;&gt;&gt; size_of_tree(numbers)
+    7
+    """
+<div class="alt 1">    "*** YOUR CODE HERE ***"
+</div><div class="solution 1">    return 1 + sum([size_of_tree(t) for t in branches(t)])
+
+# Alternate solution
+def size_of_tree(t):
+    branches_sum = 0
+    for branch in branches(t):
+        branches_sum += size_of_tree(branch)
+    return 1 + branches_sum</div></code></pre>
+
+
+
+
+<h2 id="dictionaries">Dictionaries</h2>
+
+
+<p>Dictionaries are unordered sets of key-value pairs. To create a
+dictionary, use the following syntax:</p>
+
+<pre><code>&gt;&gt;&gt; singers = { 'Iggy Azalea': 'Fancy', 'Beyonce': 'Flawless', 'Adam Levine': 'Maps'}</code></pre>
+
+<p>The curly braces denote the key-value pairs in your dictionary. Each key-value
+pair is separated by a comma. For each pair, the key appears to the left of the
+colon and the value appears to the right of the colon. You can retrieve values
+from your dictionary by "indexing" using the key:</p>
+
+<pre><code>&gt;&gt;&gt; singers['Beyonce']
+'Flawless'
+&gt;&gt;&gt; singers['Iggy Azalea']
+'Fancy'</code></pre>
+
+<p>You can modify an entry for an existing key in the dictionary using the
+following syntax. Adding a new key follows identical syntax!</p>
+
+<pre><code>&gt;&gt;&gt; singers['Beyonce'] = 'Survivor'
+&gt;&gt;&gt; singers['Beyonce']
+'Survivor'
+&gt;&gt;&gt; singers['Nicki Minaj'] = 'Anaconda' # new entry!
+&gt;&gt;&gt; singers['Nicki Minaj']
+'Anaconda'</code></pre>
+
+<p>You can also check for membership of keys!</p>
+
+<pre><code>&gt;&gt;&gt; 'Adam Levine' in singers
+True</code></pre>
+
+<h3 class="question" id="q3">Question 3</h3>
+
+<p>Implement the function <code>counter</code> which takes in a string of words, and returns a
+dictionary where each key is a word in the message, and each value is the number
+of times that word is present in the original string.</p>
+
+
+    <button id="2" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>def counter(message):
+    """ Returns a dictionary of each word in message mapped
+    to the number of times it appears in the input string.
+
+    &gt;&gt;&gt; x = counter('to be or not to be')
+    &gt;&gt;&gt; x['to']
+    2
+    &gt;&gt;&gt; x['be']
+    2
+    &gt;&gt;&gt; x['not']
+    1
+    &gt;&gt;&gt; y = counter('run forrest run')
+    &gt;&gt;&gt; y['run']
+    2
+    &gt;&gt;&gt; y['forrest']
+    1
+    """
+    word_list = message.split()
+<div class="alt 2">    "*** YOUR CODE HERE ***"
+</div><div class="solution 2">    result_dict = {}
+    for word in word_list:
+        if word in result_dict:
+            result_dict[word] += 1
+        else:
+            result_dict[word] = 1
+    return result_dict</div></code></pre>
+
+
+
+
+<h2 id="mutable-values">Mutable Values</h2>
+
+
+<h3 class="question" id="q4">Question 4</h3>
+
+<p>What does Python print? Think about these before typing it into an
+interpreter!</p>
+
+
+    <pre><code>&gt;&gt;&gt; lst = [1, 2, 3, 4, 5, 6]
+&gt;&gt;&gt; lst[4] = 1
+&gt;&gt;&gt; lst
+<div class="alt 8">______</div><div class="solution 8">[1, 2, 3, 4, 1, 6]</div>
+&gt;&gt;&gt; lst[2:4] = [9, 8]
+&gt;&gt;&gt; lst
+<div class="alt 8">______</div><div class="solution 8">[1, 2, 9, 8, 1, 6]</div>
+&gt;&gt;&gt; lst[3] = ['hi', 'bye']
+&gt;&gt;&gt; lst
+<div class="alt 8">______</div><div class="solution 8">[1, 2, 9, ['hi', 'bye'], 1, 6]</div></code></pre>
+
+    <button id="8" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+
+    <pre><code>&gt;&gt;&gt; lst[3:] = ['oski', 'bear']
+&gt;&gt;&gt; lst
+<div class="alt 9">______</div><div class="solution 9">[1, 2, 9, 'oski', 'bear']</div>
+&gt;&gt;&gt; lst[1:3] = [2, 3, 4, 5, 6, 7, 8]
+&gt;&gt;&gt; lst
+<div class="alt 9">______</div><div class="solution 9">[1, 2, 3, 4, 5, 6, 7, 8, 'oski', 'bear']</div></code></pre>
+
+    <button id="9" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+
+    <pre><code>&gt;&gt;&gt; lst == lst[:]
+<div class="alt 10">______</div><div class="solution 10">True</div>
+&gt;&gt;&gt; lst is lst[:]
+<div class="alt 10">______</div><div class="solution 10">False</div>
+&gt;&gt;&gt; a = lst[:]
+&gt;&gt;&gt; a[0] = 'oogly'
+&gt;&gt;&gt; lst
+<div class="alt 10">______</div><div class="solution 10">[1, 2, 3, 4, 5, 6, 7, 8, 'oski', 'bear']</div></code></pre>
+
+    <button id="10" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+
+    <pre><code>&gt;&gt;&gt; lst = [1, 2, 3, 4]
+&gt;&gt;&gt; b = ['foo', 'bar']
+&gt;&gt;&gt; lst[0] = b
+&gt;&gt;&gt; lst
+<div class="alt 11">______</div><div class="solution 11">[['foo', 'bar'], 2, 3, 4]</div>
+&gt;&gt;&gt; b[1] = 'ply'
+&gt;&gt;&gt; lst
+<div class="alt 11">______</div><div class="solution 11">[['foo', 'ply'], 2, 3, 4]</div>
+&gt;&gt;&gt; b = ['farply', 'garply']
+&gt;&gt;&gt; lst
+<div class="alt 11">______</div><div class="solution 11">[['foo', 'ply'], 2, 3, 4]</div>
+&gt;&gt;&gt; lst[0] = lst
+&gt;&gt;&gt; lst
+<div class="alt 11">______</div><div class="solution 11">[[...], 2, 3, 4]</div>
+&gt;&gt;&gt; lst[0][0][0][0][0]
+<div class="alt 11">______</div><div class="solution 11">[[...], 2, 3, 4]</div></code></pre>
+
+    <button id="11" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+
+<h2 id="extra-questions">Extra Questions</h2>
+
+
+<p>The following questions are for <strong>extra practice</strong> — they can be found in the
+the <a href="lab05_extra.py">lab05_extra.py</a> file. It is recommended that you complete
+these problems on your own time.</p>
+
+
+<h2 id="more-trees">More Trees</h2>
+
+
+<h3 class="question" id="q5">Question 5</h3>
+
+<p>Define the function <code>height</code>, which takes in a tree as an argument
+and returns the depth of the deepest node in the tree.</p>
+
+
+    <button id="3" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>def height(t):
+    """Return the depth of the deepest node in the tree.
+
+    &gt;&gt;&gt; height(tree(1))
+    0
+    &gt;&gt;&gt; height(tree(1, [tree(2), tree(3)]))
+    1
+    &gt;&gt;&gt; print_tree(numbers)
+    1
+      2
+      3
+        4
+        5
+      6
+        7
+    &gt;&gt;&gt; height(numbers)
+    2
+    """
+<div class="alt 3">    "*** YOUR CODE HERE ***"
+</div><div class="solution 3">    if is_leaf(t):
+        return 0
+    deepest = 0
+    for branch in branches(t):
+        deepest = max(deepest, height(branch))
+    return deepest + 1
+
+# Alternate solution
+def height(t):
+    if is_leaf(t):
+        return 0
+    return 1 + max([height(branch) for branch in branches(t)])
+
+# Alternate solution 2
+from functools import reduce
+
+def height(t):
+    if is_leaf(t):
+        return 0
+    return reduce(max, [height(branch) for branch in branches(t)], 0)</div></code></pre>
+
+
+
+<h3 class="question" id="q6">Question 6</h3>
+
+<p>The squirrels on campus need your help! There are a lot of trees on campus and the squirrels would like to know which ones contain acorns. Define the function <code>acorn_finder</code>, which takes in a tree and returns <code>True</code> if the tree contains a node with the value <code>'acorn'</code> and <code>False</code> otherwise.</p>
+
+
+    <button id="4" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>def acorn_finder(t):
+    """Returns True if t contains a node with the value 'acorn' and
+    False otherwise.
+
+    &gt;&gt;&gt; sproul = tree('roots', [tree('branch1', [tree('leaf'), tree('acorn')]), tree('branch2')])
+    &gt;&gt;&gt; acorn_finder(sproul)
+    True
+    &gt;&gt;&gt; acorn_finder(numbers)
+    False
+    """
+<div class="alt 4">    "*** YOUR CODE HERE ***"
+</div><div class="solution 4">    if root(t) == 'acorn':
+      return True
+    for branch in branches(t):
+      if acorn_finder(branch) == True:
+        return True
+    return False</div></code></pre>
+
+
+
+<h3 class="question" id="q7">Question 7</h3>
+
+<p>Define the function <code>preorder</code>, which takes in a tree as an argument and
+returns a list of all the entries in the tree in the order that
+<code>print_tree</code> would print them. This ordering of the nodes in a tree is
+called a preorder traversal (you will learn about more orders of
+traversing a tree in CS 61B).</p>
+
+
+    <button id="5" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>def preorder(t):
+    """Return a list of the entries in this tree in the order that they
+    would be visited by a preorder traversal (see problem description).
+
+    &gt;&gt;&gt; preorder(numbers)
+    [1, 2, 3, 4, 5, 6, 7]
+    &gt;&gt;&gt; preorder(tree(2, [tree(4, [tree(6)])]))
+    [2, 4, 6]
+    """
+<div class="alt 5">    "*** YOUR CODE HERE ***"
+</div><div class="solution 5">    if branches(t) == []:
+        return [root(t)]
+    flattened_branches = []
+    for branch in branches(t):
+        flattened_branches += preorder(branch)
+    return [root(t)] + flattened_branches
+
+# Alternate solution
+def preorder(t):
+    return reduce(add, [preorder(branch) for branch in branches(t)], [root(t)])</div></code></pre>
+
+
+
+
+<h2 id="dictionaries-shakespeare">Dictionaries + Shakespeare</h2>
+
+<p>We will use dictionaries to approximate the entire works of
+Shakespeare! We're going to use a bigram language model. Here's the
+idea: We start with some word — we'll use "The" as an example. Then we
+look through all of the texts of Shakespeare and for every instance of
+"The" we record the word that follows "The" and add it to a list, known
+as the <em>successors</em> of "The".  Now suppose we've done this for every
+word Shakespeare has used, ever.</p>
+
+<p>Let's go back to "The". Now, we randomly choose a word from this list,
+say "cat". Then we look up the successors of "cat" and randomly choose
+a word from that list, and we continue this process. This eventually
+will terminate in a period (".") and we will have generated a
+Shakespearean sentence!</p>
+
+<p>The object that we'll be looking things up in is called a "successor
+table", although really it's just a dictionary. The keys in this
+dictionary are words, and the values are lists of successors to those
+words.</p>
+
+<h3 class="question" id="q8">Question 8</h3>
+Here's an incomplete definition of the <code>build_successors_table</code>
+function. The input is a list of words (corresponding to a
+Shakespearean text), and the output is a successors table. (By default,
+the first word is a successor to "."). See the example below:
+
+
+    <button id="6" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>def build_successors_table(tokens):
+    """Return a dictionary: keys are words; values are lists of
+    successors.
+
+    &gt;&gt;&gt; text = ['We', 'came', 'to', 'investigate', ',', 'catch', 'bad', 'guys', 'and', 'to', 'eat', 'pie', '.']
+    &gt;&gt;&gt; table = build_successors_table(text)
+    &gt;&gt;&gt; sorted(table)
+    [',', '.', 'We', 'and', 'bad', 'came', 'catch', 'eat', 'guys', 'investigate', 'pie', 'to']
+    &gt;&gt;&gt; table['to']
+    ['investigate', 'eat']
+    &gt;&gt;&gt; table['pie']
+    ['.']
+    &gt;&gt;&gt; table['.']
+    ['We']
+    """
+    table = {}
+    prev = '.'
+    for word in tokens:
+        if prev not in table:
+<div class="alt 6">            "*** YOUR CODE HERE ***"
+</div><div class="solution 6">            table[prev] = []</div><div class="alt 6">        "*** YOUR CODE HERE ***"
+</div><div class="solution 6">        table[prev].append(word)</div>        prev = word
+    return table</code></pre>
+
+
+
+<h3 class="question" id="q9">Question 9</h3>
+
+<p>Let's generate some sentences! Suppose we're given a starting word. We
+can look up this word in our table to find its list of successors, and
+then randomly select a word from this list to be the next word in the
+sentence. Then we just repeat until we reach some ending punctuation.</p>
+
+<p><em>Hint</em>: to randomly select from a list, first make sure you import the
+Python random library with <code>import random</code> and then use the expression
+<code>random.choice(my_list)</code>)</p>
+
+<p>This might not be a bad time to play around with adding strings
+together as well. Let's fill in the <code>construct_sent</code> function!</p>
+
+
+    <button id="7" class="toggleButton" style="display: inline-block;">
+    Toggle Solution<noscript> (enable JavaScript)</noscript>
+    </button>
+    
+
+<pre><code>def construct_sent(word, table):
+    """Prints a random sentence starting with word, sampling from
+    table.
+    """
+    import random
+    result = ' '
+    while word not in ['.', '!', '?']:
+<div class="alt 7">        "*** YOUR CODE HERE ***"
+</div><div class="solution 7">        result += word + ' '
+        word = random.choice(table[word])</div>    return result + word</code></pre>
+
+
+
+
+<h3 id="putting-it-all-together">Putting it all together</h3>
+
+
+<p>Great! Now all that's left is to run our functions with some actual
+code. The following snippet included in the skeleton code will return
+a list containing the words in all of the works of Shakespeare.</p>
+
+<blockquote><p><em>Warning</em>: do <strong>NOT</strong> try to print the return result of this function.</p></blockquote>
+
+<pre><code>def shakespeare_tokens(path='shakespeare.txt', url='http://goo.gl/SztLfX'):
+    """Return the words of Shakespeare's plays as a list."""
+    import os
+    from urllib.request import urlopen
+    if os.path.exists(path):
+        return open('shakespeare.txt', encoding='ascii').read().split()
+    else:
+        shakespeare = urlopen(url)
+        return shakespeare.read().decode(encoding='ascii').split()</code></pre>
+
+<p>Next, we probably want an easy way to refer to our list of tokens and
+our successors table.  Let's make the following assignments (<em>Note:</em> the following lines are commented in the provided file. Uncomment them before procceding)</p>
+
+<pre><code>tokens = shakespeare_tokens()
+table = build_successors_table(tokens)</code></pre>
+
+<p>Finally, let's define an easy to call utility function:</p>
+
+<pre><code>&gt;&gt;&gt; def sent():
+...     return construct_sent('The', table)
+&gt;&gt;&gt; sent()
+" The plebeians have done us must be news-cramm'd "
+
+&gt;&gt;&gt; sent()
+" The ravish'd thee , with the mercy of beauty "
+
+&gt;&gt;&gt; sent()
+" The bird of Tunis , or two white and plucker down with better ; that's God's sake "</code></pre>
+
+<p>Notice that all the sentences start with the word "The". With a few
+modications, we can make our sentences start with a random word. The
+following <code>random_sent</code> function (defined in your starter file) will
+do the trick:</p>
+
+<pre><code>def random_sent():
+    import random
+    return construct_sent(random.choice(table['.']), table)</code></pre>
+
+<p>Go ahead and load your file into Python (be sure to use the <code>-i</code> flag).
+You can now call the <code>random_sent</code> function to generate random
+Shakespearean sentences!</p>
+
+<pre><code>&gt;&gt;&gt; random_sent()
+' Long live by thy name , then , Dost thou more angel , good Master Deep-vow , And tak'st more ado but following her , my sight Of speaking false !'
+
+&gt;&gt;&gt; random_sent()
+' Yes , why blame him , as is as I shall find a case , That plays at the public weal or the ghost .'</code></pre>
+
+  
+
+  <script src="//code.jquery.com/jquery-latest.js"></script>
+<script>
+  $(function() {
+    if (new Date("02/26/2015") < new Date()) {
+      $('.toggleButton').css('display', 'inline-block');
+      $('.toggleButton').click(function() {
+        var solution_id = $(this).attr('id');
+        $('div.' + solution_id).slideToggle(600);
+      });
+    }
+    // Always display these toggle buttons
+    $('.toggleButtonShow').click(function() {
+      var solution_id = $(this).attr('id');
+      $('div.' + solution_id).slideToggle(600);
+    });
+  });
+</script>
+
+</body>
+    </div>
+
+    <div id="disqus_thread"></div>
+                    <script type="text/javascript">
+                        /* * * CONFIGURATION VARIABLES * * */
+                        var disqus_shortname = 'gaotx';
+                        
+                        /* * * DON'T EDIT BELOW THIS LINE * * */
+                        (function() {
+                            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                        })();   
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  </body>
+</html>

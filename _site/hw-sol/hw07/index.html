@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+       
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <link rel="stylesheet" href="/assets/css/resource.css">
+  <link rel="stylesheet" href="/assets/css/lab.css">
+  <link rel="stylesheet" href="/assets/css/project.css">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="resource">
+      <body style="font-family: Georgia,serif;">
+    <h1 id="title-main">CS 61A: Solutions for Homework 7</h1>
+
+    <p><strong>Solutions:</strong> You can find the file with
+solutions for all questions <a href="hw07.scm">here</a>.</p>
+
+
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+  <li><a href="#q1">Question 1</a></li>
+  <li><a href="#conditional-expressions">Conditional expressions</a></li>
+  <li><a href="#q2">Question 2</a></li>
+  <li><a href="#q3">Question 3</a></li>
+  <li><a href="#q4">Question 4</a></li>
+  <li><a href="#q5">Question 5</a></li>
+  <li><a href="#q6">Question 6</a></li>
+  <li><a href="#q7">Question 7</a></li>
+  <li><a href="#q8">Question 8</a></li>
+  <li><a href="#q9">Question 9</a></li>
+  <li><a href="#q10">Question 10</a></li>
+</ul>
+
+
+    
+
+<p>The Scheme interpreter is included in the starter ZIP archive. To run the
+Scheme interpreter, use the following command:</p>
+
+<pre><code>python3 scheme</code></pre>
+
+<p>To load a file (such as <code>hw07.scm</code>), use</p>
+
+<pre><code>python3 scheme -load hw07.scm</code></pre>
+
+<p>You can also use our <a href="http://cs61a.org/assets/interpreter/scheme.html">online Scheme interpreter</a>.</p>
+
+<h3 class="question" id="q1">Question 1</h3>
+
+<p>Define the procedures <code>cadr</code> and <code>caddr</code>, which return the second
+and third elements of a list, respectively:</p>
+
+<pre><code>(define (cddr s)
+  (cdr (cdr s)))
+
+(define (cadr s)
+<span class="sol-highlight">  (car (cdr s))</span>
+)
+
+(define (caddr s)
+<span class="sol-highlight">  (car (cddr s))</span>
+)</code></pre>
+
+<p>You can unlock and test using OK:</p>
+
+<pre><code>python3 ok -q cadr-caddr -u
+python3 ok -q cadr-caddr</code></pre>
+
+
+<h3 id="conditional-expressions">Conditional expressions</h3>
+
+
+<p>The <code>cond</code> special form is a general conditional expression, similar to
+a multi-clause conditional statement in Python.  The general form of a
+conditional expression is:</p>
+
+<pre><code>(cond
+    (&lt;p1&gt; &lt;e1&gt;)
+    (&lt;p2&gt; &lt;e2&gt;)
+    ...
+    (&lt;pn&gt; &lt;en&gt;)
+    (else &lt;else-expression&gt;))</code></pre>
+
+<p>consisting of the symbol <code>cond</code> followed by pairs of expressions <code>(&lt;p&gt;
+&lt;e&gt;)</code> called clauses. The first expression in each pair is a
+<em>predicate</em>: an expression whose value is interpreted as either <code>true</code>
+or <code>false</code>.</p>
+
+<p>Conditional expressions are evaluated as follows. The predicate <code>&lt;p1&gt;</code>
+is evaluated first. If its value is <code>false</code>, then <code>&lt;p2&gt;</code> is evaluated.
+If <code>&lt;p2&gt;</code>'s value is also <code>false</code>, then <code>&lt;p3&gt;</code> is evaluated. This
+process continues until a predicate is found whose value is <code>true</code>, in
+which case the interpreter returns the value of the corresponding
+consequent expression <code>&lt;e&gt;</code> of the clause as the value of the
+conditional expression. If none of the <code>&lt;p&gt;</code>'s is found to be <code>true</code>,
+the interpreter returns the value of the <code>else</code> expression.</p>
+
+<p>The word "predicate" is used for procedures that return <code>true</code> or
+<code>false</code>, as well as for expressions that evaluate to <code>true</code> or <code>false</code>.</p>
+
+<h3 class="question" id="q2">Question 2</h3>
+
+<p>Using <code>cond</code>, define a procedure <code>sign</code> that returns <code>-1</code> for negative
+arguments, <code>0</code> for zero, and <code>1</code> for positive arguments:</p>
+
+<pre><code>(define (sign x)
+<span class="sol-highlight">  (cond ((&gt; x 0) 1)
+        ((= x 0) 0)
+        ((&lt; x 0) -1))</span>
+)</code></pre>
+
+<p>You can unlock and test using OK:</p>
+
+<pre><code>python3 ok -q sign -u
+python3 ok -q sign</code></pre>
+
+<h3 class="question" id="q3">Question 3</h3>
+
+<p>Implement a procedure <code>pow</code> for raising the number <code>b</code> to the power of
+integer <code>n</code> that runs in Θ(log n) time. <em>Hint:</em> Use the built-in
+predicates <code>even?</code> and <code>odd?</code> and the <code>square</code> procedure to implement
+the procedure using successive squaring, as we did in lecture:</p>
+
+<pre><code>(define (square x) (* x x))
+
+(define (pow b n)
+<span class="sol-highlight">  (cond ((= n 0) 1)
+        ((even? n) (square (pow b (/ n 2))))
+        (else (* b (pow b (- n 1)))))</span>
+)</code></pre>
+
+<p>You can unlock and test using OK:</p>
+
+<pre><code>python3 ok -q pow -u
+python3 ok -q pow</code></pre>
+
+<h3 class="question" id="q4">Question 4</h3>
+
+<p>Implement a predicate <code>ordered?</code>, which takes a list of numbers and
+returns whether the numbers are in ascending order. A <em>predicate</em> is a
+procedure that returns <code>true</code> or <code>false</code>.</p>
+
+<pre><code>(define (ordered? s)
+<span class="sol-highlight">  (if (or (null? s) (null? (cdr s)))
+      true
+      (and (&lt;= (car s) (cadr s)) (ordered? (cdr s))))</span>
+)</code></pre>
+
+<p>You can unlock and test using OK:</p>
+
+<pre><code>python3 ok -q ordered -u
+python3 ok -q ordered</code></pre>
+
+<h3 class="question" id="q5">Question 5</h3>
+
+<p>Implement the procedure <code>nodots</code>, which takes a nested list of numbers that
+may not be well-formed and returns a nested list with the same content and
+structure, but which does not have any dots when displayed.</p>
+
+<pre><code>(define (nodots s)
+<span class="sol-highlight">  (define (dotted s) (and (pair? s)
+                          (not (or (pair? (cdr s))
+                                   (null? (cdr s))))))
+  (cond ((null? s) s)
+        ((dotted s) (list (nodots (car s)) (cdr s)))
+        ((pair? s) (cons (nodots (car s)) (nodots (cdr s))))
+        (else s))</span>
+)</code></pre>
+
+<p>You can unlock and test using OK:</p>
+
+<pre><code>python3 ok -q nodots -u
+python3 ok -q nodots</code></pre>
+
+<h3 class="question" id="q6">Question 6</h3>
+
+<p>One way to represent a set is to store the elements in a sorted list that
+contains no repeated elements. Define a procedure <code>contains?</code> that returns
+whether a set <code>s</code> contains value <code>v</code>, assuming <code>s</code> is represented in this way.
+The Python implementation of this procedure is provided for your reference.</p>
+
+<pre><code>; Sets as sorted lists
+
+(define (empty? s) (null? s))
+
+(define (contains? s v)
+    (cond ((empty? s) false)
+<span class="sol-highlight">          ((&gt; (car s) v) false)
+          ((= (car s) v) true)
+          ((&lt; (car s) v) (contains? (cdr s) v))</span>
+          ))
+
+; Equivalent Python code, for your reference:
+;
+; def empty(s):
+;     return len(s) == 0
+;
+; def contains(s, v):
+;     if empty(s):
+;         return False
+;     elif s.first &gt; v:
+;         return False
+;     elif s.first == v:
+;         return True
+;     else:
+;         return contains(s.rest, v)</code></pre>
+
+<p>You can unlock and test using OK:</p>
+
+<pre><code>python3 ok -q contains -u
+python3 ok -q contains</code></pre>
+
+<h3 class="question" id="q7">Question 7</h3>
+
+<p>Next, define <code>add</code>, which takes a set <code>s</code> and a value <code>v</code> as arguments. It
+returns a representation of a set containing the values in <code>s</code> and the value
+<code>v</code>. There should be no repeated elements in the return value.</p>
+
+<pre><code>(define (add s v)
+    (cond ((empty? s) (list v))
+<span class="sol-highlight">          ((= (car s) v) s)
+          ((&gt; (car s) v) (cons v s))
+          ((&lt; (car s) v) (cons (car s) (add (cdr s) v)))</span>
+          ))</code></pre>
+
+<p>You can unlock and test using OK:</p>
+
+<pre><code>python3 ok -q add -u
+python3 ok -q add</code></pre>
+
+<h3 class="question" id="q8">Question 8</h3>
+
+<p>Next, define <code>intersect</code>, which returns a set containing only values that
+appear in both sets <code>s</code> and <code>t</code>. Your implementation should run in linear time
+in the length of the input sets. The Python implementation of this procedure is
+provided for your reference.</p>
+
+<p>Also, define <code>union</code>, which returns a set containing all values that appear
+in either set <code>s</code> or <code>t</code>.</p>
+
+<pre><code>(define (intersect s t)
+    (cond ((or (empty? s) (empty? t)) nil)
+<span class="sol-highlight">          ((= (car s) (car t)) (cons (car s) (intersect (cdr s) (cdr t))))
+          ((&lt; (car s) (car t)) (intersect (cdr s) t))
+          ((&gt; (car s) (car t)) (intersect s (cdr t)))</span>
+          ))
+
+; Equivalent Python code, for your reference:
+;
+; def intersect(set1, set2):
+;     if empty(set1) or empty(set2):
+;         return Link.empty
+;     else:
+;         e1, e2 = set1.first, set2.first
+;         if e1 == e2:
+;             return Link(e1, intersect(set1.rest, set2.rest))
+;         elif e1 &lt; e2:
+;             return intersect(set1.rest, set2)
+;         elif e2 &lt; e1:
+;             return intersect(set1, set2.rest)
+
+(define (union s t)
+    (cond ((empty? s) t)
+          ((empty? t) s)
+<span class="sol-highlight">          ((= (car s) (car t)) (cons (car s) (union (cdr s) (cdr t))))
+          ((&lt; (car s) (car t)) (cons (car s) (union (cdr s) t)))
+          ((&gt; (car s) (car t)) (cons (car t) (union s (cdr t))))</span>
+          ))</code></pre>
+
+<p>You can unlock and test using OK:</p>
+
+<pre><code>python3 ok -q intersect -u
+python3 ok -q intersect
+
+python3 ok -q union -u
+python3 ok -q union</code></pre>
+
+<h3 class="question" id="q9">Question 9</h3>
+
+<p>Another way to represent a set is to store the elements in a binary search
+tree. A binary search tree's branches are either empty or binary search trees.
+Also, the entry at the root of the tree must be greater than all entries in
+the left branch and less than all entries in the right branch.</p>
+
+<p>The following procedures define a data abstraction for a binary search tree.</p>
+
+<pre><code>; A data abstraction for binary trees where nil represents the empty tree
+(define (tree entry left right) (list entry left right))
+(define (entry t) (car t))
+(define (left t) (cadr t))
+(define (right t) (caddr t))
+(define (empty? s) (null? s))
+(define (leaf entry) (tree entry nil nil))</code></pre>
+
+<p>Define the procedure <code>in?</code>, which returns whether a binary search tree <code>t</code>
+contains an element <code>v</code>. Your implementation should run in logarithmic time in
+the number of entries in a balanced input tree. The Python implementation of
+this procedure is provided for your reference.</p>
+
+<pre><code>(define (in? t v)
+    (cond ((empty? t) false)
+<span class="sol-highlight">          ((= (entry t) v) true)
+          ((&lt; (entry t) v) (in? (right t) v))
+          ((&gt; (entry t) v) (in? (left t) v))</span>
+          ))
+
+; Equivalent Python code, for your reference:
+;
+; def contains(s, v):
+;     if s.is_empty:
+;         return False
+;     elif s.entry == v:
+;         return True
+;     elif s.entry &lt; v:
+;         return contains(s.right, v)
+;     elif s.entry &gt; v:
+;         return contains(s.left, v)</code></pre>
+
+<p>You can unlock and test using OK:</p>
+
+<pre><code>python3 ok -q in -u
+python3 ok -q in</code></pre>
+
+<h3 class="question" id="q10">Question 10</h3>
+
+<p>Define <code>as-list</code>, which takes a binary search tree and returns a sorted list
+containing the entries of the tree. For an optional challenge, define the
+procedure so that it runs in linear time in the length of the resulting list.
+Converting to and from the sorted list representation in linear time allows
+binary search trees to be intersected in linear time.</p>
+
+<pre><code>(define (as-list t)
+<span class="sol-highlight">    (define (extend t s)
+        (if (empty? t) s
+            (extend (left t)
+                    (cons (entry t) (extend (right t) s)))))
+    (extend t nil)</span>
+    )</code></pre>
+
+<p>You can unlock and test using OK:</p>
+
+<pre><code>python3 ok -q as-list -u
+python3 ok -q as-list</code></pre>
+
+  
+
+  
+
+</body>
+    </div>
+
+    <div id="disqus_thread"></div>
+                    <script type="text/javascript">
+                        /* * * CONFIGURATION VARIABLES * * */
+                        var disqus_shortname = 'gaotx';
+                        
+                        /* * * DON'T EDIT BELOW THIS LINE * * */
+                        (function() {
+                            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                        })();   
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  </body>
+</html>

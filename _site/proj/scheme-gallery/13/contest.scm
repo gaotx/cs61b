@@ -1,0 +1,65 @@
+
+(define colors '("white" "black" "red" "blue" "pink" "orange" "maroon" "red" "blue" "yellow" "green" "silver" "teal" "tan" "gold" "olive" "turquoise" "navy" "indigo" "hotpink" "maroon"))
+
+(define (row xloc xstart xend xinc ystart yend yinc radius maxiterations)
+	(if (>= xloc xend) nil
+		(begin
+			(column xloc ystart ystart yend yinc radius maxiterations)
+			(row (+ xloc xinc) xstart xend xinc ystart yend yinc radius maxiterations)
+			)))
+
+(define (column xloc yloc ystart yend yinc radius maxiterations)
+	(if (>= yloc yend) nil
+		(begin
+			(sequence xloc yloc 0 0 radius 0 maxiterations colors)
+			(column xloc (+ yloc yinc) ystart yend yinc radius maxiterations)
+			)))
+
+(define (sequence xloc yloc z_xloc z_yloc radius iteration maxiterations colorsel)
+	(if (or (> (+ (* z_xloc z_xloc) (* z_yloc z_yloc)) (* radius radius)) (> iteration maxiterations))
+		(if (> iteration 4)
+			(begin
+				(penup)
+				(goto (floor (* yloc 100)) (floor (* xloc 100)))
+				(pendown)
+				(begin_fill)
+				(if (and (and (> yloc -0.05) (< yloc 0.05)) (< xloc -1.25)) (color "brown") (color (car colorsel)))
+				(circle (floor (* iteration 0.5)))
+				(end_fill)
+				))
+		(sequence xloc yloc (+ (- (* z_xloc z_xloc) (* z_yloc z_yloc)) xloc) (+ (+ (* z_xloc z_yloc) (* z_xloc z_yloc)) yloc) radius (+ iteration 1) maxiterations (cdr colorsel))))
+
+; Recursion program
+(define (picture)
+	(begin
+		(clear)
+		(color "blue")
+		(speed 0)
+		(penup)
+		(goto -400 -400)
+		(pendown)
+		(begin_fill)
+		(goto 400 -400)
+		(goto 400 400)
+		(goto -400 400)
+		(goto -400 -400)
+		(end_fill)
+		(penup)
+		(color "green")
+		(goto -400 -400)
+		(pendown)
+		(begin_fill)
+		(goto 400 -400)
+		(goto 400 -200)
+		(goto -400 -200)
+		(goto -400 -400)
+		(end_fill)
+		(row -2 -2 2 0.1 -2 2 0.1 2 9)
+		(penup)
+		(goto 250 300)
+		(color "gold")
+		(pendown)
+		(begin_fill)
+		(circle 75)
+		(end_fill)
+		(hideturtle)))

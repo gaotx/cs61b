@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Contest 1 Hog Strategy 
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <link rel="stylesheet" href="/assets/css/resource.css">
+  <link rel="stylesheet" href="/assets/css/lab.css">
+  <link rel="stylesheet" href="/assets/css/project.css">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="resource">
+      <div style="font-family: Georgia,serif;">
+    <h1 id="title-main">Optional Contest 1: Hog Strategy</h1>
+
+    <div id="haiku">
+  
+<blockquote><cite>
+A strategy is<br>
+A single function that makes<br>
+Ten thousand choices.
+</cite></blockquote>
+
+</div>
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+  <li><a href="#instructions">Instructions</a></li>
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#contest-rules">Contest Rules</a></li>
+</ul>
+
+
+    
+
+<p><strong>This contest is completely optional!</strong></p>
+
+
+<h2 id="instructions">Instructions</h2>
+
+
+<p>Submit a <code>hog.py</code> file containing a function called <code>final_strategy</code> and a name
+called <code>final_bid</code> bound to a non-negative integer.</p>
+
+<pre><code>python3 ok --submit</code></pre>
+
+<p>A blank <code>hog.py</code> file and simple tests for correct formatting can be downloaded
+as a <a href="hog_contest.zip">zip archive</a>. Type <code>python3 ok</code> to run the provided tests.</p>
+
+
+<h2 id="overview">Overview</h2>
+
+
+<p>Each submitted strategy will play against all other submissions. We will
+exactly compute the expected win rate for each player, so that the
+outcome of this tournament will be determined by strategy alone and not the
+roll of the dice.</p>
+
+<p>The <code>final_bid</code> of each player will determine who plays first and the starting
+scores of each player. The following three rules apply:</p>
+
+<ul>
+  <li>If the bids are equal, each player starts with goal points, resulting in an
+  instant tie. It does not matter who rolls first.</li>
+  <li>If one bid is exactly 3 higher than the other, the higher bidder rolls first
+  starting with 10 points, and the other player starts with 0. For example, if
+  player 0 bids 2 and player 1 bids 5, player 1 would roll first starting with
+  10 points and player 0 would start with 0 points.</li>
+  <li>Otherwise, the player with the higher bid rolls first. Each player starts
+  with a number of points equal to her/his opponent's bid. For example, if
+  player 0 bids 3 and player 1 bids 4, player 1 would roll first starting with
+  3 points and player 0 would start with 4 points.</li>
+</ul>
+
+<p>A submission scores a match point each time it has an expected win rate above
+50.00000001% (.5 + 1e-10). The submissions with the most match points win.</p>
+
+
+<h2 id="contest-rules">Contest Rules</h2>
+
+
+<ul>
+  <li>The contest may be entered individually or in pairs. Two people submit a
+  single entry. Each person in the course can only be associated with at most
+  one entry.</li>
+  <li>All strategies must be deterministic, pure functions of the current player
+  scores! Non-deterministic strategies or strategies based on the history of
+  the game will be disqualified.</li>
+  <li>Calling your <code>final_strategy</code> function on every possible pair of scores
+  should take less than 2 minutes. Less than 5 seconds is strongly preferred.</li>
+  <li>Winning entries will receive 2 points of extra credit.</li>
+  <li>Winners will also be recognized publicly in future offerings of CS 61A.</li>
+</ul>
+
+  
+
+  
+
+</div>
+    </div>
+
+    <div id="disqus_thread"></div>
+                    <script type="text/javascript">
+                        /* * * CONFIGURATION VARIABLES * * */
+                        var disqus_shortname = 'gaotx';
+                        
+                        /* * * DON'T EDIT BELOW THIS LINE * * */
+                        (function() {
+                            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                        })();   
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  </body>
+</html>

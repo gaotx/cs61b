@@ -1,0 +1,16 @@
+(define (repeat k fn) (if (> k 0)
+                            (begin (fn) (repeat (- k 1) fn))
+                            nil))
+(define (circle x y) (fd x) (rt y))
+
+(define (after-circle)
+  (define (after-circle-helper x y z a)
+    (cond 
+    ((> a 0) (circle 100 50)
+    (after-circle-helper x y z (- a 1))
+    )
+    ((> z 0) (fd x) (rt y) (after-circle-helper x (+ y .5)(- z 1) 0))
+    )
+  )
+  (after-circle-helper 100 50 1000 30)
+)

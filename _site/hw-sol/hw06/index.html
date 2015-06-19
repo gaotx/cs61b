@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+       
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <link rel="stylesheet" href="/assets/css/resource.css">
+  <link rel="stylesheet" href="/assets/css/lab.css">
+  <link rel="stylesheet" href="/assets/css/project.css">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="resource">
+      <body style="font-family: Georgia,serif;">
+    <h1 id="title-main">CS 61A: Solutions for Homework 6</h1>
+
+    <p><strong>Solutions:</strong> You can find the file with
+solutions for all questions <a href="hw06.py">here</a>.</p>
+
+
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+  <li><a href="#q1">Question 1</a></li>
+  <li><a href="#q2">Question 2</a></li>
+  <li><a href="#q3">Question 3</a></li>
+  <li><a href="#q4">Question 4</a></li>
+</ul>
+
+
+    
+
+<p>The <code>Link</code> class from lecture implements the linked list data type:</p>
+
+<pre><code>class Link:
+    """A linked list.
+
+    &gt;&gt;&gt; s = Link(3, Link(4, Link(5)))
+    &gt;&gt;&gt; len(s)
+    3
+    &gt;&gt;&gt; s[2]
+    5
+    &gt;&gt;&gt; s
+    Link(3, Link(4, Link(5)))
+    """
+    empty = ()
+
+    def __init__(self, first, rest=empty):
+        assert rest is Link.empty or isinstance(rest, Link)
+        self.first = first
+        self.rest = rest
+
+    def __getitem__(self, i):
+        if i == 0:
+            return self.first
+        else:
+            return self.rest[i-1]
+
+    def __len__(self):
+        return 1 + len(self.rest)
+
+    def __repr__(self):
+        if self.rest:
+            rest_str = ', ' + repr(self.rest)
+        else:
+            rest_str = ''
+        return 'Link({0}{1})'.format(self.first, rest_str)</code></pre>
+
+<h3 class="question" id="q1">Question 1</h3>
+
+<p>Implement <code>deep_map</code>, which takes a function <code>f</code> and a <code>Link</code> <code>s</code>. It returns a
+linked list  with the same structure as <code>s</code>, but with <code>f</code> applied to any
+element within <code>s</code> or any <code>Link</code> instance contained in <code>s</code>. The <code>deep_map</code>
+function differs from <code>map_link</code> in lecture when <code>s</code> contains a <code>Link</code> as an
+element. The <code>deep_map</code> function should recursively apply <code>fn</code> to each of that
+<code>Link</code>'s elements rather than to that <code>Link</code> itself.</p>
+
+<p><em>Hint</em>: You may find the built-in <code>isinstance</code> function useful.</p>
+
+<pre><code>def deep_map(f, s):
+    """Return a Link with the same structure as s but with fn mapped over
+    its elements and any elements of linked lists contained anywhere within it.
+
+    &gt;&gt;&gt; s = Link(1, Link(Link(2, Link(3)), Link(4)))
+    &gt;&gt;&gt; deep_map(lambda x: x * x, s)
+    Link(1, Link(Link(4, Link(9)), Link(16)))
+    &gt;&gt;&gt; s # unchanged
+    Link(1, Link(Link(2, Link(3)), Link(4)))
+    &gt;&gt;&gt; deep_map(lambda x: 2 * x, Link(s, Link(Link(Link(5)))))
+    Link(Link(2, Link(Link(4, Link(6)), Link(8))), Link(Link(Link(10))))
+    """
+<span class="sol-highlight">    if s is Link.empty:
+        return s
+    elif not isinstance(s, Link):
+        return f(s)
+    return Link(deep_map(f, s.first), deep_map(f, s.rest))</span></code></pre>
+
+<h3 class="question" id="q2">Question 2</h3>
+
+<p>Implement <code>reverse</code>, which takes a linked list <code>s</code> and returns a linked list
+containing the elements of <code>s</code> in reverse order. The original <code>s</code> should be
+unchanged.</p>
+
+<pre><code>def reverse(s):
+    """Return a linked list with the elements of s in reverse order.
+
+    &gt;&gt;&gt; s = Link(3, Link(5, Link(4, Link(6))))
+    &gt;&gt;&gt; reverse(s)
+    Link(6, Link(4, Link(5, Link(3))))
+    &gt;&gt;&gt; s
+    Link(3, Link(5, Link(4, Link(6))))
+    """
+<span class="sol-highlight">    def reverse_to(s, t):
+        if s is Link.empty:
+            return t
+        else:
+            return reverse_to(s.rest, Link(s.first, t))
+    return reverse_to(s, Link.empty)</span></code></pre>
+
+<h3 class="question" id="q3">Question 3</h3>
+
+<p>The <code>Link</code> class can represent lists with cycles.  That is, a list may
+contain itself as a sublist.</p>
+
+<pre><code>&gt;&gt;&gt; s = Link(1, Link(2, Link(3)))
+&gt;&gt;&gt; s.rest.rest.rest = s
+&gt;&gt;&gt; s[20]
+3</code></pre>
+
+<p>You cannot print a list with a cycle, because its string representation would
+be infinite.</p>
+
+<p>Implement <code>has_cycle</code> that returns whether its argument, a <code>Link</code> instance,
+contains a cycle.</p>
+
+<p>For an extra (optional) challenge, try to implement <code>has_cycle_constant</code>, which
+has the same behavior but requires only <a href="http://composingprograms.com/pages/28-efficiency.html#growth-categories">constant space</a>. The solution is short
+(less than 20 lines of code), but requires a clever idea. Try to discover the
+solution yourself before asking around:</p>
+
+<pre><code>def has_cycle(s):
+    """Return whether Link s contains a cycle.
+
+    &gt;&gt;&gt; s = Link(1, Link(2, Link(3)))
+    &gt;&gt;&gt; s.rest.rest.rest = s
+    &gt;&gt;&gt; has_cycle(s)
+    True
+    &gt;&gt;&gt; t = Link(1, Link(2, Link(3)))
+    &gt;&gt;&gt; has_cycle(t)
+    False
+    """
+<span class="sol-highlight">    lists = set()
+    while s != Link.empty:
+        if s in lists:
+            return True
+        lists.add(s)
+        s = s.rest
+    return False</span>
+
+def has_cycle_constant(s):
+    """Return whether Link s contains a cycle.
+
+    &gt;&gt;&gt; s = Link(1, Link(2, Link(3)))
+    &gt;&gt;&gt; s.rest.rest.rest = s
+    &gt;&gt;&gt; has_cycle_constant(s)
+    True
+    &gt;&gt;&gt; t = Link(1, Link(2, Link(3)))
+    &gt;&gt;&gt; has_cycle_constant(t)
+    False
+    """
+    # Challenge: replace this line with your implementation
+<span class="sol-highlight">    if s == Link.empty:
+        return False
+    else:
+      slow, fast = s, s.rest
+      while fast != Link.empty:
+          if fast.rest == Link.empty:
+              return False
+          elif fast == slow or fast.rest == slow:
+              return True
+          else:
+              slow, fast = slow.rest, fast.rest.rest
+      return False</span></code></pre>
+
+<h3 class="question" id="q4">Question 4</h3>
+
+<p>A <a href="http://upload.wikimedia.org/wikipedia/commons/7/7e/Modern_mobile-art_mobiles_mobius.jpg">mobile</a> is a type of hanging sculpture.  A simple binary mobile consists
+of two branches, <code>left</code> and <code>right</code>. Each branch is a rod of a certain length,
+from which hangs either a weight or another mobile.</p>
+
+<p>Improve the classes for <code>Branch</code>, <code>Weight</code>, and <code>Mobile</code> below in the
+following ways:</p>
+
+<ul>
+  <li>Add a property <code>weight</code> that gives the total weight of the mobile.</li>
+  <li>A mobile is said to be balanced if the torque applied by its left branch is
+  equal to that applied by its right branch (that is, if the length of the left
+  rod multiplied by the weight hanging from that rod is equal to the
+  corresponding product for the right side) and if each of the submobiles
+  hanging off its branches is balanced. Implement the method <code>is_balanced</code> that
+  returns <code>True</code> if and only if the <code>Mobile</code> is balanced.</li>
+</ul>
+
+<p>When you are finished, all doctests below should pass:</p>
+
+<pre><code>class Mobile:
+    """A binary mobile has branches; each branch has a weight or a mobile.
+
+    &gt;&gt;&gt; m = Mobile(Branch(1, Weight(2)), Branch(2, Weight(1)))
+    &gt;&gt;&gt; m.weight
+    3
+    &gt;&gt;&gt; m.is_balanced()
+    True
+    &gt;&gt;&gt; m.left.contents = Mobile(Branch(1, Weight(1)), Branch(2, Weight(1)))
+    &gt;&gt;&gt; m.weight
+    3
+    &gt;&gt;&gt; m.left.contents.is_balanced()
+    False
+    &gt;&gt;&gt; m.is_balanced() # All submobiles must be balanced for m to be balanced
+    False
+    &gt;&gt;&gt; m.left.contents.right.contents.weight = 0.5
+    &gt;&gt;&gt; m.left.contents.is_balanced()
+    True
+    &gt;&gt;&gt; m.is_balanced()
+    False
+    &gt;&gt;&gt; m.right.length = 1.5
+    &gt;&gt;&gt; m.is_balanced()
+    True
+    """
+    def __init__(self, left, right):
+        for v in (left, right):
+            if type(v) != Branch:
+                raise TypeError(str(v) + ' is not a Branch')
+        self.left = left
+        self.right = right
+
+    @property
+    def weight(self):
+        """The total weight of the mobile."""
+<span class="sol-highlight">        return self.left.contents.weight + self.right.contents.weight</span>
+
+    def is_balanced(self):
+        """True if and only if the mobile is balanced."""
+<span class="sol-highlight">        torque_equal = self.left.torque == self.right.torque
+        lc, rc = self.left.contents, self.right.contents
+        return torque_equal and lc.is_balanced() and rc.is_balanced()</span>
+
+class Branch:
+    """A branch of a binary mobile."""
+    def __init__(self, length, contents):
+        if type(contents) not in (Weight, Mobile):
+            raise TypeError(str(contents) + ' is not a Weight or Mobile')
+        self.length = length
+        self.contents = contents
+
+    @property
+    def torque(self):
+        """The torque on the branch"""
+        return self.length * self.contents.weight
+
+class Weight:
+    """A weight at the end of a branch."""
+    def __init__(self, weight):
+        self.weight = weight
+
+    def is_balanced(self):
+        return True</code></pre>
+
+  
+
+  
+
+</body>
+    </div>
+
+    <div id="disqus_thread"></div>
+                    <script type="text/javascript">
+                        /* * * CONFIGURATION VARIABLES * * */
+                        var disqus_shortname = 'gaotx';
+                        
+                        /* * * DON'T EDIT BELOW THIS LINE * * */
+                        (function() {
+                            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                        })();   
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  </body>
+</html>

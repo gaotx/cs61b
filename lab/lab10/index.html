@@ -1,0 +1,485 @@
+---
+layout: resource
+title: Lab 10
+---
+<body style="font-family: Georgia,serif;">
+    <h1 id="title-main">Lab 10: Interpreters</h1>
+
+    <p><i>Due at 11:59pm on 04/08/2015.</i></p>
+
+<h2>Starter Files</h2>
+
+<p>Download <a href="lab10.zip">lab10.zip</a>.
+Inside the archive, you will find starter files for the questions in this lab,
+  along with a copy of the <a href="ok">OK</a> autograder.</p>
+
+<h2>Submission</h2>
+
+<p>By the end of this lab, you should have submitted the lab with
+<code>python3 ok --submit</code>. You may submit more than once before the
+deadline; only the final submission will be graded.</p>
+
+
+<ul>
+  <li>To receive credit for this lab, you must complete questions 1, 2, 3,
+  4, 5 in <a href="adventure.py">adventure.py</a> and submit through OK.</li>
+</ul>
+
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#interpreters">Interpreters</a></li>
+  <li><a href="#adventure">Adventure</a></li>
+  <ul>
+  <li><a href="#q1">Question 1</a></li>
+  <li><a href="#q2">Question 2</a></li>
+  <li><a href="#q3">Question 3</a></li>
+  <li><a href="#q4">Question 4</a></li>
+  <li><a href="#q5">Question 5</a></li>
+</ul>
+
+  <li><a href="#conclusion">Conclusion</a></li>
+</ul>
+
+
+    
+
+
+<h2 id="introduction">Introduction</h2>
+
+
+<p>Today, we will build a text-based adventure game. This involves
+writing a program that accepts text commands, interprets those
+commands, acts upon them, and reports the results back to the player.
+For example, the game will look like:</p>
+
+<pre><code>$ python3 adventure.py
+
+Welcome to the micro-world of CS 61A! You have a midterm tomorrow,
+and in hopes of doing well, you quest to seek Werdna, a mythical
+TA who is rumoured to hold the key to besting the test.
+
+You arrive in 271 Soda. The room is bright
+and miserable as always. A few 61A students
+are scattered among the lab computers, working
+on the latest project.
+Exits:
+out - Hearst Ave.
+
+adventure&gt; help
+There are 7 possible operators
+look
+go
+take
+give
+examine
+ask
+help
+
+adventure&gt; look
+
+You look around. You see
+A rubber ducky
+
+adventure&gt; take rubber ducky
+You take the rubber ducky
+
+adventure&gt; examine rubber ducky
+
+Hm. It's yellow and it's rubber and it squeaks. Fascinating.
+
+adventure&gt; go out
+
+You leave 2nd floor Soda though the exit all the cool kids use
+You find yourself on the sidewalk of Hearst Ave.
+Exits:
+north - 271 Soda
+west - Euclid Ave.
+south - Campus</code></pre>
+
+<p>At a high level, this is exactly what an interpeter does.</p>
+
+<p>Why are we doing this? Because traditionally, all the interpreter based
+exercises in 61A have either been "write a calculator" OR "write an
+programming language interpreter." Hopefully this livens things up.</p>
+
+<blockquote><p>See <a href="http://en.wikipedia.org/wiki/Colossal_Cave_Adventure">this
+article</a> for
+more information about text based adventure games.  Kn0w y0ur r00ts,
+y0.</p></blockquote>
+
+
+<h2 id="interpreters">Interpreters</h2>
+
+
+<p>An interpreter is a program that allows you to interact
+with the computer in a certain language. It understands the
+expressions that you type in through that language, and perform
+the corresponding actions in some way, usually using an underlying
+language.</p>
+
+<p>For example, you saw a simple calculator language in lecture that is
+written in Python.  In Project 4, you will write a Scheme interpreter
+in Python as well. Python itself is written in the C programming
+language.  The computer itself uses hardware to interpret machine code,
+a series of ones and zeros that represent basic operations like adding
+numbers, loading information from memory, etc.</p>
+
+<p>When you talk about an interpreter, there are two languages that
+are at work:</p>
+
+<ol>
+  <li>The language being interpreted. We also call this the language being
+  implemented. We use Python to implement calc and Scheme. The main 
+  Python distribution (known as CPython) is implemented in C.</li>
+  <li>The underlying implementation language. From above, Python, Python,
+  and C respectively.</li>
+</ol>
+
+<p>Note that the underlying language need not be different from the implemented
+language. In the previous incarnation of 61A, students were introduced to a
+Scheme interpreter written in Scheme. CS61A in Summer 2012 covered a Python
+interpreter written in Python!  This idea is called Metacircular Evaluation.</p>
+
+<p>Each interpreter has five parts:</p>
+
+<ul>
+  <li>Lexer - first operation called by REPL. The lexer turns the user input string
+  into atomic pieces (tokens) that are like "words" of the implemented language. 
+  In Adventure, this part is combined with the parser in <code>adv_parse</code> in the line
+  <code>tokens = line.split()</code>.</li>
+  <li>Parser - takes the tokens and organizes them in a data structure that
+  the underlying language understands. For our adventure game, holding the
+  tokens in a tuple is enough. For Scheme, we use deep linked lists (linked
+  lists whose elements can also be linked lists) to represent hierarchy and
+  recursion.</li>
+  <li>Evaluator - takes in the aforementioned sequence and interprets it
+  accordingly to the rules of the language. The evaluator may call
+  apply to apply an evaluated operator to its evaluated operands.</li>
+  <li>Apply - applies the operator to the argument values. Apply may call
+  the evaluator to do more work... this is possibly the most important
+  example of Mutual Recursion. Ever.</li>
+  <li>Read-Eval-Print-Loop (REPL for short) - the loop that waits for user
+  input, passes it to the parser and then the evaluator, and then
+  prints out the result.</li>
+</ul>
+
+<p>Here's how all the pieces fit together:</p>
+
+<pre><code>              ____________________________________________
+              |                                            |
+              |_____     _________     __________    ______|
+User Input --&gt;|Lexer|--&gt; | Parser |--&gt; |Evaluator|--&gt;|Print|--&gt; Output
+              |_____|    |________|    |_________|   |_____|
+              |                        __^_v____           |
+              ^                       |Apply    |          v
+              ^ REPL                  |_________|          v
+              |____________________________________________|</code></pre>
+
+<p>Now let's explore how these parts work together in an
+adventure game!</p>
+
+
+<h2 id="adventure">Adventure</h2>
+
+
+<p>We can implement our adventure language in Python3 by completing
+the interpreter(/game engine) in <code>adventure.py</code>.</p>
+
+<p>First, here's an explanation of the the two files we were given:</p>
+
+<ul>
+  <li><code>adventure.py</code>: This file includes the skeleton code of the game
+  engine that you will complete. There are also classes (Person, Place,
+  Thing) that model objects in the game. Your engine and the game data
+  uses these.</li>
+  <li><code>cs61a_world.py</code>: All the game data that makes things interesting is
+  in this file.  It creates Persons, Places, and Things that make up
+  the adventure world.</li>
+</ul>
+
+<p>Now, let's look at the base code in <code>adventure.py</code>.  There's a lot of
+code to take in at once, but don't freeze up!  We'll walk through and
+implement everything, function by function.</p>
+
+<ul>
+  <li><code>adventure</code>: our REPL. This function reads player input, calls
+  <code>adv_parse</code> to get an expression out (represented as a tuple), and
+  then calls <code>adv_eval</code> to perform the actions. It prints the results
+  accordingly. Then it makes a recursive call to itself in order to
+  take in the next command.</li>
+</ul>
+
+<p>The player is represented as a <code>Person</code> object. The interpreter will
+allow the player to move the <code>Person</code> through the game and interact
+with the various aspects of the world.</p>
+
+<p>You can try to run it by doing</p>
+
+<pre><code>&gt;&gt;&gt; python3 adventure.py</code></pre>
+
+<p>However it's missing functionality, so nothing will really work.</p>
+
+<p>Let's fix that, shall we?</p>
+
+<h3 class="question" id="q1">Question 1</h3>
+
+<blockquote><p><strong>Note</strong>: When you want to test manually, make sure you're in Python.
+Here's how:</p>
+
+<pre><code>$ python3 -i adventure.py
+adventure&gt;                 # Type ctrl-D
+&gt;&gt;&gt; adv_parse('look')      # Now you can call adv_parse</code></pre>
+
+<p>Remember that when you run <code>adventure.py</code>, you are talking to
+the adventure program, which will evaluate your input in terms
+of the adventure code. In order to talk to Python again, you
+kill the adventure program by doing Ctrl-d.</p>
+
+<p>If the above didn't work (Ctrl-d takes you out of the entire
+interpreter), try</p>
+
+<pre><code>$ python3
+&gt;&gt;&gt; from adventure import *
+&gt;&gt;&gt; from cs61a_world import *
+&gt;&gt;&gt; adv_parse('look')</code></pre>
+
+<p>OK tests can still be run the same way</p>
+
+<pre><code>$ python3 ok -q adv_parse</code></pre></blockquote>
+
+<p>Let's start things off by implementing parsing. We do this in
+<code>adv_parse</code> — our Parser. Since our game language is simple, we're
+going to do the lexical (turn line into tokens) and syntactic analyses
+(turn tokens into expression) all in one function. Our expression
+representation is a tuple (No ADT here). Here is the basic syntax of a
+command:</p>
+
+<pre><code>[operator] [operand]</code></pre>
+
+<p>When we encounter a command that matches this syntax, return:</p>
+
+<pre><code>([operator], [operand])</code></pre>
+
+<p>Another common syntax is:</p>
+
+<pre><code>[operator]</code></pre>
+
+<p>The corresponding expression is:</p>
+
+<pre><code>([operator], '')</code></pre>
+
+<p>For example,</p>
+
+<ul>
+  <li><p><code>adv_parse('take cookie')</code> returns <code>('take', 'cookie')</code></p>
+
+  <ul>
+    <li><code>'take'</code> is the operator</li>
+    <li><code>'cookie'</code> is the operand</li>
+  </ul></li>
+  <li><p><code>adv_parse('look')</code> returns <code>('look', '')</code></p>
+
+  <ul>
+    <li><code>'look'</code> is the operator</li>
+    <li><code>''</code> is the operand</li>
+  </ul></li>
+  <li><p><code>adv_parse('take rubber ducky')</code> returns <code>('take', 'rubber ducky')</code></p>
+
+  <ul>
+    <li><code>'take'</code> is the operator</li>
+    <li><code>'rubber ducky'</code> is the operand</li>
+  </ul></li>
+</ul>
+
+<p>Most of our operators follow this syntax.  There are two commands that
+require a different handling:</p>
+
+<ul>
+  <li><p><code>ask</code>: when you encounter a line like 'ask Leonard for sushi', return
+  <code>('ask', 'Leonard', 'sushi')</code></p>
+
+  <ul>
+    <li>The recipient will always be immediately after 'ask', with 'for' afterward.</li>
+    <li>You can assume that the name is only one word long.</li>
+  </ul></li>
+  <li><p><code>give</code>: when you encounter a line like 'give a cookie to Andrew',
+  return <code>('give', 'a cookie', 'Andrew')</code></p>
+
+  <ul>
+    <li>The recipient will always be last, with 'to' beforehand.</li>
+    <li>You can assume that the name is only one word long and 'to' appears second to last.</li>
+  </ul></li>
+</ul>
+
+<p>Use OK to test your solution to <code>adv_parse</code>:</p>
+
+<pre><code>python3 ok -q adv_parse</code></pre>
+
+<p><em>Hint</em>: consider the following example:</p>
+
+<pre><code>&gt;&gt;&gt; x = 'take rubber ducky'
+&gt;&gt;&gt; y = x.split()
+&gt;&gt;&gt; y
+['take', 'rubber', 'ducky']
+&gt;&gt;&gt; y.pop(0)
+'take'
+&gt;&gt;&gt; y
+['rubber', 'ducky']
+&gt;&gt;&gt; ' '.join(y[0:]) # Google 'python3 string join'
+'rubber ducky'
+&gt;&gt;&gt; # You may also find list slicing helpful</code></pre>
+
+<p><em>Note</em>: This lab is heavy on the concepts, so the big picture is important. 
+We therefore tried to make the code simpler to write to help with that.
+We suggest that you actively discuss the interpretation process and how Scheme's
+additional features (e.g. <code>define</code>) might change the way we write certain parts of the
+interpreter.</p>
+
+<h3 class="question" id="q2">Question 2</h3>
+
+<p><code>adv_eval</code>: our Evaluator. We want to handle all kinds of expressions.</p>
+
+<p>The rules are:</p>
+
+<ul>
+  <li>For normal expressions: evaluate the OPERATOR and evaluate each OPERAND.
+  <em>Hint</em>: Which function in <code>adventure.py</code> can we use to evaluate them?
+  Then, apply the operator to the operand by calling <code>adv_apply</code>.</li>
+  <li>For give expressions: handle them using the <code>give</code> function (line
+  109). You may just call the <code>give</code> function directly in this case.
+  What is <code>give</code>'s domain?</li>
+  <li>For ask expressions: handle them using the <code>ask</code> function (line
+  122). What is <code>ask</code>'s domain?</li>
+</ul>
+
+<p>For example:</p>
+
+<pre><code>&gt;&gt;&gt; from adventure import *
+&gt;&gt;&gt; from cs61a_world import *
+&gt;&gt;&gt; adv_parse('look')
+&gt;&gt;&gt; Place.current = SodaHall
+&gt;&gt;&gt; adv_eval(adv_parse('take rubber ducky'))
+'Player 1 takes the rubber ducky'
+&gt;&gt;&gt; Place.current = WerdnasHouse
+&gt;&gt;&gt; adv_eval(adv_parse('give rubber ducky to Werdna'))
+'Werdna takes the rubber ducky'</code></pre>
+
+<blockquote><p><em>Note</em>: You won't be able to test this until you finish Question 3.</p></blockquote>
+
+<p><code>adv_eval</code> is truly where the action is. It takes the expression
+that is passed in and performs the correct action based on the rules
+of our game language.</p>
+
+<p><em>Hint</em>: Use recursion and also the functions defined right under <code>adv_eval</code>
+(<code>adv_apply</code>, <code>look</code>, <code>give</code>, <code>take</code>, etc.).</p>
+
+<p><code>ask</code> and <code>give</code> are Special Forms, because they do not follow the 
+<code>[operator] [operand]</code> pattern. As you can see, we write separate rules for
+them in <code>adv_eval</code> to account for this difference. When evaluating Scheme
+expressions, you will also have to handle <code>if</code>, <code>define</code>, and other forms
+differently because not all operands are evaluated in those expressions.</p>
+
+<h3 class="question" id="q3">Question 3</h3>
+
+<p><code>adv_apply</code>: our apply. Handles the application of the normal commands
+Since our commands are simple, <code>adv_apply</code> just needs to apply the
+operator to the operand. There are no calls to <code>adv_eval</code> in Adventure.</p>
+
+<p>The point of apply becomes more apparent with more complicated
+languages. (Why? Which features of programming languages are missing in
+this adventure game language?)
+However the princple holds—apply takes care of the
+function calls that are evaluated without any special rules.</p>
+
+<p><em>Hint</em>: <code>adv_apply</code> is really straightfoward. Don't overthink it.</p>
+
+<p>Use OK to test your solution to <code>adv_eval</code> and <code>adv_apply</code>:</p>
+
+<pre><code>python3 ok -q adv_eval</code></pre>
+
+<p>AT THIS POINT YOU CAN PLAY THE GAME! :D</p>
+
+<h3 class="question" id="q4">Question 4</h3>
+
+<p>One thing that would be useful is to figure out what's in our
+inventory. For example:</p>
+
+<pre><code>adventure&gt; take rubber ducky
+Player 1 takes the rubber ducky
+adventure&gt; stuff
+You look through your stuff... you see
+rubber ducky - Hm. It's yellow and it's rubber and it squeaks. Fascinating.
+-- End of stuff --</code></pre>
+
+<p>Add code to take care of this. What needs to be modified?
+Do <code>adv_eval</code> and/or <code>adv_apply</code> need to be modified at all?</p>
+
+<p><em>Hint</em>: You will find it helpful to use <code>examine</code> (line 133).</p>
+
+<h3 class="question" id="q5">Question 5</h3>
+
+<p>Now that you've implemented this interpreter, you can play the game!</p>
+
+<pre><code>python3 adventure.py</code></pre>
+
+<p>Happy Questing!</p>
+
+
+<h2 id="conclusion">Conclusion</h2>
+
+
+<p>Hope this lab was fun. :)</p>
+
+<p>Since the game is simple, some parts of the lab are toy-ish.
+However, the game is still strong and robust enough to be extended;
+feel free to add more places, people and things! :P
+This also speaks to how powerful Python is as a language,
+to allow us to create a full game in relatively short time!
+(The original TA might have hacked this game together in a night...)
+You are also encouraged to create your own world and tell your own story.</p>
+
+<p>Lab 10 Takeaways:</p>
+
+<ul>
+  <li>Interpreters allow us to directly interact with the computer through
+  a language.</li>
+  <li>Interpreters are made of a REPL, a parser, an evaluator, and an
+  apply'er. They interact with each other in specific ways.</li>
+  <li>There are two languages when talking about an interpreter: the
+  underlying language vs language being implemented.</li>
+  <li>Special forms have their own rules for being evaluted.  They don't
+  get handled in apply.</li>
+  <li>In adventure.py, the adventure game language is interpreted by the
+  Python program. You talk to the computer in adventure talk which gets
+  translated to actions in the underlying Python language.</li>
+  <li>No tree recursion between <code>adv_eval</code> and <code>adv_apply</code>: our simple game
+  language doesn't need it. However, think about what why mutual recursion
+  is necessary in Scheme.</li>
+</ul>
+
+<p>In Project 4, you will implement a Scheme interpreter in Python.</p>
+
+
+  
+
+  <script src="//code.jquery.com/jquery-latest.js"></script>
+<script>
+  $(function() {
+    if (new Date("04/09/2015") < new Date()) {
+      $('.toggleButton').css('display', 'inline-block');
+      $('.toggleButton').click(function() {
+        var solution_id = $(this).attr('id');
+        $('div.' + solution_id).slideToggle(600);
+      });
+    }
+    // Always display these toggle buttons
+    $('.toggleButtonShow').click(function() {
+      var solution_id = $(this).attr('id');
+      $('div.' + solution_id).slideToggle(600);
+    });
+  });
+</script>
+
+</body>

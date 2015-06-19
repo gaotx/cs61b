@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Sublime 
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <link rel="stylesheet" href="/assets/css/resource.css">
+  <link rel="stylesheet" href="/assets/css/lab.css">
+  <link rel="stylesheet" href="/assets/css/project.css">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="resource">
+      <div style="font-family: Georgia,serif;">
+    <h1 id="title-main">Sublime</h1>
+
+    
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#getting-sublime-on-your-own-computer">Getting Sublime on your own computer</a></li>
+  <li><a href="#example-greet-py">Example: <code>greet.py</code></a></li>
+  <ul>
+  <li><a href="#opening-files">Opening files</a></li>
+  <li><a href="#editing-files">Editing files</a></li>
+  <li><a href="#running-python">Running Python</a></li>
+</ul>
+
+  <li><a href="#keyboard-shortcuts">Keyboard Shortcuts</a></li>
+</ul>
+
+
+    
+
+<h2 id="introduction">Introduction</h2>
+
+
+<p>Sublime is a friendly text editor known for its slick user interface,
+numerous features, and snappy performance that provides a combination
+of many amazing features from modern text editors (and more)!</p>
+
+<p>Sublime is easy to use, and extremely fun to master (I mean, who
+doesn't want to use multiple cursors in vim mode while — you get the
+picture, do things with CS words that don't quite make sense right
+now). This guide will get you started with Sublime, with a few basics
+and essential tools for your workflow in CS61A. If there's something
+you want Sublime to do, it's likely possible! A quick Google search
+will probably show you a plugin you can install to extend Sublime's
+functionality.</p>
+
+
+<h2 id="getting-sublime-on-your-own-computer">Getting Sublime on your own computer</h2>
+
+
+<p>You can go to <a href="http://www.sublimetext.com/">Sublime's website</a> to
+download it.</p>
+
+
+<h2 id="example-greet-py">Example: <code>greet.py</code></h2>
+
+
+<p>Alright, by now, you should have Sublime installed. You have the option
+of either finding the Application or opening it up from the terminal.
+Recall from <a href="../lab00/">Lab 0</a> that you can open a terminal on the school
+computers by pressing <code>Ctrl-Alt-t</code>.</p>
+
+<p>Let's first create and navigate to a directory called <code>example</code>, using
+the UNIX commands you learned in <a href="../lab00/">Lab 0</a>:</p>
+
+<pre><code>mkdir ~/example
+cd ~/example</code></pre>
+
+
+<h3 id="opening-files">Opening files</h3>
+
+
+<p>Now let's open up Sublime!</p>
+
+<blockquote class="help-mac">
+
+<p>For Ubuntu or Mac users, you'll most likely find Sublime in your
+<code>Applications</code>.</p>
+
+</blockquote>
+
+<blockquote class="help-windows">
+
+<p>For Windows users, you'll most likely find Sublime in your
+<code>Program Files</code>.</p>
+
+</blockquote>
+
+<p>Sublime will open up to a blank file. We can start writing our program!</p>
+
+<p><img src="/assets/blank.png" alt="blank sublime"></p>
+
+
+<h3 id="editing-files">Editing files</h3>
+
+
+<p>Now we have Sublime open, we can begin writing our first Python file.
+Don't worry, we don't expect you to know any Python yet! All
+you have to do is type in the following:</p>
+
+<pre><code>def greet(name):
+    print('Hi', name, ', how are you doing?')
+    print(' - Python')</code></pre>
+
+<p>Once you've finished typing, Sublime should look something like this:</p>
+
+<p><img src="/assets/greet-function.png" alt="Greet function"></p>
+
+<p>To save, you can just type <code>Ctrl + s</code>. If you haven't already, save
+this file as <code>greet.py</code>.</p>
+
+
+<h3 id="running-python">Running Python</h3>
+
+
+<p>In this class, you will be switching between your text editor and
+Python a lot — writing code and testing code.</p>
+
+<p>Back in our terminal, we're currently in our <code>example</code> directory.
+Let's play around with our code. In the terminal, start by typing</p>
+
+<pre><code>python3 -i greet.py</code></pre>
+
+<p>This command does the following:</p>
+
+<ol>
+  <li><code>python3</code> is the command that starts Python</li>
+  <li>The <code>-i</code> flag tells Python to start in <strong>interactive mode</strong>, which
+  allows you to type in Python commands from your terminal</li>
+  <li><code>greet.py</code> is the name of the Python file we want to load</li>
+</ol>
+
+<p>Notice that the Python interpreter says <code>&gt;&gt;&gt;</code>. This means Python is
+ready to take a command.</p>
+
+<p>Recall that we defined a function called <code>greet</code>. Let's see what it
+does! Type in the following:</p>
+
+<pre><code>greet('Michelle')</code></pre>
+
+<p>Python will then print out</p>
+
+<pre><code>Hi Michelle, how are you doing?
+ - Python</code></pre>
+
+<p>You probably want Python to greet you and not me. So if your name is
+John, you should also type:</p>
+
+<pre><code>greet('John')</code></pre>
+
+<p>and Python will print</p>
+
+<pre><code>Hi John, how are you doing?
+ - Python</code></pre>
+
+<p>Our code works! Let's close Python by typing in</p>
+
+<pre><code>exit()</code></pre>
+
+<blockquote><p>There are a couple of ways to exit Python. You can type in <code>exit()</code>
+or <code>quit()</code>. On MacOS and Linux, you can also type in <code>Ctrl-d</code> (this
+doesn't work on Windows).</p></blockquote>
+
+<p>Congratulations, you've edited your first file in Sublime!</p>
+
+
+<h2 id="keyboard-shortcuts">Keyboard Shortcuts</h2>
+
+
+<p>Sublime has a some swell keyboard shortcuts. Here are a few useful
+ones!  (for Mac users, replace all the <code>Ctrl</code> sequences with <code>cmd</code>)</p>
+
+<ul>
+  <li><code>ctrl+s</code> : saves the current file</li>
+  <li><code>ctrl+x</code> : cuts the entire line your cursor is on</li>
+  <li><code>ctrl+v</code> : pastes the entire line you cut in the line above your
+  curson OR pastes the selected text in place</li>
+  <li><code>ctrl+d</code> (my favorite!): highlights the current word. For every
+  'ctrl+d' you type after this first word, it will highlight every next
+  instance of the word. This allows you to easily rename variables with
+  multiple cursors! (Play around with this one, it's fun!)</li>
+  <li><code>ctrl+z</code> : undo</li>
+  <li><code>ctrl+y</code> : redo</li>
+  <li><code>ctrl+tab</code> : moves you to the next tab</li>
+  <li><code>ctrl+shift+tab</code> : moves you to the previous tab</li>
+  <li><code>ctrl+f</code> : search for a word</li>
+  <li><code>ctrl+shift+f</code> : searches through all tabs</li>
+  <li><code>ctrl+shift+p</code> : This one's important. This opens up a little panel
+  of tools! You can do things like type "ss python" which will set the
+  syntax of your file to python or "reindent" will help you reindent a
+  file you paste in (this will be helpful in future labs!)</li>
+</ul>
+
+<p><img src="/assets/control-panel.png" alt="Control Panel"></p>
+
+<p>This guide only scratches the surface of all of Sublime's
+functionality. Remember, if there's something you wish Sublime could
+do, it probably can! Just Google it!</p>
+  
+
+  
+
+</div>
+    </div>
+
+    <div id="disqus_thread"></div>
+                    <script type="text/javascript">
+                        /* * * CONFIGURATION VARIABLES * * */
+                        var disqus_shortname = 'gaotx';
+                        
+                        /* * * DON'T EDIT BELOW THIS LINE * * */
+                        (function() {
+                            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                        })();   
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  </body>
+</html>

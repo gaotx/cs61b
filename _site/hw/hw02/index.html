@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Homework 2 
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  <link rel="stylesheet" href="/assets/css/resource.css">
+  <link rel="stylesheet" href="/assets/css/lab.css">
+  <link rel="stylesheet" href="/assets/css/project.css">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="public/apple-touch-icon-144-precomposed.png">
+                                 <link rel="shortcut icon" href="public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="resource">
+      <body style="font-family: Georgia,serif;">
+    <h1 id="title-main">CS 61A: Homework 2</h1>
+
+    <p><em>Due by 11:59pm on Monday, 2/2</em></p>
+
+<h2>Instructions</h2>
+
+<p>Download <a href="hw02.zip">hw02.zip</a>.  Inside the archive, you
+will find a file called <a href="hw02.py">hw02.py</a>, along with a copy of the <a href="ok">OK</a> autograder.</p>
+
+
+
+<p><strong>Submission:</strong> When you are done, submit with
+<code>python3 ok --submit</code>. You may submit more than once before
+the deadline; only the final submission will be scored.</p>
+
+<h2>Using OK</h2>
+
+<p>The <code>ok</code> program helps you test your code and track your progress.
+The first time you run the autograder, you will be asked to log in with your
+@berkeley.edu account using your web browser. Please do so. Each time you run
+ok, it will back up your work and progress on our servers.
+
+You can run all the doctests with the following command:</p>
+
+<pre><code>python3 ok</code></pre>
+
+<p>To test a specific question, use the <code>-q</code> option with the
+name of the function:</p>
+
+<pre><code>python3 ok -q &lt;function&gt;</code></pre>
+
+<p>By default, only tests that <strong>fail</strong> will appear. If you
+want to see how you did on all tests, you can use the <code>-v</code>
+option:</p>
+
+<pre><code>python3 ok -v</code></pre>
+
+<p>If you do not want to send your progress to our server or you have any
+problems logging in, add the <code>--local</code> flag to block all
+communication:</p>
+
+<pre><code>python3 ok --local</code></pre>
+
+<p>When you are ready to submit, run <code>ok</code> with the
+<code>--submit</code> option:</p>
+
+<pre><code>python3 ok --submit</code></pre>
+
+<p><strong>Readings:</strong> You might find the following references
+useful:</p>
+
+<ul>
+  <li><a href="http://composingprograms.com/pages/16-higher-order-functions.html">Section 1.6</a></li>
+</ul>
+
+
+    <h2 id="table-of-contents">Table of Contents</h2>
+    <ul>
+  <li><a href="#q1">Question 1</a></li>
+  <li><a href="#q2">Question 2</a></li>
+  <li><a href="#q3">Question 3: Challenge Problem (optional)</a></li>
+</ul>
+
+
+    
+
+<p>Several doctests refer to these one-argument functions:</p>
+
+<pre><code>def square(x):
+    return x * x
+
+def triple(x):
+    return 3 * x
+
+def identity(x):
+    return x
+
+def increment(x):
+    return x + 1</code></pre>
+
+<h3 class="question" id="q1">Question 1</h3>
+
+<p>Implement <code>piecewise</code>, which takes two one-argument functions, <code>f</code> and <code>g</code>,
+along with a number <code>b</code>. It returns a new function that takes a number <code>x</code> and
+returns either <code>f(x)</code> if <code>x</code> is less than <code>b</code>, or <code>g(x)</code> if <code>x</code> is greater than
+or equal to <code>b</code>.</p>
+
+<pre><code>def piecewise(f, g, b):
+    """Returns the piecewise function h where:
+
+    h(x) = f(x) if x &lt; b,
+           g(x) otherwise
+
+    &gt;&gt;&gt; def negate(x):
+    ...     return -x
+    &gt;&gt;&gt; abs_value = piecewise(negate, identity, 0)
+    &gt;&gt;&gt; abs_value(6)
+    6
+    &gt;&gt;&gt; abs_value(-1)
+    1
+    """
+    "*** YOUR CODE HERE ***"</code></pre>
+
+<h3 class="question" id="q2">Question 2</h3>
+
+<p>If <code>f</code> is a numerical function and <code>n</code> is a positive integer, then we
+can form the nth repeated application of <code>f</code>, which is defined to be
+the function whose value at <code>x</code> is <code>f(f(...(f(x))...))</code>. For example,
+if <code>f</code> adds <code>1</code> to its argument, then the nth repeated application of
+<code>f</code> adds <code>n</code>. Write a function that takes as inputs a function <code>f</code> and
+a positive integer <code>n</code> and returns the function that computes the nth
+repeated application of f:</p>
+
+<pre><code>def repeated(f, n):
+    """Return the function that computes the nth application of f.
+
+    &gt;&gt;&gt; add_three = repeated(increment, 3)
+    &gt;&gt;&gt; add_three(5)
+    8
+    &gt;&gt;&gt; repeated(triple, 5)(1) # 3 * 3 * 3 * 3 * 3 * 1
+    243
+    &gt;&gt;&gt; repeated(square, 2)(5) # square(square(5))
+    625
+    &gt;&gt;&gt; repeated(square, 4)(5) # square(square(square(square(5))))
+    152587890625
+    """
+    "*** YOUR CODE HERE ***"</code></pre>
+
+<p><em>Hint</em>: You may find it convenient to use <code>compose1</code> from the textbook:</p>
+
+<pre><code>def compose1(f, g):
+    """Return a function h, such that h(x) = f(g(x))."""
+    def h(x):
+        return f(g(x))
+    return h</code></pre>
+
+
+
+<h3 class="question" id="q3">Question 3: Challenge Problem (optional)</h3>
+
+<p>The logician Alonzo Church invented a system of representing non-negative
+integers entirely using functions. The purpose was to show that functions are
+sufficient to describe all of number theory: if we have functions, we do not
+need to assume that numbers exist, but instead we can invent them.</p>
+
+<p>Your goal in this problem is to rediscover this representation known as <em>Church
+numerals</em>. Here are the definitions of <code>zero</code>, as well as a function that
+returns one more than its argument:</p>
+
+<pre><code>def zero(f):
+    return lambda x: x
+
+def successor(n):
+    return lambda f: lambda x: f(n(f)(x))</code></pre>
+
+<p>First, define functions <code>one</code> and <code>two</code> such that they have the same behavior
+as <code>successor(zero)</code> and <code>successsor(successor(zero))</code> respectively, but <em>do
+not call <code>successor</code> in your implementation</em>.</p>
+
+<p>Next, implement a function <code>church_to_int</code> that converts a church numeral
+argument to a regular Python integer.</p>
+
+<p>Finally, implement functions <code>add_church</code>, <code>mul_church</code>, and <code>pow_church</code> that
+perform addition, multiplication, and exponentiation on church numerals.</p>
+
+<pre><code>def one(f):
+    """Church numeral 1: same as successor(zero)"""
+    "*** YOUR CODE HERE ***"
+
+def two(f):
+    """Church numeral 2: same as successor(successor(zero))"""
+    "*** YOUR CODE HERE ***"
+
+three = successor(two)
+
+def church_to_int(n):
+    """Convert the Church numeral n to a Python integer.
+
+    &gt;&gt;&gt; church_to_int(zero)
+    0
+    &gt;&gt;&gt; church_to_int(one)
+    1
+    &gt;&gt;&gt; church_to_int(two)
+    2
+    &gt;&gt;&gt; church_to_int(three)
+    3
+    """
+    "*** YOUR CODE HERE ***"
+
+def add_church(m, n):
+    """Return the Church numeral for m + n, for Church numerals m and n.
+
+    &gt;&gt;&gt; church_to_int(add_church(two, three))
+    5
+    """
+    "*** YOUR CODE HERE ***"
+
+def mul_church(m, n):
+    """Return the Church numeral for m * n, for Church numerals m and n.
+
+    &gt;&gt;&gt; four = successor(three)
+    &gt;&gt;&gt; church_to_int(mul_church(two, three))
+    6
+    &gt;&gt;&gt; church_to_int(mul_church(three, four))
+    12
+    """
+    "*** YOUR CODE HERE ***"
+
+def pow_church(m, n):
+    """Return the Church numeral m ** n, for Church numerals m and n.
+
+    &gt;&gt;&gt; church_to_int(pow_church(two, three))
+    8
+    &gt;&gt;&gt; church_to_int(pow_church(three, two))
+    9
+    """
+    "*** YOUR CODE HERE ***"</code></pre>
+
+
+
+
+  
+
+  
+
+</body>
+    </div>
+
+    <div id="disqus_thread"></div>
+                    <script type="text/javascript">
+                        /* * * CONFIGURATION VARIABLES * * */
+                        var disqus_shortname = 'gaotx';
+                        
+                        /* * * DON'T EDIT BELOW THIS LINE * * */
+                        (function() {
+                            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                        })();   
+                    </script>
+                    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  </body>
+</html>
