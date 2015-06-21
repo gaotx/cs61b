@@ -1,0 +1,494 @@
+---
+layout: resource
+title: Lab 0
+---
+<main class="content">
+        <header class="title">Lab 1: javac, java, Git</header>
+<h2 id="navigation">Navigation</h2>
+
+
+<ul>
+  <li><a href="#a-java-compilation-amp-development">Java Compilation &amp; Development</a></li>
+  <li><a href="#b-writing-java-programs">Writing Java Programs</a></li>
+  <li><a href="#c-using-git">Using Git</a></li>
+  <li><a href="#d-using-github">Using Github</a></li>
+</ul>
+
+
+<h2 id="notes">Notes</h2>
+
+
+<ul>
+  <li>If you do not yet have an account, you should head to <a href="https://piazza.com/class/hx9h4t96ea8qv?cid=53">https://piazza.com/class/hx9h4t96ea8qv?cid=53</a>. Let your GSI know if you do not receive one of your two emails.</li>
+  <li>If you are using your own computer, you should head to <a href="http://berkeley-cs61b.github.io/public_html/materials/lab/lab1b/lab1b.html">lab1b</a> before beginning this lab.</li>
+</ul>
+
+
+<h2 id="a-java-compilation-amp-development">A. Java Compilation &amp; Development</h2>
+
+
+<p>Java 1.7 is currently installed on the instructional machines. You may need to
+install it on your personal computer. You can do that by downloading the
+Java 1.7 JDK from <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Oracle</a>.
+Downloading the JDK should also provide <code>javac</code>, a Java compiler.</p>
+
+
+<h4 id="java-is-compiled">Java Is Compiled</h4>
+
+
+<p>Java is a compiled language rather than an interpreted language (like Python or
+Scheme.) When code in an interpreted language runs, an interpreter program
+translates the code into actions that the computer then executes. In contrast,
+a compiled language must first uses a <em>compiler</em> to translate the actions. Only
+afterwards can the computer run the resulting compiled code, either on the
+computer directly, or in Java's case, on an interpreter called the <em>Java
+virtual machine</em>.</p>
+
+<p>Let's see an example. Here is the "Hello World" program in Java. Don't worry
+about understanding it right now. We'll deconstruct it later in this lab.</p>
+
+<pre><code>public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello world!");
+    }
+}</code></pre>
+
+<p>Here is what the corresponding Java compiled code (called <em>bytecode</em>) looks
+like. The virtual machine can interpret this to run the program.</p>
+
+<p><img src="bytecode.png" alt="Java bytecode"></p>
+
+
+<h4 id="why-compilation">Why Compilation?</h4>
+
+
+<p>At this point, you may be wondering by Java is compiled. Compilers are quite
+helpful for several reasons:</p>
+
+<ol>
+  <li><p>Compilers can check for errors prior to runtime. The Java compiler will
+  catch and report errors like:</p>
+
+  <ul>
+    <li>type errors, which can be produced by giving functions the wrong
+    objects as parameters (like a <code>String</code> instead of a <code>int</code>)</li>
+    <li>syntax errors, which can be caused by forgetting syntactical elements like
+    parentheses or braces</li>
+  </ul>
+
+  <p>Catching these and many other types of errors prior to runtime help catch
+  many of the possible bugs caused by programmer error and make Java programs
+  more stable before they are run.</p></li>
+  <li>Compilers can help speed up programs. Programs written in interpreted
+  languages can be slow because interpreters must parse text that is
+  understandable to humans and translate it into instructions that can be
+  directly understood by the machine. The compiler does this translation work
+  once and saves the instructions to a file called a <em>binary</em>.  Then each time we
+  run the binary, the machine reads the instructions directly, saving time and
+  work.</li>
+  <li>Compilers can verify access rights to classes and methods. Java has a lot
+  of built-in security because access rights can be assigned to each class and
+  method. Special keywords called <em>access modifiers</em> limit what other classes and
+  methods have access to. The compiler checks that every program that uses a class
+  or calls a method has the correct access rights to use or call it. You will
+  learn more about this later in the course.</li>
+</ol>
+
+<p>There are many other reasons some languages have compilers, some of which you
+will learn by taking CS 61C. But for now, you will just need to know how to
+compile and run your Java program.</p>
+
+
+<h4 id="compiling-java-programs">Compiling Java Programs</h4>
+
+
+<p>There are many different <a href="http://en.wikipedia.org/wiki/Java_compiler">Java compilers</a>,
+but we'll be using <code>javac</code> for command line in this class. As mentioned above,
+<code>javac</code> is included in Oracle's Java Development Kit (JDK), so you can set it up
+on your own computer if you'd like.</p>
+
+<p>To compile a Java file called <code>File.java</code>, type the following command into your
+terminal:</p>
+
+<pre><code>$ javac File.java</code></pre>
+
+<p>You can also add some helpful options, which are called <em>flags</em> to the
+compile command. A full documentation is available <a href="http://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html">here</a>.</p>
+
+<pre><code>$ javac -g File.java</code></pre>
+
+<p>The "-g" flag is one of the most helpful flags because it will generate
+debugging information, including local variables. This is good for testing
+programs. We encourage you to use this flag when testing your code during
+the development process.</p>
+
+
+<h4 id="running-java-programs">Running Java Programs</h4>
+
+
+<p>Compiling your program using the command above should give you <code>.class</code> files.
+Opening the <code>.class</code> files will show you something like the bytecode in the
+image at the very beginning of this lab.</p>
+
+<p>Once you have your <code>File.class</code> file, you can run your Java program with this
+command in your terminal:</p>
+
+<pre><code>$ java File</code></pre>
+
+<p>Note that you do not type <code>File.class</code>. That is a common mistake that will
+cause an error message like this:</p>
+
+<pre><code>Error: Could not find or load main class</code></pre>
+
+
+<h4 id="running-hello-world">Running Hello World</h4>
+
+
+<p>Create a new text file called <code>HelloWorld.java</code> and type in the <code>HelloWorld</code>
+program above. Then compile and run it using the following commands:</p>
+
+<pre><code>$ javac HelloWorld.java
+$ java HelloWorld</code></pre>
+
+<p>You should see <code>Hello world!</code> printed out in your terminal.</p>
+
+
+<h4 id="java-documentation">Java Documentation</h4>
+
+
+<p>The Java language has incredible <a href="http://docs.oracle.com/javase/7/docs/api/">API</a>
+(Application Programming Interface) documentation, which is often very
+helpful when using classes and methods in packages created by other
+programmers. Don't worry about understanding how to use or read this
+documentation yet. Just know that it is available and will come in very handy
+in the future.</p>
+
+
+<h4 id="a-note-on-ides">A Note on IDEs</h4>
+
+
+<p>An IDE (integrated development environment) is a program that can be used to
+write and run programs without using command line. They provide useful features
+like debugging and are popular tools for programmers to write and test their
+code. There exist many popular IDEs for Java such as</p>
+
+<ul>
+  <li><a href="http://www.bluej.org/">BlueJ</a></li>
+  <li><a href="https://eclipse.org/">Eclipse</a></li>
+  <li><a href="https://www.jetbrains.com/idea/">IntelliJ</a></li>
+  <li><a href="https://netbeans.org/">NetBeans</a></li>
+</ul>
+
+<p>You may use one if you would like. However, it is important to still know how
+to compile and run Java programs on command line.</p>
+
+<p><strong>IMPORTANT</strong>: Also, the course staff will not be officially supporting any of
+these IDEs. You will need to figure out how to use them on your own.</p>
+
+
+<h2 id="b-writing-java-programs">B. Writing Java Programs</h2>
+
+
+
+<h4 id="java-is-object-oriented">Java is Object-Oriented</h4>
+
+
+<p>Java is an <em>object-oriented</em> programming language. Those of you who took 61A/AS
+may recognize that term as having been applied to Python/Scheme. Java takes OOP
+a step further. In Java, all programs have class definitions.  Methods and
+variables exist within classes.</p>
+
+
+<h4 id="format-of-a-java-program">Format of a Java Program</h4>
+
+
+<p>Every Java file contains a public class, interface, or enum. For now, let's
+just discuss <em>class definitions</em>. A definition provides the name of the class
+as well as its <em>variables</em> and <em>methods</em>.</p>
+
+<p>Here is a deconstruction of the aforementioned "Hello World" program:</p>
+
+<p><img src="HelloWorld.png" alt="HelloWorld" title="HelloWorld"></p>
+
+<p>A Java program consists of a collection of one of more of these Java files
+containing classes, interfaces, or enums. At least one of the classes in a Java
+program must contain a method called <code>main</code>. This main method is called in order
+to run the program.</p>
+
+<p>This is why running the <code>HelloWorld</code> program prints out <code>Hello world!</code>. The
+<code>main</code> methods in the <code>HelloWorld</code> class is being run when you type
+<code>java HelloWorld</code> into the terminal.</p>
+
+
+<h4 id="comments-in-java">Comments in Java</h4>
+
+
+<p>There are two formats for comments in a Java program:</p>
+
+<ol>
+  <li><p>single-line comments start with two consecutive slash characters and
+  continues to the end of the line</p>
+
+<pre><code>// This is one kind of comment</code></pre></li>
+  <li><p>multi-line comments start with /* and end with */</p>
+
+<pre><code>/* This is a
+   multi-line
+   comment */</code></pre></li>
+</ol>
+
+<p>Some commenting styles add single asterisks at the start of each line in the
+comment after the first, to improve readability.</p>
+
+<pre><code>/* This is a
+ * multi-line
+ * comment */</code></pre>
+
+
+<h4 id="example-leap-year-program">Example: Leap-Year Program</h4>
+
+
+<p>For our first Java program, we'll be writing a program that prints out whether
+or not a year is a leap year or not. A leap year is either:</p>
+
+<ol>
+  <li>divisible by 400 <strong>or</strong></li>
+  <li>divisible by 4 and not by 100.</li>
+</ol>
+
+<p>For example, 2000 and 2004 are leap years. 1900, 2003, and 2100 are not leap
+years.</p>
+
+<p>Your Java file should be called <code>LeapYear.java</code>. These lines should go into the
+<code>main</code> method of the <code>LeapYear</code> class. Remember that your class name should
+match the name of your file. Your program should include the line:</p>
+
+<pre><code>int year = 2000;</code></pre>
+
+<p>If you're not sure where to start, you can copy and paste lines from <a href="lab1_copy_and_paste.txt">this file</a>.</p>
+
+
+<h4 id="some-java-vocabulary-in-leap-year">Some Java Vocabulary in Leap Year</h4>
+
+
+<ul>
+  <li>The <code>%</code> operator implements <em>remainder</em>. Thus, the value of <code>year % 4</code>
+  will be 0, 1, 2, or 3.</li>
+  <li>The <code>!=</code> operator compares two values for <em>inequality</em>. The code fragment
+  <code>if (year % 4 != 0)</code> reads as "if the remainder when dividing <code>year</code> by 4 is
+  not equal to 0."</li>
+  <li>The method <code>System.out.println</code> prints its argument to "standard output"
+  (which is, in this case, your terminal window) when called.</li>
+  <li>When one of the arguments of the <code>+</code> operator is a string, the arguments are
+  concatenated as strings. <em>String concatenation</em> is the operation of joining
+  two character strings end-to-end.</li>
+</ul>
+
+
+<h4 id="testing-leap-year">Testing Leap Year</h4>
+
+
+<p>When you've arranged the lines properly and compiled successfully, running
+the program should print out the following line:</p>
+
+<pre><code>2000 is a leap year.</code></pre>
+
+<p>You can test your program with other <code>year</code> values by changing the line</p>
+
+<pre><code>int year = 2000;</code></pre>
+
+<p>to other numbers. Once your program is correct, save it as <code>LeapYear.java</code>.
+You'll be submitting it below.</p>
+
+
+<h2 id="c-using-git">C. Using Git</h2>
+
+
+<p><strong>Note</strong>: In this class, you will not be submitting work via your instructional
+accounts. You will instead be using a tool called Git to submit your work to a website called Github. Your instructional account will still be helpful if you want to work on the lab computers, but is not strictly necessary for the course.</p>
+
+<p>If you'd like to learn more
+about using your instructional account, please read <a href="../../../materials/guides/instructional-accounts.html">this guide</a>,
+which can also be found on the <a href="../../../resources.html">resources page</a>
+of the course website.</p>
+
+<p>Git is a very useful tool, but a tricky one. We've written a guide that you'll be using through the semester. <strong>At the very least</strong>, you should now read through sections A, B, and C of our <a href="../../../materials/guides/using-git.html">Git guide</a>, and then work through the exercise in section D. Ideally, you should complete the remainder of the guide, including the exercise with a partner, but if time is short you can skip these sections for now. We expect you to eventually understand everything in this guide.</p>
+
+<p>Git will quite possibly seem hard at first. <strong>It is a bad idea to jump in blindly and guess at git commands.</strong> You can find yourself in a bad spot. Read the Git guide, we mean it!</p>
+
+<p>For
+future reference, it is also linked in the <a href="../../../resources.html">resources page</a>.
+After reading that guide, continue below because you'll be using Git to submit
+your work for this lab.</p>
+
+
+<h2 id="d-using-github">D. Using Github</h2>
+
+
+<p class="redtext"><strong>STOP!</strong> Did your read the <a href="../../../materials/guides/using-git.html">Using Git Guide</a>?
+If you didn't, don't go ahead. Read the guide first! You'll need it for the
+steps that follow this point.</p>
+
+<p>While it is technically possible to copy and paste most of what is going on below without understanding what is going, this will likely cause you considerable grief later on.</p>
+
+
+<h4 id="setting-up-your-git-repository">Setting Up Your Git Repository</h4>
+
+
+<p>Before beginning this section ensure that the name of your GitHub repository in the <a href="https://github.com/Berkeley-CS61B">Berkeley-CS61B organization</a>
+ matches your instructional account login. If this is not true, please let
+your TA know.</p>
+
+<p><strong>Note</strong>: You'll need to perform this series of steps to set up your Git repo
+on each computer you use (e.g. instructional computer, personal computer). If
+you know that you'll only be using your personal computer, feel free to do this
+just on your personal computer.</p>
+
+<ol>
+  <li><p>Clone your <a href="https://github.com/Berkeley-CS61B">Berkeley-CS61B organization</a>
+  repository.</p>
+
+  <ul>
+    <li><p>Navigate to the spot in your folders on your computer that you'd like to
+    start your repository.</p>
+
+<pre><code>$ cd cs61b</code></pre></li>
+    <li><p>Enter the following command to clone your GitHub repo. Make sure to
+    replace the <code>**</code> with your own instructional account login/repo name.</p>
+
+<pre><code>$ git clone https://github.com/Berkeley-CS61B/**.git</code></pre>
+
+    <p>If you'd like to SSH instead of HTTP (and <a href="https://help.github.com/articles/generating-ssh-keys/">set up your own SSH key</a>),
+    feel free to also do that instead.</p></li>
+    <li><p>Move into your newly created repo! (Make sure you do this part, or the
+    rest of the steps below will not work correctly.)</p>
+
+<pre><code>$ cd **</code></pre></li>
+  </ul></li>
+  <li><p>Add the <code>skeleton</code> remote. You will pull from this remote repo to get starter code for assignments. (Make sure that you are within the newly created folder
+  when the continue with these commands.)</p>
+
+  <ul>
+    <li><p>Enter the follow command to add the <code>skeleton</code> remote.</p>
+
+<pre><code>$ git remote add skeleton https://github.com/Berkeley-CS61B/skeleton.git</code></pre></li>
+    <li><p>Listing the remotes should now show both the <code>origin</code> and <code>skeleton</code>
+    remotes.</p>
+
+<pre><code>$ git remote -v</code></pre></li>
+  </ul></li>
+</ol>
+
+
+<h4 id="working-on-the-skeleton">Working on the Skeleton</h4>
+
+
+<ol>
+  <li><p>You must now pull from the <code>skeleton</code> remote in order to get the starter code
+  for lab1. You will also do this when new projects and assignments are released.</p>
+
+<pre><code>$ git pull skeleton master</code></pre></li>
+  <li><p>Move <code>LeapYear.java</code> into the <code>lab1</code> directory. You should be on your
+  <code>master</code> branch. You can check this with the following command:</p>
+
+<pre><code>$ git branch</code></pre></li>
+  <li><p>Stage and commit <code>LeapYear.java</code>.</p>
+
+<pre><code>$ git add lab1/LeapYear.java
+$ git commit -m "Completed LeapYear.java"</code></pre></li>
+  <li><p>Push these changes to the <code>master</code> branch on the <code>origin</code> remote repo.</p>
+
+<pre><code>$ git push origin master</code></pre>
+
+  <p>You can verify that this has been successful by checking your repo on
+  GitHub.</p></li>
+</ol>
+
+
+<h4 id="complete-lab-1">Complete Lab 1</h4>
+
+
+<p>Now that you have the skeleton, you should see a file in the lab1 directory
+called <code>Year.java</code>.</p>
+
+<p>You should fill it out, using your code in <code>LeapYear.java</code>. This time, however,
+you'll notice that <code>year</code> is a parameter for the <code>isLeapYear</code> method rather than
+a local variable within a method.</p>
+
+<p>After you have filled out that file, commit your work as you did before.</p>
+
+<a id="autograder"></a>#### Running the Autograder &amp; Submitting Homework
+
+<ol>
+  <li><p>At some points in your development, you may want to run the autograder.</p>
+
+  <ul>
+    <li><p>Create an <code>ag/ASSIGNMENT</code> branch. In this case, the assignment is lab1.</p>
+
+<pre><code>$ git checkout -b ag/lab1</code></pre></li>
+    <li><p>If you've previously created this branch, you do not need the <code>-b</code> flag,
+    which creates a new branch:</p>
+
+<pre><code>$ git checkout ag/lab1
+$ git merge master</code></pre></li>
+    <li><p>Push this local branch to your GitHub repo.</p>
+
+<pre><code>$ git push origin ag/lab1</code></pre></li>
+  </ul></li>
+</ol>
+
+<p>After pushing to the autograder branch, you should receive an email to the
+address associated with your login.</p>
+
+<p class="redtext"><strong>Note 1</strong>: For just this first lab, you will not be
+receiving an email. For other assignments, you will receive an email.</p>
+
+<p><strong>Note 2</strong>: This autograder may not be running the full number of tests that will
+be used to grade your assignment. (This especially true for the projects.) It
+should be used as a sanity check, not as a thorough test.</p>
+
+<ol>
+  <li><p>If you are ready to submit your homework, you will push to a <code>submit</code> branch.</p>
+
+  <ul>
+    <li><p>Create a <code>submit/ASSIGNMENT</code> branch.</p>
+
+<pre><code>$ git checkout -b submit/lab1</code></pre></li>
+    <li><p>Similarly to with the autograder branch, if you have already created this
+    branch, you just need to check it out and merge over your changes from your
+    <code>master</code> branch.</p>
+
+<pre><code>$ git checkout submit/lab1
+$ git merge master</code></pre></li>
+    <li><p>Push this local branch to your GitHub repo.</p>
+
+<pre><code>$ git push origin submit/lab1</code></pre></li>
+  </ul></li>
+</ol>
+
+<p>Note: You will not receive an autograder email from pushing to the <code>submit</code>
+branch so do not worry about that. Also, you can continue pushing to the
+<code>submit</code> branch if you find that you have corrections to make. We will run the
+complete autograder for every assignment to get final grades only after the
+deadline has passed.</p>
+
+
+<h4 id="recap">Recap</h4>
+
+
+<ol>
+  <li>Java is a compiled language. You can use <code>javac</code> and <code>java</code> to compile and
+  run your code.</li>
+  <li>Java is an object-oriented language. Every Java file must contain either a
+  class, interface, or enumeration.</li>
+  <li>When running a Java program, the <code>main</code> method runs. This <code>main</code> method
+  can call other methods/classes in the program.</li>
+  <li>Git is a version control system that tracks the history of a set of files in
+  the form of commits.</li>
+  <li>Commit often and use informative commit messages.</li>
+  <li>Pull from the <code>skeleton</code> remote repository to get or update starter code for
+  assignments.</li>
+  <li>Push to the <code>ag/ASSIGNMENT</code> branch to run the autograder or the
+  <code>submit/ASSIGNMENT</code> branch to submit assignments.</li>
+</ol>
+    </main>
