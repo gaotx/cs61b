@@ -1,22 +1,126 @@
-/* CS 61A Lab Stylesheet */
-
-blockquote.help-windows {
-  background-color: #b2dfee;
+/* General */
+body {
+    background-color: #EFEFEF;
+}
+img {
+    max-width: 100%;
 }
 
-blockquote.help-mac {
-  background-color: #c5e3bf;
+/* Content */
+.content {
+    padding: 60px 30px 30px;
+    background-color: white;
+    border-left: 1px solid #59a3d7;
+    border-right: 1px solid #59a3d7;
+    max-width: 700px;
+    margin: 0 auto;
+}
+.title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.updated {
+    font-size: 15px;
+}
+.due-date {
+    font-size: 15px;
+    color: #0072c1;
+}
+p, ul, ol, li {
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 28px;
+    margin: 10px 0;
+}
+h2 {
+    font-size: 20px;
+    margin: 25px 0 0;
+    border-top: 1px solid #59a3d7;
+    padding-top: 25px;
+}
+h4 {
+    margin: 25px 0 0;
+    font-size: 16px;
+}
+.redtext {
+    color: red;
 }
 
-.toggleButton {
-  display:none;
+/* Code Segments & Font */
+pre {
+    background-color: #EEE;
+    padding: 10px 20px;
+    margin: 0;
+    line-height: normal;
+}
+pre code {
+    font-size: 14px;
 }
 
+/* Navigation */
+#navigation + ul li {
+    line-height: 24px;
+    margin: 0;
+}
+
+/* Tables */
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+td {
+    padding: 5px 10px;
+}
+td.case {
+    background-color: #B0E2FF;
+}
+table.text {
+    line-height: 16px;
+}
+table.unlined {
+    border: none;
+}
+table.unlined > tbody > tr > td {
+    border: none;
+    padding: 3px 10px;
+    text-align: right;
+    font-size: 15px;
+}
+
+/* Self-Tests */
+.question > tbody > tr > td:nth-child(3) {
+    display: none;
+}
+.testbutton {
+    padding: 5px 10px;
+    border: 1px solid black;
+    width: 130px;
+    text-align: center;
+    background-color: #0072c1;
+    color: white;
+    margin-top: 15px;
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
+    -webkit-transition: background-color 0.2s ease;
+    -moz-transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+.testbutton:hover {
+    background-color: #555;
+}
 .solution {
-  display:none;
+    margin-top: 15px;
+    display: none;
 }
 
-.solution, .solution pre {
-  color:#0072c1;
+/* Self-Tests in Tables */
+.testbutton.togglebutton.tablebutton {
+    margin-top: 0px;
 }
-
+.tablesolution {
+    margin-top: 5px;
+}
+.tablesolution > .code {
+    margin: 0;
+}

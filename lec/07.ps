@@ -1,0 +1,896 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 25 25 587 767
+%%Title: Enscript Output
+%%For: Jonathan R. Shewchuk
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Mon Feb  3 03:51:19 2014
+%%Orientation: Landscape
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 7 7 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript 1.6 4
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    % light bar
+    0 0 d_header_w d_header_h 2 div Box
+    .95 setgray fill
+
+    % dark gray boxes
+    /dbw d_header_h 2 mul def	% dark box width
+    /dbc .7 def			% dark box color
+
+    % left dark box.
+    0 0 dbw d_header_h Box
+    dbc setgray fill
+
+    0 setgray 
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 5 div moveto show
+
+    % right dark box
+    d_header_w dbw sub 0 dbw d_header_h Box
+    dbc setgray fill
+
+    HeaderPageNumF setfont
+    1 setgray
+    pagenumstr dup
+    stringwidth pop dbw exch sub 2 div d_header_w dbw sub add
+    d_header_h .2 mul moveto show
+
+    % filename
+    0 setgray 
+    HeaderHDRF setfont
+    d_header_w fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        d_header_w user_header_left_str stringwidth pop sub 2 div 
+        h moveto user_header_left_str show
+      } {
+        dbw 5 add h moveto user_header_left_str show
+
+        d_header_w user_header_center_str stringwidth pop sub 2 div 
+        h moveto user_header_center_str show
+
+	d_header_w dbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} def
+%%EndResource
+/d_page_w 742 def
+/d_page_h 562 def
+/d_header_x 0 def
+/d_header_y 526 def
+/d_header_w 742 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 742 def
+/d_footer_h 0 def
+/d_output_w 742 def
+/d_output_h 526 def
+/cols 2 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+90 rotate
+25 -587 translate
+/pagenum 1 def
+/fname (07) def
+/fdir () def
+/ftail (07) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/03/14) def
+/modtimestr (03:51:12) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 516 M
+(                              CS 61B: Lecture 7) s
+5 508 M
+(                         Wednesday, February 5, 2014) s
+5 492 M
+(Today's reading:  Goodrich & Tamassia, Section 3.2.) s
+5 476 M
+(LISTS) s
+5 468 M
+(=====) s
+5 460 M
+(Let's consider two different data structures for storing a list of things:) s
+5 452 M
+(an array and a linked list.) s
+5 436 M
+(An array is a pretty obvious way to store a list, with a big advantage:  it) s
+5 428 M
+(enables very fast access of each item.  However, it has two disadvantages.) s
+5 412 M
+(First, if we want to insert an item at the beginning or middle of an array, we) s
+5 404 M
+(have to slide a lot of items over one place to make room.  This takes time) s
+5 396 M
+(proportional to the length of the array.) s
+5 380 M
+(Second, an array has a fixed length that can't be changed.  If we want to add) s
+5 372 M
+(items to the list, but the array is full, we have to allocate a whole new array) s
+5 364 M
+(and move all the ints from the old array to the new one.) s
+5 348 M
+(public class AList {) s
+5 340 M
+(  int a[];) s
+5 332 M
+(  int lastItem;) s
+5 316 M
+(  public AList\(\) {) s
+5 308 M
+(    a = new int[10];                           // The number "10" is arbitrary.) s
+5 300 M
+(    lastItem = -1;) s
+5 292 M
+(  }) s
+5 276 M
+(  public void insertItem\(int newItem, int location\) {) s
+5 268 M
+(    int i;) s
+5 252 M
+(    if \(lastItem + 1 == a.length\) {               // No room left in the array?) s
+5 244 M
+(      int b[] = new int[2 * a.length];  // Allocate a new array, twice as long.) s
+5 236 M
+(      for \(i = 0; i <= lastItem; i++\) {      // Copy items to the bigger array.) s
+5 228 M
+(        b[i] = a[i];) s
+5 220 M
+(      }) s
+5 212 M
+(      a = b;                   // Replace the too-small array with the new one.) s
+5 204 M
+(    }) s
+5 196 M
+(    for \(i = lastItem; i >= location; i--\) {       // Shift items to the right.) s
+5 188 M
+(      a[i + 1] = a[i];) s
+5 180 M
+(    }) s
+5 172 M
+(    a[location] = newItem;) s
+5 164 M
+(    lastItem++;) s
+5 156 M
+(  }) s
+5 148 M
+(}) s
+376 508 M
+(LINKED LISTS \(a recursive data type\)) s
+376 500 M
+(============) s
+376 492 M
+(We can avoid these problems by choosing a Scheme-like representation of lists.) s
+376 484 M
+(A linked list is made up of _nodes_.  Each node has two components:  an item,) s
+376 476 M
+(and a reference to the next node in the list.  These components are analogous) s
+376 468 M
+(to "car" and "cdr".  However, our node is an explicitly defined object.) s
+376 452 M
+(  public class ListNode {          // ListNode is a recursive type) s
+376 444 M
+(    public int item;) s
+376 436 M
+(    public ListNode next;          // Here we're using ListNode before) s
+376 428 M
+(  }                                //   we've finished declaring it.) s
+376 412 M
+(Let's make some ListNodes.) s
+376 396 M
+(  ListNode l1 = new ListNode\(\), l2 = new ListNode\(\), l3 = new ListNode\(\);) s
+376 388 M
+(  l1.item = 7;) s
+376 380 M
+(  l2.item = 0;) s
+376 372 M
+(  l3.item = 6;) s
+376 356 M
+(       -------------         -------------         -------------) s
+376 348 M
+(       |     ----- |         |     ----- |         |     ----- |) s
+376 340 M
+(       | item| 7 | |         | item| 0 | |         | item| 6 | |) s
+376 332 M
+(  l1-->|     ----- |    l2-->|     ----- |    l3-->|     ----- |) s
+376 324 M
+(       |     ----- |         |     ----- |         |     ----- |) s
+376 316 M
+(       | next| ? | |         | next| ? | |         | next| ? | |) s
+376 308 M
+(       |     ----- |         |     ----- |         |     ----- |) s
+376 300 M
+(       -------------         -------------         -------------) s
+376 284 M
+(Now let's link them together.) s
+376 268 M
+(  l1.next = l2;) s
+376 260 M
+(  l2.next = l3;) s
+376 244 M
+(What about the last node?  We need a reference that doesn't reference anything.) s
+376 236 M
+(In Java, this is called "null".) s
+376 220 M
+(  l3.next = null;) s
+376 204 M
+(       -------------         -------------         -------------) s
+376 196 M
+(       |     ----- |         |     ----- |         |     ----- |) s
+376 188 M
+(       | item| 7 | |         | item| 0 | |         | item| 6 | |) s
+376 180 M
+(  l1-->|     ----- |    l2-->|     ----- |    l3-->|     ----- |) s
+376 172 M
+(       |     ----- |         |     ----- |         |     ----- |) s
+376 164 M
+(       | next| .-+-+-------->| next| .-+-+-------->| next| X | |) s
+376 156 M
+(       |     ----- |         |     ----- |         |     ----- |) s
+376 148 M
+(       -------------         -------------         -------------) s
+376 132 M
+(To simplify programming, let's add some constructors to the ListNode class.) s
+376 116 M
+(public ListNode\(int i, ListNode n\) {) s
+376 108 M
+(  item = i;) s
+376 100 M
+(  next = n;) s
+376 92 M
+(}) s
+376 76 M
+(public ListNode\(int i\) {) s
+376 68 M
+(  this\(i, null\);) s
+376 60 M
+(}) s
+376 44 M
+(These constructors allow us to emulate Scheme's "cons" operation.) s
+376 28 M
+(  ListNode l1 = new ListNode\(7, new ListNode\(0, new ListNode\(6\)\)\);) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+90 rotate
+25 -587 translate
+/pagenum 2 def
+/fname (07) def
+/fdir () def
+/ftail (07) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (02/03/14) def
+/modtimestr (03:51:12) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 508 M
+(Linked lists vs. array lists) s
+5 500 M
+(----------------------------) s
+5 492 M
+(Linked lists have several advantages over array-based lists.  Inserting an item) s
+5 484 M
+(into the middle of a linked list takes just a small constant amount of time, if) s
+5 476 M
+(you already have a reference to the previous node \(and don't have to walk) s
+5 468 M
+(through the whole list searching for it\).  The list can keep growing until) s
+5 460 M
+(memory runs out.) s
+5 444 M
+(The following method inserts a new item into the list immediately after "this".) s
+5 428 M
+(  public void insertAfter\(int item\) {) s
+5 420 M
+(    next = new ListNode\(item, next\);) s
+5 412 M
+(  }) s
+5 396 M
+(  l2.insertAfter\(3\);) s
+5 380 M
+(         -------------       -------------   -------------       -------------) s
+5 372 M
+(         |     ----- |       |     ----- |   |     ----- |       |     ----- |) s
+5 364 M
+(         | item| 7 | |       | item| 0 | |   | item| 3 | |       | item| 6 | |) s
+5 356 M
+(    l1-->|     ----- |  l2-->|     ----- |   |     ----- |  l3-->|     ----- |) s
+5 348 M
+(         |     ----- |       |     ----- |   |     ----- |       |     ----- |) s
+5 340 M
+(         | next| .-+-+------>| next| .-+-+-->| next| .-+-+------>| next| X | |) s
+5 332 M
+(         |     ----- |       |     ----- |   |     ----- |       |     ----- |) s
+5 324 M
+(         -------------       -------------   -------------       -------------) s
+5 308 M
+(However, linked lists have a big disadvantage compared to arrays.  Finding the) s
+5 300 M
+(nth item of an array takes a tiny, constant amount of time.  Finding the nth) s
+5 292 M
+(item of a linked list takes time proportional to n.  You have to start at the) s
+5 284 M
+(head of the list and walk forward n - 1 nodes, one "next" at a time.) s
+5 268 M
+(Many of the data structures we will study in this class will be attempts to) s
+5 260 M
+(find a compromise between arrays and linked lists.  We'll learn data structures) s
+5 252 M
+(that are fast for both arbitrary lookups \(like arrays\) _and_ arbitrary) s
+5 244 M
+(insertions \(like linked lists\).) s
+5 228 M
+(Lists of Objects) s
+5 220 M
+(----------------) s
+5 212 M
+(For greater generality, let's change ListNodes so that each node contains not) s
+5 204 M
+(an int, but a reference to any Java object.  In Java, we can accomplish this by) s
+5 196 M
+(declaring a reference of type Object.) s
+5 180 M
+(  public class SListNode {) s
+5 172 M
+(    public Object item;) s
+5 164 M
+(    public SListNode next;) s
+5 156 M
+(  }) s
+5 140 M
+(The "S" in "SListNode" stands for singly-linked.  This will make sense when we) s
+5 132 M
+(contrast these lists with doubly-linked lists later.  You'll see the SListNode) s
+5 124 M
+(class in next week's lab and homework.) s
+376 508 M
+(A List Class) s
+376 500 M
+(------------) s
+376 492 M
+(There are two problems with SListNodes.) s
+376 476 M
+(\(1\)  Suppose x and y are pointers to the same shopping list.  Suppose we insert) s
+376 468 M
+(     a new item at the beginning of the list thusly:) s
+376 452 M
+(       x = new SListNode\("soap", x\);) s
+376 436 M
+(     y doesn't point to the new item; y still points to the second item in x's) s
+376 428 M
+(     list.  If y goes shopping for x, he'll forget to buy soap.) s
+376 412 M
+(\(2\)  How do you represent an empty list?  The obvious way is "x = null".) s
+376 404 M
+(     However, Java won't let you call a SListNode method--or any method--on) s
+376 396 M
+(     a null object.  If you write "x.insertAfter\(item\)" when x is null, you'll) s
+376 388 M
+(     get a run-time error, even though x is declared to be a SListNode.) s
+376 380 M
+(     \(There are good reasons for this, which you'll learn later in the course.\)) s
+376 364 M
+(The solution is a separate SList class, whose job is to maintain the head) s
+376 356 M
+(\(first node\) of the list.  We will put many of the methods that operate on) s
+376 348 M
+(lists in the SList class, rather than the SListNode class.) s
+376 332 M
+(public class SList {) s
+376 324 M
+(  private SListNode head;             // First node in list.) s
+376 316 M
+(  private int size;                   // Number of items in list.) s
+376 300 M
+(  public SList\(\) {                    // Here's how to represent an empty list.) s
+376 292 M
+(    head = null;) s
+376 284 M
+(    size = 0;) s
+376 276 M
+(  }) s
+376 260 M
+(  public void insertFront\(Object item\) {) s
+376 252 M
+(    head = new SListNode\(item, head\);) s
+376 244 M
+(    size++;) s
+376 236 M
+(  }) s
+376 228 M
+(}) s
+376 220 M
+(                 SList object                    SListNode object) s
+376 212 M
+(                 -------------                     -------------  String object) s
+376 204 M
+(      -----      |     ----- |                     |     ----- |     ----------) s
+376 196 M
+(    x | .-+----->| size| 1 | |                     | item| .-+-+---->|  milk  |) s
+376 188 M
+(      -----      |     ----- |                     |     ----- |     ----------) s
+376 180 M
+(      -----      |     ----- |                     |     ----- |) s
+376 172 M
+(    y | .-+----->| head| .-+-+-------------------->| next| X | |) s
+376 164 M
+(      -----      |     ----- |                     |     ----- |) s
+376 156 M
+(                 -------------                     -------------) s
+376 140 M
+(Now, when you call x.insertFront\("fish"\), every reference to that SList can see) s
+376 132 M
+(the change.) s
+376 116 M
+(              SList           SListNode                SListNode) s
+376 108 M
+(              -------------   -------------            -------------) s
+376 100 M
+(      -----   |     ----- |   |     ----- |  --------  |     ----- |  --------) s
+376 92 M
+(    x | .-+-->| size| 2 | |   | item| .-+-+->| fish |  | item| .-+-+->| milk |) s
+376 84 M
+(      -----   |     ----- |   |     ----- |  --------  |     ----- |  --------) s
+376 76 M
+(      -----   |     ----- |   |     ----- |            |     ----- |) s
+376 68 M
+(    y | .-+-->| head| .-+-+-->| next| .-+-+----------->| next| X | |) s
+376 60 M
+(      -----   |     ----- |   |     ----- |            |     ----- |) s
+376 52 M
+(              -------------   -------------            -------------) s
+376 36 M
+(Another advantage of the SList class is that it can keep a record of the) s
+376 28 M
+(SList's size \(number of SListNodes\).  Hence, the size can be determined more) s
+376 20 M
+(quickly than if the SListNodes had to be counted.) s
+_R
+S
+%%Trailer
+%%Pages: 2
+%%DocumentNeededResources: font Times-Roman Courier-Bold Courier 
+%%+ font Times-Bold 
+%%EOF

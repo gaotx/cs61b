@@ -1,1 +1,0 @@
-counted 25 non-delimiter tokens

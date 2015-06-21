@@ -1,0 +1,890 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 25 25 587 767
+%%Title: Enscript Output
+%%For: Jonathan R. Shewchuk
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Wed Jan 29 02:22:12 2014
+%%Orientation: Landscape
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 7 7 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript 1.6 4
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    % light bar
+    0 0 d_header_w d_header_h 2 div Box
+    .95 setgray fill
+
+    % dark gray boxes
+    /dbw d_header_h 2 mul def	% dark box width
+    /dbc .7 def			% dark box color
+
+    % left dark box.
+    0 0 dbw d_header_h Box
+    dbc setgray fill
+
+    0 setgray 
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 5 div moveto show
+
+    % right dark box
+    d_header_w dbw sub 0 dbw d_header_h Box
+    dbc setgray fill
+
+    HeaderPageNumF setfont
+    1 setgray
+    pagenumstr dup
+    stringwidth pop dbw exch sub 2 div d_header_w dbw sub add
+    d_header_h .2 mul moveto show
+
+    % filename
+    0 setgray 
+    HeaderHDRF setfont
+    d_header_w fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        d_header_w user_header_left_str stringwidth pop sub 2 div 
+        h moveto user_header_left_str show
+      } {
+        dbw 5 add h moveto user_header_left_str show
+
+        d_header_w user_header_center_str stringwidth pop sub 2 div 
+        h moveto user_header_center_str show
+
+	d_header_w dbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} def
+%%EndResource
+/d_page_w 742 def
+/d_page_h 562 def
+/d_header_x 0 def
+/d_header_y 526 def
+/d_header_w 742 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 742 def
+/d_footer_h 0 def
+/d_output_w 742 def
+/d_output_h 526 def
+/cols 2 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+90 rotate
+25 -587 translate
+/pagenum 1 def
+/fname (04) def
+/fdir () def
+/ftail (04) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (01/29/14) def
+/modtimestr (02:19:55) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 516 M
+(                              CS 61B: Lecture 4) s
+5 508 M
+(                         Wednesday, January 29, 2014) s
+5 492 M
+(Today's reading:  S&B pp. 10-14, 49-53, 75, 78-79, 86, 117, 286-287, 292, 660.) s
+5 476 M
+(PRIMITIVE TYPES) s
+5 468 M
+(===============) s
+5 460 M
+(Not all variables are references to objects.  Some variables are primitive) s
+5 452 M
+(types, which store values like "3", "7.2", "h", and "false".  They are:) s
+5 436 M
+(  byte:  A 8-bit integer in the range -128...127.  \(One bit is the sign.\)) s
+5 428 M
+(  short:  A 16-bit integer in the range -32768...32767.) s
+5 420 M
+(  int:  A 32-bit integer in the range -2147483648...2147483647.) s
+5 412 M
+(  long:  A 64-bit integer, range -9223372036854775808...9223372036854775807.) s
+5 404 M
+(  double:  A 64-bit floating-point number like 18.355625430920409.) s
+5 396 M
+(  float:  A 32-bit floating-point number; has fewer digits of precision.) s
+5 388 M
+(  boolean:  "true" or "false".) s
+5 380 M
+(  char:  A single character.) s
+5 364 M
+(long values are written with an L on the end:  long x = 43L;) s
+5 356 M
+(This tells the compiler to internally write out "43" in a 64-bit format.) s
+5 348 M
+(double and float values must have a decimal point:  double y = 18.0;) s
+5 340 M
+(float values are written with an f at the end:  float f = 43.9f;) s
+5 324 M
+(                        Object types            Primitive types) s
+5 316 M
+(--------------------------------------------------------------------------) s
+5 308 M
+(Variable contains a     reference               value) s
+5 300 M
+(How defined?            class definition        built into Java) s
+5 292 M
+(How created?            "new"                   "6", "3.4", "true") s
+5 284 M
+(How initialized?        constructor             default \(usually zero\)) s
+5 276 M
+(How used?               methods                 operators \("+", "*", etc.\)) s
+5 260 M
+(Operations on int, long, short, and byte types.) s
+5 252 M
+(    -x               x * y ) s
+5 244 M
+(    x + y            x / y    <-- rounds toward zero \(drops the remainder\).) s
+5 236 M
+(    x - y            x % y    <-- calculates the remainder of x / y.) s
+5 228 M
+(Except for "%", these operations are also available for doubles and floats.) s
+5 220 M
+(Floating-point division \("/"\) doesn't round to an integer, but it does) s
+5 212 M
+(round off after a certain number of bits determined by the storage space.) s
+5 196 M
+(The java.lang library has more operations in...) s
+5 188 M
+(    - the Math class.) s
+5 180 M
+(      x = Math.abs\(y\);  // Absolute value.  Also see Math.sqrt, Math.sin, etc.) s
+5 172 M
+(    - the Integer class.) s
+5 164 M
+(      int x = Integer.parseInt\("1984"\);  // Convert a string to a number.) s
+5 156 M
+(    - the Double class.) s
+5 148 M
+(      double d = Double.parseDouble\("3.14"\);) s
+5 132 M
+(Converting types:  integers can be assigned to variables of longer types.) s
+5 124 M
+(    int i = 43; ) s
+5 116 M
+(    long l = 43;    // Okay, because longs are a superset of ints.) s
+5 108 M
+(    l = i;          // Okay, because longs are a superset of ints.) s
+5 100 M
+(    i = l;          // Compiler ERROR.) s
+5 92 M
+(    i = \(int\) l;    // Okay.) s
+5 76 M
+(The string "\(int\)" is called a cast, and it casts the long into an int.  In the) s
+5 68 M
+(process, high bits will be lost if l does not fit in the range -2147483648...) s
+5 60 M
+(2147483647.  Java won't let you compile "i = l" because it's trying to protect) s
+5 52 M
+(you from accidentally creating a nonsense value and a hard-to-find bug.  Java) s
+5 44 M
+(requires you to explicitly cast longs to ints to show your acknowledgment that) s
+5 36 M
+(you may be destroying information.) s
+5 20 M
+(Similarly, "float f = 5.5f; double d = f;" is fine, but you need an explicit) s
+5 12 M
+(cast for "double d = 5.5; float f = \(float\) d;".  Integers \(even longs\) can be) s
+5 4 M
+(directly assigned to floating-point variables \(even floats\) without a cast, but) s
+376 516 M
+(the reverse requires a cast because the number is truncated to an integer.) s
+376 500 M
+(Boolean Values) s
+376 492 M
+(--------------) s
+376 484 M
+(A boolean value is either "true" or "false".  Booleans have operations of their) s
+376 476 M
+(own, signified "&&" \(and\), "||" \(or\), and "!" \(not\).) s
+376 460 M
+(                  a    |    b    ||  a && b  |  a || b  |    !a) s
+376 452 M
+(               ==================||==============================) s
+376 444 M
+(                false  |  false  ||  false   |  false   |   true) s
+376 436 M
+(                false  |   true  ||  false   |   true   |) s
+376 428 M
+(                 true  |  false  ||  false   |   true   |  false) s
+376 420 M
+(                 true  |   true  ||   true   |   true   |) s
+376 404 M
+(Boolean values can be specified directly \("true", "false"\) or be created by) s
+376 396 M
+(the comparison operators "==", "<", ">", "<=", ">=", "!=" \(not equal to\).) s
+376 380 M
+(    boolean x = 3 == 5;       // x is now false.) s
+376 372 M
+(    x = 4.5 >= 4.5;           // x is now true.) s
+376 364 M
+(    x = 4 != 5 - 1;           // x is now false.) s
+376 356 M
+(    x = false == \(3 == 0\);    // x is now true.) s
+376 340 M
+(CONDITIONALS) s
+376 332 M
+(============) s
+376 324 M
+(An "if" statement uses a boolean expression to decide whether to execute a set) s
+376 316 M
+(of statements.  The form is) s
+376 300 M
+(    if \(boolValue\) {) s
+376 292 M
+(      statements;) s
+376 284 M
+(    }) s
+376 268 M
+(The statements are executed if and only if "boolValue" is "true".  The) s
+376 260 M
+(parentheses around the boolean expression are required \(for no good reason\).) s
+376 244 M
+(    boolean pass = score >= 75;) s
+376 236 M
+(    if \(pass\) {) s
+376 228 M
+(      output\("You pass CS 61B"\);) s
+376 220 M
+(    } else {) s
+376 212 M
+(      // The following line executes if and only if score < 75.) s
+376 204 M
+(      output\("You are such an unbelievable loser"\);) s
+376 196 M
+(    }) s
+376 180 M
+(if-then-else clauses can be \(1\) nested and \(2\) daisy-chained.  Nesting allows) s
+376 172 M
+(you to build decision trees.  Daisy-chaining allows you to present more than) s
+376 164 M
+(two alternatives.  For instance, suppose you want to find the maximum of three) s
+376 156 M
+(numbers.) s
+376 140 M
+(    if \(x > y\) {) s
+376 132 M
+(      if \(x > z\) {) s
+376 124 M
+(        maximum = x;) s
+376 116 M
+(      } else {) s
+376 108 M
+(        maximum = z;) s
+376 100 M
+(      }) s
+376 92 M
+(    } else if \(y > z\) {) s
+376 84 M
+(      maximum = y;) s
+376 76 M
+(    } else {) s
+376 68 M
+(      maximum = z;) s
+376 60 M
+(    }) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+90 rotate
+25 -587 translate
+/pagenum 2 def
+/fname (04) def
+/fdir () def
+/ftail (04) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (01/29/14) def
+/modtimestr (02:19:55) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 508 M
+(Some long chains of if-then-else clauses can be simplified by using a "switch") s
+5 500 M
+(statement.  "switch" is appropriate only if every condition tests whether a) s
+5 492 M
+(variable x is equal to some constant.) s
+5 476 M
+(    switch \(month\) {        |      if \(month == 2\) {                         ) s
+5 468 M
+(    case 2:                 |        days = 28;                              ) s
+5 460 M
+(      days = 28;            |      } else if \(\(month == 4\) || \(month == 6\) ||) s
+5 452 M
+(      break;                |                 \(month == 9\) || \(month == 11\)\) {) s
+5 444 M
+(    case 4:                 |        days = 30;                              ) s
+5 436 M
+(    case 6:                 |      } else {                                  ) s
+5 428 M
+(    case 9:                 |        days = 31;                              ) s
+5 420 M
+(    case 11:                |      }                                         ) s
+5 412 M
+(      days = 30;            |) s
+5 404 M
+(      break;) s
+5 396 M
+(    default:) s
+5 388 M
+(      days = 31;) s
+5 380 M
+(      break;) s
+5 372 M
+(    }                   //  These two code fragments do exactly the same thing.) s
+5 356 M
+(IMPORTANT:  "break" jumps to the end of the "switch" statement.  If you forget) s
+5 348 M
+(a break statement, the flow of execution will continue right through past the) s
+5 340 M
+(next "case" clause, which is why cases 4, 6, and 9 work right.  If month == 12) s
+5 332 M
+(in the following example, both Strings are printed.) s
+5 316 M
+(    switch \(month\) {) s
+5 308 M
+(    case 12:) s
+5 300 M
+(      output\("It's December."\);) s
+5 292 M
+(      // Just keep moving right on through.) s
+5 284 M
+(    case 1:) s
+5 276 M
+(    case 2:) s
+5 268 M
+(    case 11:) s
+5 260 M
+(      output\("It's cold."\);) s
+5 252 M
+(    }) s
+5 236 M
+(However, this is considered bad style, because it's hard to read and) s
+5 228 M
+(understand.  If there's any chance that other people will need to read or) s
+5 220 M
+(modify your code \(which is the norm when you program for a business\), don't) s
+5 212 M
+(code it like this.  Use break statements in the switch, and use subroutines to) s
+5 204 M
+(reuse code and clarify the control flow.) s
+5 188 M
+(Observe that the last example doesn't have a "default:" case.  If "month" is) s
+5 180 M
+(not 1 nor 2 nor 11 nor 12, Java jumps right to the end of the "switch") s
+5 172 M
+(statement \(just past the closing brace\) and continues execution from there.) s
+376 508 M
+(THE "return" KEYWORD) s
+376 500 M
+(====================) s
+376 492 M
+(Like conditionals, "return" affects the flow of control of a program.  It) s
+376 484 M
+(causes a method to end immediately, so that control returns to the calling) s
+376 476 M
+(method.) s
+376 460 M
+(Here's a recursive method that prints the numbers from 1 to x.) s
+376 444 M
+(    public static void oneToX\(int x\) {) s
+376 436 M
+(      if \(x < 1\) {) s
+376 428 M
+(        return;) s
+376 420 M
+(      }) s
+376 412 M
+(      oneToX\(x - 1\);) s
+376 404 M
+(      System.out.println\(x\);) s
+376 396 M
+(    }) s
+376 380 M
+(The return keyword serves a dual purpose:  it is also the means by which a) s
+376 372 M
+(function returns a value.  A _function_ is a method that is declared to return) s
+376 364 M
+(a non-void type.  For instance, here's a function that returns an int.) s
+376 348 M
+(    public int daysInMonth\(int month\) {) s
+376 340 M
+(      switch \(month\) {) s
+376 332 M
+(      case 2:) s
+376 324 M
+(        return 28;) s
+376 316 M
+(      case 4:) s
+376 308 M
+(      case 6:) s
+376 300 M
+(      case 9:) s
+376 292 M
+(      case 11:) s
+376 284 M
+(        return 30;) s
+376 276 M
+(      default:) s
+376 268 M
+(        return 31;) s
+376 260 M
+(      }) s
+376 252 M
+(    }) s
+376 236 M
+(The "return" value can be an expression.  Some examples:) s
+376 220 M
+(    return x + y - z;) s
+376 204 M
+(    return car.velocity\(time\);) s
+_R
+S
+%%Trailer
+%%Pages: 2
+%%DocumentNeededResources: font Times-Roman Courier-Bold Courier 
+%%+ font Times-Bold 
+%%EOF

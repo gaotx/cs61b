@@ -1,0 +1,282 @@
+      Summary of Conventions Enforced by the style61b Program
+                              Fall 2012
+
+
+RUNNING THE PROGRAM
+------- --- -------
+
+On the instructional machines, you can run our version of the open-
+source "checkstyle" program with the command
+
+   style61b FILE.java ...
+
+where FILE.java ... denotes one or more names of Java source files.  The 
+program will exit normally if there are no style violations, and otherwise 
+will exit with a non-zero exit code.
+
+'style61b' is a simple script that invokes checkstyle configured with our
+official style parameters.  You can use it on a home installation that has Java
+by copying ~cs61b/lib/checkstyle/ucb-checkstyle.jar to your computer and using
+the command
+
+    java -cp DIR/ucb-checkstyle.jar ucb.checkstyle.Main FILE ...
+
+on Unix, Mac, or Linux installations (where DIR is the directory in which you
+store ucb-checkstyle.jar).  Reverse the "/" for Windows.
+      
+
+STYLE CHECKS
+----- ------
+
+The style61b program enforces the following conventions.
+
+Whitespace
+----------
+
+W1. Each file must end with a newline sequence.
+
+W2. Files may not contain horizontal tab characters.  Use blanks only for
+    indentation.
+
+W3. No line may contain trailing blanks.
+
+W4. Do NOT put whitespace:
+    a. Around the "<" and ">" within a generic type designation 
+       ("List<Integer>", not "List <Integer>", or "List< Integer >").
+    b. After the prefix operators "!", "--", "++", "~", unary "-", or unary "+".
+    c. Before the tokens ";" or the suffix operators "--" and "++".
+    d. After "(" or before ")".
+    e. After "."
+
+W5. DO put whitespace:
+    a. After ";", ",", or type casts (e.g., "(String) x", not "(String)x").
+    b. Around binary operators (e.g., "*", "+") and comparison operators.
+    c. Around assignment operators (e.g., "=", "+=").
+    d. Around "?" and ":" in the ternary conditional operator ("x>0 ? x : -x").
+    e. Around the keywords "assert", "catch", "do", "else", "finally", "for",
+       "if", "return", "synchronized", "try", and "while".
+
+W6. In general, break (insert newlines in) lines before an operator, as in 
+            ... + 20 * X 
+                + Y;
+
+W7. Do not separate a method name from the "(" in a method call with blanks.
+    However, you may separate them with a newline followed by blanks (for
+    indentation) on long lines.
+
+Indentation
+-----------
+
+We've tried to set up Emacs on the instructional machines to follow the
+rules here:
+
+I1. The basic indentation step is 4 spaces.
+
+I2. Indent code by the basic indentation step for each block level (blocks are
+    generally enclosed in "{" and "}"), as in 
+        if (x > 0) {
+            r = -x;
+        } else {
+            r = x;
+        }
+
+I3. Indent 'case' labels at the same level as their enclosing 'switch', as in
+
+        switch (op) {
+        case '+':
+            addOpnds(x, y);
+            break;
+        default:
+            ERROR();
+        }
+
+I4. Indent continued lines by the basic indentation step.
+
+Braces
+------
+
+BR1. Use { } braces around the statements of all 'if', 'while', 'do', and
+     'for' statements.
+
+BR2. Place a "}" brace on the same line as a following "else", "finally", 
+     or "catch", as in 
+
+         if (x > 0) {
+             y = -x;
+         } else {
+             y = x;
+         }
+
+BR3. Put the "{" that opens a block at the end of a line.  Generally, it goes
+     at the end of the "if", "for", "while", "switch", "do", method header, or
+     class header that contains it.  If line length forces it to the
+     next line, do not indent it, and put it alone on the line.
+
+Comments
+--------
+
+C1. Every class and field must have a Javadoc (/** ... */) comment.
+    Every method must either have a Javadoc comment, or an "@Override" 
+    annotation.
+
+C2. Each parameter of a method must be mentioned in its Javadoc comment, using
+    either a "@param" tag, or spelled out in all capital letters in running
+    text.  Parameters that begin with "dummy", "ignored", or "unused" do not
+    need to be commented.
+
+C3. Methods that return non-void values must describe them in their Javadoc
+    comment either with a "@return" tag or in a phrase in running text that
+    contains the word "return", "returning", or "returns".
+
+C4. The Javadoc comment on every class must contain an @author tag.
+
+C5. Each Javadoc comment must start with a properly formed sentence, starting
+    with a capital letter and ending with a period.
+
+C6. Do not use C++ ("//"-style) comments.  If they appear in a skeleton file
+    provided by the staff, they are intended to be removed.
+
+C7. In method bodies, use "/* ... */"-style comments only at the beginning of
+    of the method.  That is, avoid internal comments.
+
+C8. Comments must appear alone on their line(s).
+
+
+Names
+-----
+
+N1. Names of static final constants must be in all capitals (e.g., RED,
+    DEFAULT_NAME).
+
+N2. Names of parameters, local variables, and methods must start with a
+    lower-case letter, or consist of a single, upper-case letter.
+
+N3. Names of types (classes), including type parameters, must start with
+    a capital letter.
+
+N4. Names of packages must start with a lower-case letter.
+
+N5. Names of instance variables and non-final class (static) variables must
+    start with either a lower-case letter or "_".
+
+Imports
+-------
+
+IM1. Do not use 'import PACKAGE.*', unless the package is java.lang.Math,
+     java.lang.Double, or org.junit.Assert.  'import static CLASS.*' is OK.
+
+IM2. Do not import the same class or static member twice.
+
+IM3. Do not import classes or members that you do not use.
+
+
+Assorted Java Style Conventions
+-------- ---- ----- -----------
+
+S1. Write array types with the "[]" after the element-type name, not after
+    the declarator.  Write "String[] names", not "String names[]".
+
+S2. Write any modifiers for methods, classes, or fields in the following order:
+    a. public, protected, or private.
+    b. abstract or static.
+    c. final, transient, or volatile.
+    d. synchronized.
+    e. native.
+    f. strictfp.
+
+S3. Do not explicitly modify methods, fields, or classes where the modification
+    is redundant:
+    a. Do not label methods in interfaces or annotations as "public" 
+       or "abstract".
+    b. Do not label fields in interfaces or annotations as "static", "public",
+       or "final".
+    c. Do not label methods in final classes as "final".
+    d. Do not label nested interfaces "static".
+
+S4. Do not use empty blocks ('{ }' with only whitespace or comments inside)
+    for control statements.  There is one exception: a catch block may consist
+    solely of comments having the form
+         /* Ignore EXCEPTIONNAME. */
+
+S5. Avoid "magic numbers" in code by giving them symbolic names, as in 
+    
+         public static final MAX_SIZE = 100;
+
+    Exceptions are the numerals -10 through 10, 0.5, -0.5, 0.25, -0.25.
+
+S6. Do not try to catch the exceptions Exception, RuntimeError, or Error.
+
+S7. Write "b" rather than "b == true" and "!b" rather than "b == false".
+
+S8. Replace
+
+         if (condition) {
+             return true;
+         } else {
+             return false;
+         }
+
+    with just
+
+         return condition;
+
+S9. Only static final fields of classes may be public.  Other fields must be
+    private or protected.
+
+S10. Classes that have only static methods and fields must not have a public
+     (or defaulted) constructor.
+
+S11. Classes that have only private constructors must be declared "final".
+
+
+Avoiding Error-Prone Constructs
+-------- ----------- ----------
+
+E1. If a class overrides "equals", it must also override "hashCode".
+
+E2. Local variables and parameters must not shadow field names.  The preferred
+    way to handle, e.g., getter/setter methods that simply control a field
+    is to prefix the field name with "_", as in
+
+        public double getWidth() {
+            return _width;
+        }
+
+        public void setWidth(double width) {
+            _width = width;
+        }
+
+E3. Do not use nested assignments, such as "if ((x = next()) != null) ...".
+
+E4. Include a "default" case in every "switch" statement.
+
+E5. End every arm of a "switch" statement either with a "break" statement
+    or a comment of the form
+        /* fall through */
+
+E6. Do not compare String literals with "==".  Write
+
+        if (x.equals("something"))
+
+    and not
+
+        if (x == "something")
+
+    There are cases where you really want to use "==", but you are unlikely to
+    encounter them in this class. 
+
+Limits
+------
+
+L1. No file may be longer than 2000 lines.
+
+L2. No line may be longer than 80 characters.
+
+L3. No method may be longer than 60 lines.
+
+L4. No method may have more than 8 parameters.
+
+L5. Every file must contain exactly one outer class (nested classes are OK).
+
+
+

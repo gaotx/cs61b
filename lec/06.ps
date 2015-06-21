@@ -1,0 +1,954 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 25 25 587 767
+%%Title: Enscript Output
+%%For: Jonathan R. Shewchuk
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Mon Feb 10 15:20:22 2014
+%%Orientation: Landscape
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 7 7 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript 1.6 4
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    % light bar
+    0 0 d_header_w d_header_h 2 div Box
+    .95 setgray fill
+
+    % dark gray boxes
+    /dbw d_header_h 2 mul def	% dark box width
+    /dbc .7 def			% dark box color
+
+    % left dark box.
+    0 0 dbw d_header_h Box
+    dbc setgray fill
+
+    0 setgray 
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 5 div moveto show
+
+    % right dark box
+    d_header_w dbw sub 0 dbw d_header_h Box
+    dbc setgray fill
+
+    HeaderPageNumF setfont
+    1 setgray
+    pagenumstr dup
+    stringwidth pop dbw exch sub 2 div d_header_w dbw sub add
+    d_header_h .2 mul moveto show
+
+    % filename
+    0 setgray 
+    HeaderHDRF setfont
+    d_header_w fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        d_header_w user_header_left_str stringwidth pop sub 2 div 
+        h moveto user_header_left_str show
+      } {
+        dbw 5 add h moveto user_header_left_str show
+
+        d_header_w user_header_center_str stringwidth pop sub 2 div 
+        h moveto user_header_center_str show
+
+	d_header_w dbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} def
+%%EndResource
+/d_page_w 742 def
+/d_page_h 562 def
+/d_header_x 0 def
+/d_header_y 526 def
+/d_header_w 742 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 742 def
+/d_footer_h 0 def
+/d_output_w 742 def
+/d_output_h 526 def
+/cols 2 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+90 rotate
+25 -587 translate
+/pagenum 1 def
+/fname (06) def
+/fdir () def
+/ftail (06) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (02/10/14) def
+/modtimestr (15:19:54) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 516 M
+(                              CS 61B:  Lecture 6) s
+5 508 M
+(                           Monday, February 3, 2014) s
+5 492 M
+(Today's reading:  Sierra & Bates pp. 282-285.) s
+5 476 M
+(MORE ARRAYS) s
+5 468 M
+(===========) s
+5 452 M
+(Automatic Array Construction) s
+5 444 M
+(----------------------------) s
+5 436 M
+(Last lecture, we used a loop to construct all the arrays that the top-level) s
+5 428 M
+(array references.  This was necessary to construct a triangular array.  But if) s
+5 420 M
+(you want a rectangular multi-dimensional array, rather than a triangular one,) s
+5 412 M
+(Java can construct all of the arrays for you at once.) s
+5 396 M
+(  int[][] table = new int[x][y];) s
+5 380 M
+(This declaration constructs an array of x references to arrays.  It also) s
+5 372 M
+(constructs x arrays of y ints.  The variable "table" references the array of) s
+5 364 M
+(arrays; and each entry in the array of arrays references one of the arrays of) s
+5 356 M
+(ints.  All the arrays are constructed for you at once.  Similarly, Java can) s
+5 348 M
+(construct three- or ten-dimensional arrays for you, memory permitting.) s
+5 332 M
+(We could have used a square array to store Pascal's Triangle, but that would) s
+5 324 M
+(have unnecessarily wasted memory.  If you have enough memory, you might not) s
+5 316 M
+(care.) s
+5 300 M
+(When you declare a variable, you can also construct array entries by using) s
+5 292 M
+(initializers.) s
+5 276 M
+(  Human[] b = {amanda, rishi, new Human\("Paolo"\)};) s
+5 268 M
+(  int[][] c = {{7, 3, 2}, {x}, {8, 5, 0, 0}, {y + z, 3}};) s
+5 252 M
+(In the second example, Java constructs a non-rectangular two-dimensional array,) s
+5 244 M
+(composed of one array of arrays and four arrays of ints.) s
+5 228 M
+(Outside of declarations, you need a more complicated notation.) s
+5 212 M
+(  d = new int[] {3, 7};) s
+5 204 M
+(  f\(new int[] {1, 2, 3}\);) s
+5 188 M
+(Another subtlety of array declarations is the following.) s
+5 172 M
+(  int[] a, b, c;                           // a, b, and c all reference arrays.) s
+5 164 M
+(  int a[], b, c[][];           // a is 1D; c is 2D; b is not a reference/array.) s
+5 156 M
+(  int[] a, b[];            // a references a 1D array; b references a 2D array.) s
+5 140 M
+(Arrays of Objects) s
+5 132 M
+(-----------------) s
+5 124 M
+(When you construct a multi-dimensional array, Java can construct all the arrays) s
+5 116 M
+(for you.  But when you construct an array of objects, Java does not construct) s
+5 108 M
+(the objects automatically.  The array contains space for references to the) s
+5 100 M
+(objects.  You must construct the objects yourself.) s
+5 84 M
+(  String[] sentence = new String[3];) s
+5 76 M
+(  sentence[0] = "Word";) s
+5 68 M
+(  sentence[2] = new String\(\);) s
+5 52 M
+(                          ---      --------------------     ---) s
+5 44 M
+(                 sentence |.+----->|  .  | null |  .--+---->| |) s
+5 36 M
+(                          ---      ---+----------------     --- empty String) s
+5 28 M
+(                                      |) s
+5 20 M
+(                                      |     --------) s
+5 12 M
+(                                      \\---->| Word |) s
+5 4 M
+(                                            --------) s
+376 508 M
+(main\(\)'s Parameter) s
+376 500 M
+(------------------) s
+376 492 M
+(What is the array of Strings that the main\(\) method takes as a parameter?) s
+376 484 M
+(It's a list of command-line arguments sent to your Java program, prepared for) s
+376 476 M
+(you by Java.  Consider the following program.) s
+376 460 M
+(  class Echo {) s
+376 452 M
+(    public static void main\(String[] args\) {) s
+376 444 M
+(      for \(int i = 0; i < args.length; i++\) {) s
+376 436 M
+(        System.out.println\(args[i]\);) s
+376 428 M
+(      }) s
+376 420 M
+(    }) s
+376 412 M
+(  }) s
+376 396 M
+(If we compile this and type "java Echo kneel and worship Java", java prints) s
+376 380 M
+(  kneel                               ---     ---------------------------------) s
+376 372 M
+(  and                            args |.+---->|   .   |   .   |   .   |   .   |) s
+376 364 M
+(  worship                             ---     ----+-------+-------+-------+----) s
+376 356 M
+(  Java                                            |       |       |       |) s
+376 348 M
+(                                                  v       v       v       v) s
+376 340 M
+(MORE LOOPS                                     -------  ----- --------- ------) s
+376 332 M
+(==========                                     |kneel|  |and| |worship| |Java|) s
+376 324 M
+(                                               -------  ----- --------- ------) s
+376 316 M
+("do" Loops) s
+376 308 M
+(----------) s
+376 300 M
+(A "do" loop has just one difference from a "while" loop.  If Java reaches) s
+376 292 M
+(a "do" loop, it _always_ executes the loop body at least once.  Java doesn't) s
+376 284 M
+(check the loop condition until the end of the first iteration.  "do" loops are) s
+376 276 M
+(appropriate for any loop you always want executed at least once, especially if) s
+376 268 M
+(the variables in the condition won't have meaningful assignments until the loop) s
+376 260 M
+(body has been executed.) s
+376 244 M
+(  do {) s
+376 236 M
+(    s = keybd.readLine\(\);) s
+376 228 M
+(    process\(s\);) s
+376 220 M
+(  } while \(s.length\(\) > 0\);               // Exit loop if s is an empty String.) s
+376 204 M
+(The "break" and "continue" Statements) s
+376 196 M
+(-------------------------------------) s
+376 188 M
+(A "break" statement immediately exits the innermost loop or "switch" statement) s
+376 180 M
+(enclosing the "break", and continues execution at the code following the loop) s
+376 172 M
+(or "switch".) s
+376 156 M
+(In the loop example above, we might want to skip "process\(s\)" when s is a) s
+376 148 M
+(signal to exit \(in this case, an empty String\).  We want a "time-and-a-half") s
+376 140 M
+(loop--we want to enter the loop at a different point in the read-process cycle) s
+376 132 M
+(than we want to exit the loop at.  Here are two alternative loops that do the) s
+376 124 M
+(right thing.  They behave identically.  Each has a different disadvantage.) s
+376 108 M
+(  s = keybd.readLine\(\);                |  while \(true\) {       // Loop forever.) s
+376 100 M
+(  while \(s.length\(\) > 0\) {             |    s = keybd.readLine\(\);) s
+376 92 M
+(    process\(s\);                        |    if \(s.length\(\) == 0\) {      ) s
+376 84 M
+(    s = keybd.readLine\(\);              |      break;) s
+376 76 M
+(  }                                    |    }                           ) s
+376 68 M
+(                                       |    process\(s\);                        ) s
+376 60 M
+(Disadvantage:  The line "s = keybd..." |  }                                    ) s
+376 52 M
+(is repeated twice.  It's not really    |                                       ) s
+376 44 M
+(a disadvantage here, but if input      | Disadvantage:  Somewhat obfuscated for) s
+376 36 M
+(took 100 lines of code, the            | the reader, because the loop isn't    ) s
+376 28 M
+(duplication would make the code harder | aligned with its natural endpoint.    ) s
+376 20 M
+(to maintain.  Why?  Because a) s
+376 12 M
+(programmer improving the code might change one copy of the duplicated code) s
+376 4 M
+(without noticing the need to change the other to match.) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+90 rotate
+25 -587 translate
+/pagenum 2 def
+/fname (06) def
+/fdir () def
+/ftail (06) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (02/10/14) def
+/modtimestr (15:19:54) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 508 M
+(Some loops have more than one natural endpoint.  Suppose we want to iterate the) s
+5 500 M
+(read-process loop at most ten times.  In the example at left below, the "break") s
+5 492 M
+(statement cannot be criticized, because the loop has two natural endpoints.  We) s
+5 484 M
+(could get rid of the "break" by writing the loop as at right below, but the) s
+5 476 M
+(result is longer and harder to read.) s
+5 460 M
+(  for \(int i = 0; i < 10; i++\) {       |  int i = 0;) s
+5 452 M
+(    s = keybd.readLine\(\);              |  do {) s
+5 444 M
+(    if \(s.length\(\) == 0\) {             |    s = keybd.readLine\(\);       ) s
+5 436 M
+(      break;                           |    if \(s.length\(\) > 0\) {             ) s
+5 428 M
+(    }                                  |      process\(s\);                      ) s
+5 420 M
+(    process\(s\);                        |    }) s
+5 412 M
+(  }                                    |    i++;) s
+5 404 M
+(                                       |  } while \(\(i < 10\) &&) s
+5 396 M
+(                                       |           \(s.length\(\) > 0\)\);) s
+5 380 M
+(There are anti-break zealots who claim that the loop on the right is the) s
+5 372 M
+("correct" way to do things.  I disagree, because the left loop is clearly more) s
+5 364 M
+(readable.) s
+5 348 M
+(Some of the zealots feel this way because "break" statements are a little bit) s
+5 340 M
+(like the "go to" statements found in some languages like Basic and Fortran \(and) s
+5 332 M
+(the machine language that microprocessors really execute\).  "go to" statements) s
+5 324 M
+(allow you to jump to any line of code in the program.  It sounds like a good) s
+5 316 M
+(idea at first, but it invariably leads to insanely unmaintainable code.  For) s
+5 308 M
+(example, what happens if you jump to the middle of a loop?  Turing Award winner) s
+5 300 M
+(Edsger Dijkstra wrote a famous article in 1968 entitled "Go To Statement) s
+5 292 M
+(Considered Harmful", which is part of the reason why many modern languages like) s
+5 284 M
+(Java don't have "go to" statements.) s
+5 268 M
+(Both "break" and "return" are limited forms of "go to" statements.  Their) s
+5 260 M
+(limitations prohibit the worst abuses of "go to".  They allow control flow to) s
+5 252 M
+(jump in your program in ways that are straightforward to understand.) s
+5 236 M
+(WARNING:  It's easy to forget exactly where a "break" statement will jump to.) s
+5 228 M
+(For example, "break" does not jump to the end of the innermost enclosing "if") s
+5 220 M
+(statement.  An AT&T programmer introduced a bug into telephone switching) s
+5 212 M
+(software in a procedure that contained a "switch" statement, which contained an) s
+5 204 M
+("if" clause, which contained a "break", which was intended for the "if" clause,) s
+5 196 M
+(but instead jumped to the end of the "switch" statement.  As a result, on) s
+5 188 M
+(January 15, 1990, AT&T's entire U.S. long distance service collapsed for eleven) s
+5 180 M
+(hours.  \(That code was actually written in C, but Java and C use identical) s
+5 172 M
+(syntax and semantics for loops, "switch", and "break".\)) s
+5 156 M
+(The "continue" statement is akin to the "break" statement, except) s
+5 148 M
+(\(1\) it only applies to loops, and) s
+5 140 M
+(\(2\) it jumps to the end of the loop body but it doesn't necessarily exit the) s
+5 132 M
+(    loop; another iteration will commence if the loop condition is satisfied.) s
+5 116 M
+(Finally, I told you that "for" loops are identical to certain "while" loops,) s
+5 108 M
+(but there's actually a subtle difference when you use "continue".  What's the) s
+5 100 M
+(difference between the following two loops?) s
+5 84 M
+(  int i = 0;                           | for \(int i = 0; i < 10; i++\) {) s
+5 76 M
+(  while \(i < 10\) {                     |   if \(condition\(i\)\) {) s
+5 68 M
+(    if \(condition\(i\)\) {                |     continue;) s
+5 60 M
+(      continue;                        |   }) s
+5 52 M
+(    }                                  |   call\(i\);) s
+5 44 M
+(    call\(i\);                           | }) s
+5 36 M
+(    i++;                               |) s
+5 28 M
+(  }                                    |) s
+376 508 M
+(Answer:  when "continue" is called in the "while" loop, "i++" is not executed.) s
+376 500 M
+(In the "for" loop, however, i is incremented at the end of _every_ iteration,) s
+376 492 M
+(even iterations where "continue" is called.) s
+376 476 M
+(CONSTANTS) s
+376 468 M
+(=========) s
+376 460 M
+(Java's "final" keyword is used to declare a value that can never be changed.) s
+376 452 M
+(If you find yourself repeatedly using a numerical value with some "meaning" in) s
+376 444 M
+(your code, you should probably turn it into a "final" constant.) s
+376 428 M
+(BAD:     if \(month == 2\) {) s
+376 412 M
+(GOOD:    public final static int FEBRUARY = 2;    // Usually near top of class.) s
+376 396 M
+(         ...) s
+376 380 M
+(         if \(month == FEBRUARY\) {) s
+376 364 M
+(Why?  Because if you ever need to change the numerical value assigned to) s
+376 356 M
+(February, you'll only have to change one line of code, rather than hundreds.) s
+376 340 M
+(You can't change the value of FEBRUARY after it is declared and initialized.) s
+376 332 M
+(If you try to assign another value to FEBRUARY, you'll have a compiler error.) s
+376 316 M
+(The custom of rendering constants in all-caps is long-established and was) s
+376 308 M
+(inherited from C.  \(The compiler does not require it, though.\)) s
+376 292 M
+(For any array x, "x.length" is a "final" field.) s
+376 276 M
+(You can declare local parameters "final" to prevent them from being changed.) s
+376 260 M
+(  void myMethod\(final int x\) {) s
+376 252 M
+(    x = 3;                             // Compiler ERROR.  Don't mess with X's!) s
+376 244 M
+(  }) s
+376 228 M
+("final" is usually used for class variables \(static fields\) and parameters, but) s
+376 220 M
+(it can be used for instance variables \(non-static fields\) and local variables) s
+376 212 M
+(too.  It only makes sense for these to be "final" if the variable is declared) s
+376 204 M
+(with an initializer that calls a method or constructor that doesn't always) s
+376 196 M
+(return the same value.) s
+376 180 M
+(  class Bob {) s
+376 172 M
+(    public final long creationTime = System.currentTimeMillis\(\);) s
+376 164 M
+(  }) s
+376 148 M
+(When objects of the Bob class are constructed, they record the time at that) s
+376 140 M
+(moment.  Afterward, the creationTime can never be changed.) s
+376 124 M
+(SCOPE) s
+376 116 M
+(=====) s
+376 108 M
+(The _scope_ of a variable is the portion of the program that can access the) s
+376 100 M
+(variable.  Here are some of Java's scoping rules.) s
+376 84 M
+(- Local variables and parameters are in scope only inside the method that) s
+376 76 M
+(  declares them.  Furthermore, a local variable is in scope only from the) s
+376 68 M
+(  variable declaration down to the innermost closing brace that encloses it.) s
+376 60 M
+(  A local variable declared in the initialization part of a "for" loop is in) s
+376 52 M
+(  scope only in the loop body.) s
+376 44 M
+(- Class variables \(static fields\) are in scope everywhere in the class,) s
+376 36 M
+(  except when shadowed by a local variable or parameter of the same name.) s
+376 28 M
+(- Instance variables \(non-static fields\) are in scope in non-static methods) s
+376 20 M
+(  of the class, except when shadowed.) s
+_R
+S
+%%Trailer
+%%Pages: 2
+%%DocumentNeededResources: font Times-Roman Courier-Bold Courier 
+%%+ font Times-Bold 
+%%EOF

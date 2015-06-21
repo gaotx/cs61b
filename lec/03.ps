@@ -1,0 +1,912 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 25 25 587 767
+%%Title: Enscript Output
+%%For: Jonathan R. Shewchuk
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Mon Jan 27 15:13:38 2014
+%%Orientation: Landscape
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 7 7 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript 1.6 4
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    % light bar
+    0 0 d_header_w d_header_h 2 div Box
+    .95 setgray fill
+
+    % dark gray boxes
+    /dbw d_header_h 2 mul def	% dark box width
+    /dbc .7 def			% dark box color
+
+    % left dark box.
+    0 0 dbw d_header_h Box
+    dbc setgray fill
+
+    0 setgray 
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 5 div moveto show
+
+    % right dark box
+    d_header_w dbw sub 0 dbw d_header_h Box
+    dbc setgray fill
+
+    HeaderPageNumF setfont
+    1 setgray
+    pagenumstr dup
+    stringwidth pop dbw exch sub 2 div d_header_w dbw sub add
+    d_header_h .2 mul moveto show
+
+    % filename
+    0 setgray 
+    HeaderHDRF setfont
+    d_header_w fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        d_header_w user_header_left_str stringwidth pop sub 2 div 
+        h moveto user_header_left_str show
+      } {
+        dbw 5 add h moveto user_header_left_str show
+
+        d_header_w user_header_center_str stringwidth pop sub 2 div 
+        h moveto user_header_center_str show
+
+	d_header_w dbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} def
+%%EndResource
+/d_page_w 742 def
+/d_page_h 562 def
+/d_header_x 0 def
+/d_header_y 526 def
+/d_header_w 742 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 742 def
+/d_footer_h 0 def
+/d_output_w 742 def
+/d_output_h 526 def
+/cols 2 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+90 rotate
+25 -587 translate
+/pagenum 1 def
+/fname (03) def
+/fdir () def
+/ftail (03) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (01/27/14) def
+/modtimestr (15:11:54) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 516 M
+(                              CS 61B:  Lecture 3) s
+5 508 M
+(                           Monday, January 27, 2014) s
+5 492 M
+(Today's reading:  Sierra & Bates, pp. 71-74, 76, 85, 240-249, 273-281, 308-309.) s
+5 476 M
+(DEFINING CLASSES) s
+5 468 M
+(================) s
+5 460 M
+(An object is a repository of data.  _Fields_ are variables that hold the data) s
+5 452 M
+(stored in objects.  Fields in objects are also known as _instance_variables_.) s
+5 444 M
+(In Java, fields are addressed much like methods are, but fields never have) s
+5 436 M
+(parameters, and no parentheses appear after them.  For example, suppose that) s
+5 428 M
+(amanda is a Human object.  Then amanda.introduce\(\) is a method call, and) s
+5 420 M
+(amanda.age is a field.  Let's write a _class_definition_ for the Human class.) s
+5 404 M
+(class Human {) s
+5 396 M
+(  public int age;                // The Human's age \(an integer\).) s
+5 388 M
+(  public String name;            // The Human's name.) s
+5 372 M
+(  public void introduce\(\) {      // This is a _method_definition_.) s
+5 364 M
+(    System.out.println\("I'm " + name + " and I'm " + age + " years old."\);) s
+5 356 M
+(  }) s
+5 348 M
+(}) s
+5 332 M
+("age" and "name" are both fields of a Human object.  Now that we've defined the) s
+5 324 M
+(Human class, we can construct as many Human objects as we want.  Each Human) s
+5 316 M
+(object we create can have different values of age and name.  We might create) s
+5 308 M
+(amanda by executing the following code.) s
+5 292 M
+(  Human amanda = new Human\(\);    // Create amanda.) s
+5 284 M
+(  amanda.age = 6;                // Set amanda's fields.) s
+5 276 M
+(  amanda.name = "Amanda";) s
+5 268 M
+(  amanda.introduce\(\);            // _Method_call_ has amanda introduce herself.) s
+5 252 M
+(                    --------------) s
+5 244 M
+(                    |      ----  |) s
+5 236 M
+(             ---    |  age | 6|  |) s
+5 228 M
+(      amanda |.+--->|      ----  |     ------------) s
+5 220 M
+(             ---    | name | -+--+---->| "Amanda" |) s
+5 212 M
+(                    |      ----  |     ------------) s
+5 204 M
+(                    --------------    a String object) s
+5 196 M
+(                    a Human object) s
+5 180 M
+(The output is:    I'm Amanda and I'm 6 years old.) s
+5 164 M
+(Why is it that, inside the definition of introduce\(\), we don't have to write) s
+5 156 M
+("amanda.name" and "amanda.age"?  When we invoke "amanda.introduce\(\)", Java) s
+5 148 M
+(remembers that we are calling introduce\(\) _on_ the object that "amanda") s
+5 140 M
+(references.  The methods defined inside the Human class remember that we're) s
+5 132 M
+(referring to amanda's name and age.  If we had written "rishi.introduce\(\)", the) s
+5 124 M
+(introduce method would print rishi's name and age instead.  If we want to mix) s
+5 116 M
+(two or more objects, we can.) s
+5 100 M
+(class Human {) s
+5 92 M
+(  // Include all the stuff from the previous definition of Human here.) s
+5 76 M
+(  public void copy\(Human original\) {) s
+5 68 M
+(    age = original.age;) s
+5 60 M
+(    name = original.name;) s
+5 52 M
+(  }) s
+5 44 M
+(}) s
+5 28 M
+(Now, "amanda.copy\(rishi\)" copies rishi's fields to amanda.) s
+376 508 M
+(Constructors) s
+376 500 M
+(------------) s
+376 492 M
+(Let's write a constructor, a method that constructs a Human.  The constructor) s
+376 484 M
+(won't actually contain code that does the creating; rather, Java provides a) s
+376 476 M
+(brand new object for us right at the beginning of the constructor, and all you) s
+376 468 M
+(have to write \(if you want\) in the constructor is code to initialize the new) s
+376 460 M
+(object.) s
+376 444 M
+(class Human {) s
+376 436 M
+(  // Include all the stuff from the previous definitions here.) s
+376 420 M
+(  public Human\(String givenName\) {) s
+376 412 M
+(    age = 6;) s
+376 404 M
+(    name = givenName;) s
+376 396 M
+(  }) s
+376 388 M
+(}) s
+376 372 M
+(Notice that the constructor is named "Human", and it returns an object of type) s
+376 364 M
+("Human".  This constructor is called whenever we write "new Human\(s\)", where s) s
+376 356 M
+(is a String reference.  Now, we can shorten amanda's coming-out party to) s
+376 340 M
+(  Human amanda = new Human\("Amanda"\);) s
+376 332 M
+(  amanda.introduce\(\);) s
+376 316 M
+(These lines accomplish precisely the same result as amanda's previous four) s
+376 308 M
+(lines.) s
+376 292 M
+(You might ask...why were we able to create a Human object before we wrote a) s
+376 284 M
+(constructor?  Java provides every class with a default constructor, which takes) s
+376 276 M
+(no parameters and does no initializing.  Hence, when we wrote) s
+376 260 M
+(  Human amanda = new Human\(\);) s
+376 244 M
+(we created a new, blank Human.  If the default constructor were explicitly) s
+376 236 M
+(written, it would look like this:) s
+376 220 M
+(  public Human\(\) {) s
+376 212 M
+(  }) s
+376 196 M
+(Warning:  if you write your own Human constructor, even if it takes parameters,) s
+376 188 M
+(the default constructor goes away.  If you want to have the default constructor) s
+376 180 M
+(_and_ another constructor, you must define both explicitly.) s
+376 164 M
+(You can override the default constructor by explicitly writing your own) s
+376 156 M
+(constructor with no parameters.) s
+376 140 M
+(class Human {) s
+376 132 M
+(  // Include all the stuff from the previous definitions here.) s
+376 116 M
+(  public Human\(\) {) s
+376 108 M
+(    age = 0;) s
+376 100 M
+(    name = "Untitled";) s
+376 92 M
+(  }) s
+376 84 M
+(}) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+90 rotate
+25 -587 translate
+/pagenum 2 def
+/fname (03) def
+/fdir () def
+/ftail (03) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (01/27/14) def
+/modtimestr (15:11:54) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 508 M
+(The "this" Keyword) s
+5 500 M
+(------------------) s
+5 492 M
+(A method invocation, like "amanda.introduce\(\)", implicitly passes an object) s
+5 484 M
+(\(in this example, amanda\) as a parameter called "this".  So we can rewrite our) s
+5 476 M
+(last constructor as follows without changing its meaning.) s
+5 460 M
+(  public Human\(\) {) s
+5 452 M
+(    this.age = 0;) s
+5 444 M
+(    this.name = "Untitled";) s
+5 436 M
+(  }) s
+5 420 M
+(In this case, "this" is optional.  However, if the parameters or local) s
+5 412 M
+(variables of a method have the same name as the fields of an object, then the) s
+5 404 M
+(former have priority, and the "this" keyword is needed to refer to the object's) s
+5 396 M
+(fields.) s
+5 380 M
+(  public void change\(int age\) {) s
+5 372 M
+(    String name = "Tom";) s
+5 356 M
+(    this.age = age;) s
+5 348 M
+(    this.name = name;) s
+5 340 M
+(  }) s
+5 324 M
+(When we call "amanda.change\(11\)", "this" is assigned the same value as "amanda") s
+5 316 M
+(before the change\(\) method begins execution.) s
+5 300 M
+(                                                   Parameters & local variables) s
+5 292 M
+(          ---    --------------                    of change\(\)) s
+5 284 M
+(   amanda |.+--->|      ----  |                      ----            ----) s
+5 276 M
+(          ---    |  age | 6|  |<---------------------+- | this   age |11|) s
+5 268 M
+(                 |      ----  |     ------------     ----            ----) s
+5 260 M
+(                 | name | -+--+---->|  Amanda  |          ----     ---------) s
+5 252 M
+(                 |      ----  |     ------------     name | -+---->|  Tom  |) s
+5 244 M
+(                 --------------                           ----     ---------) s
+5 228 M
+(Now, when Java executes "this.age = age", it overwrites the 6 with an 11.) s
+5 220 M
+(When Java executes "this.name = name", it overwrites amanda's name as below.) s
+5 204 M
+(                                                   Parameters & local variables) s
+5 196 M
+(          ---    --------------                    of change\(\)) s
+5 188 M
+(   amanda |.+--->|      ----  |                      ----            ----) s
+5 180 M
+(          ---    |  age |11|  |<---------------------+- | this   age |11|) s
+5 172 M
+(                 |      ----  |     ------------     ----            ----) s
+5 164 M
+(                 | name | -+--+--\\  |  Amanda  |          ----) s
+5 156 M
+(                 |      ----  |  |  ------------     name | -+---->---------) s
+5 148 M
+(                 --------------  |                        ----     |  Tom  |) s
+5 140 M
+(                                 \\-------------------------------->---------) s
+5 124 M
+(  ------------------------------------------------------) s
+5 116 M
+(  | IMPORTANT:  You CANNOT change the value of "this"! |) s
+5 108 M
+(  ------------------------------------------------------) s
+5 92 M
+(A statement like "this = amanda;" will trigger a compile-time error.) s
+376 508 M
+(The "static" Keyword) s
+376 500 M
+(--------------------) s
+376 492 M
+(A _static_field_ is a single variable shared by a whole class of objects; its) s
+376 484 M
+(value does not vary from object to object.  For example, if "numberOfHumans" is) s
+376 476 M
+(the number of Human objects that have been constructed, it is not appropriate) s
+376 468 M
+(for each object to have its own copy of this number; every time a new Human is) s
+376 460 M
+(created, we would have to update every Human.) s
+376 444 M
+(If we declare a field "static", there is just one field for the whole class.) s
+376 436 M
+(Static fields are also called _class_variables_.) s
+376 420 M
+(class Human {) s
+376 412 M
+(  public static int numberOfHumans;) s
+376 396 M
+(  public int age;) s
+376 388 M
+(  public String name;) s
+376 372 M
+(  public Human\(\) {) s
+376 364 M
+(    numberOfHumans++;    // The constructor increments the number by one.) s
+376 356 M
+(  }) s
+376 348 M
+(}) s
+376 332 M
+(If we want to look at the variable numberOfHumans from another class, we write) s
+376 324 M
+(it in the usual notation, but we prefix it with the class name rather than the) s
+376 316 M
+(name of a specific object.) s
+376 300 M
+(  int kids = Human.numberOfHumans / 4;  // Good.) s
+376 292 M
+(  int kids = amanda.numberOfHumans / 4; // This works too, but has nothing to) s
+376 284 M
+(                                        // do with amanda specifically.  Don't) s
+376 276 M
+(                                        // do this; it's bad \(confusing\) style.) s
+376 260 M
+(System.in and System.out are other examples of static fields.) s
+376 244 M
+(Methods can be static too.  A _static_method_ doesn't implicitly pass an object) s
+376 236 M
+(as a parameter.) s
+376 220 M
+(class Human {) s
+376 212 M
+(  ...) s
+376 204 M
+(  public static void printHumans\(\) {) s
+376 196 M
+(    System.out.println\(numberOfHumans\);) s
+376 188 M
+(  }) s
+376 180 M
+(}) s
+376 164 M
+(Now, we can call "Human.printHumans\(\)" from another class.  We can also call) s
+376 156 M
+("amanda.printHumans\(\)", and it works, but it's bad style, and amanda will NOT) s
+376 148 M
+(be passed along as "this".) s
+376 132 M
+(The main\(\) method is always static, because when we run a program, we are not) s
+376 124 M
+(passing an object in.) s
+376 108 M
+(  -------------------------------------------------------) s
+376 100 M
+(  | IMPORTANT:  In a static method, THERE IS NO "this"! |) s
+376 92 M
+(  -------------------------------------------------------) s
+376 76 M
+(Any attempt to reference "this" will cause a compile-time error.) s
+376 60 M
+(Lifetimes of Variables) s
+376 52 M
+(----------------------) s
+376 44 M
+(- A local variable \(declared in a method\) is gone forever as soon as the method) s
+376 36 M
+(  in which it's declared finishes executing.  \(If it references an object, the) s
+376 28 M
+(  object might continue to exist, though.\)) s
+376 20 M
+(- An instance variable \(non-static field\) lasts as long as the object exists.) s
+376 12 M
+(  An object lasts as long as there's a reference to it.) s
+376 4 M
+(- A class variable \(static field\) lasts as long as the program runs.) s
+_R
+S
+%%Trailer
+%%Pages: 2
+%%DocumentNeededResources: font Times-Roman Courier-Bold Courier 
+%%+ font Times-Bold 
+%%EOF

@@ -1,0 +1,856 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 25 25 587 767
+%%Title: Enscript Output
+%%For: Jonathan R. Shewchuk
+%%Creator: GNU enscript 1.6.4
+%%CreationDate: Wed Jan 22 02:54:57 2014
+%%Orientation: Landscape
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 4
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 4
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Courier
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier /F-gs-font MF
+/F-gs-font 7 7 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript 1.6 4
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    % light bar
+    0 0 d_header_w d_header_h 2 div Box
+    .95 setgray fill
+
+    % dark gray boxes
+    /dbw d_header_h 2 mul def	% dark box width
+    /dbc .7 def			% dark box color
+
+    % left dark box.
+    0 0 dbw d_header_h Box
+    dbc setgray fill
+
+    0 setgray 
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop dbw exch sub 2 div 
+    d_header_h 5 div moveto show
+
+    % right dark box
+    d_header_w dbw sub 0 dbw d_header_h Box
+    dbc setgray fill
+
+    HeaderPageNumF setfont
+    1 setgray
+    pagenumstr dup
+    stringwidth pop dbw exch sub 2 div d_header_w dbw sub add
+    d_header_h .2 mul moveto show
+
+    % filename
+    0 setgray 
+    HeaderHDRF setfont
+    d_header_w fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        d_header_w user_header_left_str stringwidth pop sub 2 div 
+        h moveto user_header_left_str show
+      } {
+        dbw 5 add h moveto user_header_left_str show
+
+        d_header_w user_header_center_str stringwidth pop sub 2 div 
+        h moveto user_header_center_str show
+
+	d_header_w dbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} def
+%%EndResource
+/d_page_w 742 def
+/d_page_h 562 def
+/d_header_x 0 def
+/d_header_y 526 def
+/d_header_w 742 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 742 def
+/d_footer_h 0 def
+/d_output_w 742 def
+/d_output_h 526 def
+/cols 2 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+90 rotate
+25 -587 translate
+/pagenum 1 def
+/fname (02) def
+/fdir () def
+/ftail (02) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (01/22/14) def
+/modtimestr (02:54:50) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 516 M
+(                              CS 61B:  Lecture 2) s
+5 508 M
+(                           Friday, January 24, 2014) s
+5 492 M
+(Today's reading:  Sierra & Bates, Chapter 2; pp. 54-58, 154-160, 661, 669.) s
+5 476 M
+(OBJECTS AND CONSTRUCTORS) s
+5 468 M
+(========================) s
+5 460 M
+(String s;           // Step 1:      declare a String variable.) s
+5 452 M
+(s = new String\(\);   // Steps 2, 3:  construct new empty String; assign it to s.) s
+5 436 M
+(At this point, s is a variable that           ---     ------) s
+5 428 M
+(references an "empty" String, i.e.          s |.+---->|    |) s
+5 420 M
+(a String containing zero characters.          ---     ------) s
+5 404 M
+(String s = new String\(\);  // Steps 1, 2, 3 combined.) s
+5 388 M
+(s = "Yow!";               // Construct a new String; make s a reference to it.) s
+5 372 M
+(          ---     ----------) s
+5 364 M
+(        s |.+---->|  Yow!  |) s
+5 356 M
+(          ---     ----------) s
+5 340 M
+(String s2 = s;            // Copy the reference stored in s into s2.) s
+5 324 M
+(          ---     ----------     ---   ) s
+5 316 M
+(        s |.+---->|  Yow!  |<----+.| s2) s
+5 308 M
+(          ---     ----------     ---) s
+5 292 M
+(Now s and s2 reference the same object.) s
+5 276 M
+(s2 = new String\(s\);       // Construct a copy of object; store reference in s2.) s
+5 260 M
+(          ---     ----------       ---     ----------) s
+5 252 M
+(        s |.+---->|  Yow!  |    s2 |.+---->|  Yow!  |) s
+5 244 M
+(          ---     ----------       ---     ----------) s
+5 228 M
+(Now they refer to two different, but identical, objects.) s
+5 212 M
+(Think about that.  When Java executes that line, it does the following things,) s
+5 204 M
+(in the following order.) s
+5 196 M
+(- Java looks inside the variable s to see where it's pointing.) s
+5 188 M
+(- Java follows the pointer to the String object.) s
+5 180 M
+(- Java reads the characters stored in that String object.) s
+5 172 M
+(- Java creates a new String object that stores a copy of those characters.) s
+5 164 M
+(- Java stores a reference to the new String object in s2.) s
+5 148 M
+(We've seen three String constructors:) s
+5 140 M
+(  \(1\)  new String\(\) constructs an _empty_string_--it's a string, but it) s
+5 132 M
+(       contains zero characters.) s
+5 124 M
+(  \(2\)  "Yow!" constructs a string containing the characters Yow!.) s
+5 116 M
+(  \(3\)  new String\(s\) takes a _parameter_ s.  Then it makes a copy of the object) s
+5 108 M
+(       that s references.) s
+5 92 M
+(Constructors _always_ have the same name as their class, except the special) s
+5 84 M
+(constructor "stuffinquotes".  That's the only exception.) s
+5 68 M
+(Observe that "new String\(\)" can take no parameters, or one parameter.  These) s
+5 60 M
+(are two different constructors--one that is called by "new String\(\)", and one) s
+5 52 M
+(that is called by "new String\(s\)".  \(Actually, there are many more than) s
+5 44 M
+(two--check out the online Java API to see all the possibilities.\)) s
+376 508 M
+(METHODS) s
+376 500 M
+(=======) s
+376 492 M
+(Let's look at some methods that aren't constructors.) s
+376 476 M
+(s2 = s.toUppercase\(\);       // Create a string like s, but in all upper case.) s
+376 460 M
+(   ---     ----------) s
+376 452 M
+(s2 |.+---->|  YOW!  |) s
+376 444 M
+(   ---     ----------) s
+376 428 M
+(String s3 = s2.concat\("!!"\);             // Also written:  s3 = s2 + "!!";) s
+376 412 M
+(   ---     ------------) s
+376 404 M
+(s3 |.+---->|  YOW!!!  |) s
+376 396 M
+(   ---     ------------) s
+376 380 M
+(String s4 = "*".concat\(s2\).concat\("*"\);  // Also written:  s4 = "*" + s + "*";) s
+376 364 M
+(   ---     ------------) s
+376 356 M
+(s4 |.+---->|  *YOW!*  |) s
+376 348 M
+(   ---     ------------) s
+376 332 M
+(Now, here's an important fact:  when Java executed the line) s
+376 316 M
+(  s2 = s.toUppercase\(\);) s
+376 300 M
+(the String object "Yow!" did _not_ change.  Instead, s2 itself changed to) s
+376 292 M
+(reference a new object.  Java wrote a new "pointer" into the variable s2, so) s
+376 284 M
+(now s2 points to a different object than it did before.) s
+376 268 M
+(Unlike in C, in Java Strings are _immutable_--once they've been constructed,) s
+376 260 M
+(their contents never change.  If you want to change a String object, you've got) s
+376 252 M
+(to create a brand new String object that reflects the changes you want.  This) s
+376 244 M
+(is not true of all objects; most Java objects let you change their contents.) s
+376 228 M
+(You might find it confusing that methods like "toUppercase" and "concat" return) s
+376 220 M
+(newly created String objects, though they are not constructors.  The trick is) s
+376 212 M
+(that those methods calls constructors internally, and return the newly) s
+376 204 M
+(constructed Strings.) s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+90 rotate
+25 -587 translate
+/pagenum 2 def
+/fname (02) def
+/fdir () def
+/ftail (02) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (01/22/14) def
+/modtimestr (02:54:50) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+column_lines
+do_header
+5 508 M
+(I/O Classes and Objects in Java) s
+5 500 M
+(-------------------------------) s
+5 492 M
+(Here are some objects in the System class for interacting with a user:) s
+5 476 M
+(  System.out is a PrintStream object that outputs to the screen.) s
+5 468 M
+(  System.in is an InputStream object that reads from the keyboard.) s
+5 460 M
+(    [Reminder:  this is shorthand for "System.in is a variable that references) s
+5 452 M
+(                an InputStream object."]) s
+5 436 M
+(But System.in doesn't have methods to read a line directly.  There is a method) s
+5 428 M
+(called readLine that does, but it is defined on BufferedReader objects.) s
+5 412 M
+(- How do we construct a BufferedReader?  One way is with an InputStreamReader.) s
+5 404 M
+(- How do we construct an InputStreamReader?  We need an InputStream.) s
+5 396 M
+(- How do we construct an InputStream?  System.in is one.) s
+5 388 M
+(\(You can figure all of this out by looking at the constructors in the online) s
+5 380 M
+(Java libraries API--specifically, in the java.io library.\)) s
+5 364 M
+(Why all this fuss?) s
+5 348 M
+(InputStream objects \(like System.in\) read raw data from some source \(like the) s
+5 340 M
+(keyboard\), but don't format the data.) s
+5 324 M
+(InputStreamReader objects compose the raw data into characters \(which are) s
+5 316 M
+(typically two bytes long in Java\).) s
+5 300 M
+(BufferedReader objects compose the characters into entire lines of text.) s
+5 284 M
+(Why are these tasks divided among three different classes?  So that any one) s
+5 276 M
+(task can be reimplemented \(say, for improved speed\) without changing the other) s
+5 268 M
+(two.) s
+5 252 M
+(Here's a complete Java program that reads a line from the keyboard and prints) s
+5 244 M
+(it on the screen.) s
+5 228 M
+(import java.io.*;) s
+5 212 M
+(class SimpleIO {) s
+5 204 M
+(  public static void main\(String[] arg\) throws Exception {) s
+5 196 M
+(    BufferedReader keybd =) s
+5 188 M
+(          new BufferedReader\(new InputStreamReader\(System.in\)\);) s
+5 180 M
+(    System.out.println\(keybd.readLine\(\)\);) s
+5 172 M
+(  }) s
+5 164 M
+(}) s
+5 148 M
+(Don't worry if you don't understand the first three lines; we'll learn the) s
+5 140 M
+(underlying ideas eventually.  The first line is present because to use the Java) s
+5 132 M
+(libraries, other than java.lang, you need to "import" them.  java.io includes) s
+5 124 M
+(the InputStreamReader and BufferedReader classes.) s
+5 108 M
+(The second line just gives the program a name, "SimpleIO".) s
+5 92 M
+(The third line is present because any Java program always begins execution at a) s
+5 84 M
+(method named "main", which is usually defined more or less as above.  When you) s
+5 76 M
+(write a Java program, just copy the line of code, and plan to understand it a) s
+5 68 M
+(few weeks from now.) s
+376 508 M
+(Classes for Web Access) s
+376 500 M
+(----------------------) s
+376 492 M
+(Let's say we want to read a line of text from the White House Web page.  \(The) s
+376 484 M
+(line will be HTML, which looks ugly.  You don't need to understand HTML.\)) s
+376 468 M
+(How to read a line of text?  With readLine on BufferedReader.) s
+376 460 M
+(How to create a BufferedReader?  With an InputStreamReader.) s
+376 452 M
+(How to create a InputStreamReader?  With an InputStream.) s
+376 444 M
+(How to create an InputStream?  With a URL.) s
+376 428 M
+(import java.net.*;) s
+376 420 M
+(import java.io.*;) s
+376 404 M
+(class WHWWW {) s
+376 396 M
+(  public static void main\(String[] arg\) throws Exception {) s
+376 388 M
+(    URL u = new URL\("http://www.whitehouse.gov/"\);) s
+376 380 M
+(    InputStream ins = u.openStream\(\);) s
+376 372 M
+(    InputStreamReader isr = new InputStreamReader\(ins\);) s
+376 364 M
+(    BufferedReader whiteHouse = new BufferedReader\(isr\);) s
+376 356 M
+(    System.out.println\(whiteHouse.readLine\(\)\);) s
+376 348 M
+(  }) s
+376 340 M
+(}) s
+376 324 M
+(Postscript:  Object-Oriented Terminology \(not examinable\)) s
+376 316 M
+(----------------------------------------) s
+376 308 M
+(In the words of Turing Award winner Nicklaus Wirth, "Object-oriented) s
+376 300 M
+(programming \(OOP\) solidly rests on the principles and concepts of traditional) s
+376 292 M
+(procedural programming.  OOP has not added a single novel concept ... along) s
+376 284 M
+(with the OOP paradigm came an entirely new terminology with the purpose of) s
+376 276 M
+(mystifying the roots of OOP."  Here's a translation guide.) s
+376 260 M
+(Procedural Programming      Object-Oriented Programming) s
+376 252 M
+(----------------------      ---------------------------) s
+376 244 M
+(record / structure          object) s
+376 236 M
+(record type                 class) s
+376 228 M
+(extending a type            declaring a subclass) s
+376 220 M
+(procedure                   method) s
+376 212 M
+(procedure call              sending a message to the method [ack!  phthhht!]) s
+376 196 M
+(I won't ever talk about "sending a message" in this class.  I think it's a) s
+376 188 M
+(completely misleading metaphor.  In computer science, message-passing normally) s
+376 180 M
+(implies asynchrony:  that is, the process that sends a message can continue) s
+376 172 M
+(executing while the receiving process receives the message and acts on it.) s
+376 164 M
+(But that's NOT what it means in object-oriented programming:  when a Java) s
+376 156 M
+(method "sends a message" to another method, the former method is frozen until) s
+376 148 M
+(the latter methods completes execution, just like with procedure calls in most) s
+376 140 M
+(languages.  But you should probably know that this termology exists, much as it) s
+376 132 M
+(sucks, because you'll probably run into it sooner or later.) s
+_R
+S
+%%Trailer
+%%Pages: 2
+%%DocumentNeededResources: font Times-Roman Courier-Bold Courier 
+%%+ font Times-Bold 
+%%EOF
