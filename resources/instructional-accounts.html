@@ -1,0 +1,138 @@
+---
+layout: resource
+title: Instructional Accounts
+---
+<main class="content">
+        <header class="title">Using Instructional Accounts</header>
+        <div class="due-date">Author: Sarah Kim</div>
+<h2 id="a-registering-amp-updating-password">A. Registering &amp; Updating Password</h2>
+
+
+<p>You should have an instructional account sheet with your login and password.
+Make sure that your assigned GitHub repository matches your login. Your login
+should be either two or three letters long (e.g. dp, afg).</p>
+
+<p>Please make sure to register for the course by typing this command into the
+terminal:</p>
+
+<pre><code>register</code></pre>
+
+<p>You can also change your password using:</p>
+
+<pre><code>ssh update</code></pre>
+
+
+<h2 id="b-accessing-remotely">B. Accessing Remotely</h2>
+
+
+<p><strong>Note</strong>: In this class, you will not need to SCP work back/forth due to using
+the Git version control system. This system is covered below.</p>
+
+<p>Regardless, you may wish to access your instructional account remotely from a
+different computer (for checking grades, for example).</p>
+
+<p>If you are a Windows user, you will need to use <a href="http://www.putty.org/">PuTTY</a>
+to login to your class account from your own computer. This is a helpful
+<a href="https://www.youtube.com/watch?v=gDDaz6Sb8jo">video</a> created by CS 61A.</p>
+
+<p>If you are on an OSX or UNIX computer, you can use your Terminal to access your
+class account remotely. To access your class account, use this <code>ssh</code> command:</p>
+
+<pre><code>ssh -X cs61b-**@cory.eecs.berkeley.edu</code></pre>
+
+<p>The <code>**</code> should be replaced by your login.</p>
+
+
+<h2 id="c-unix-commands">C. UNIX Commands</h2>
+
+
+<p>The lab computers run on the UNIX operating system. As such, you can use
+xterm commands to make changes to your directory and files. Here are some
+important ones that you may find useful in this course:</p>
+
+<ul>
+  <li><p><code>cd</code>: change your working directory</p>
+
+<pre><code>cd hw</code></pre>
+
+  <p>This command will change your directory to <code>hw</code>.</p></li>
+  <li><p><code>pwd</code>: present working directory</p>
+
+<pre><code>pwd</code></pre>
+
+  <p>This command will tell you the full absolute path for the current
+  directory you are in if you are not sure where you are.</p></li>
+  <li><p><code>.</code>: means your current directory</p>
+
+<pre><code>cd .</code></pre>
+
+  <p>This command will change your directory to the current directory (aka.
+  do nothing).</p></li>
+  <li><p><code>..</code>: means one parent directory above your current directory</p>
+
+<pre><code>cd ..</code></pre>
+
+  <p>This command will change your directory to its parent. If you are in
+  /workspace/day1/, the command will place you in /workspace/.</p></li>
+  <li><p><code>ls</code>: list files/folders in directory</p>
+
+<pre><code>ls</code></pre>
+
+  <p>This command will list all the files and folders in your current
+  directory.</p>
+
+<pre><code>ls -l</code></pre>
+
+  <p>This command will list all the files and folders in your current
+  directory with timestamps and file permissions. This can help you
+  double-check if your file updated correctly or change the read-write-
+  execute permissions for your files.</p></li>
+  <li><p><code>mkdir</code>: make a directory</p>
+
+<pre><code>mkdir dirname</code></pre>
+
+  <p>This command will make a directory within the current directory called
+  <code>dirname</code>.</p></li>
+  <li><p><code>rm</code>: remove a file</p>
+
+<pre><code>rm file1</code></pre>
+
+  <p>This command will remove file1 from the current directory. It will not
+  work if <code>file1</code> does not exist.</p>
+
+<pre><code>rm -r dir1</code></pre>
+
+  <p>This command will remove the <code>dir1</code> directory recursively. In other
+  words, it will delete all the files and directories in <code>dir1</code> in addition
+  to <code>dir1</code> itself. Be careful with this command!</p></li>
+  <li><p><code>cp</code>: copy a file</p>
+
+<pre><code>cp lab1/original lab2/duplicate</code></pre>
+
+  <p>This command will copy the <code>original</code> file in the <code>lab1</code> directory and
+  and create a <code>duplicate</code> copy in the <code>lab2</code> directory.</p></li>
+  <li><p><code>mv</code>: move or rename a file</p>
+
+<pre><code>mv lab1/original lab2/original</code></pre>
+
+  <p>This command moves <code>original</code> from <code>lab1</code> to <code>lab2</code>. Unlike <code>cp</code>, mv
+  does not leave original in the <code>lab1</code> directory.</p>
+
+<pre><code>mv lab1/original lab1/newname</code></pre>
+
+  <p>This command does not move the file but rather renames it from <code>original</code>
+  to <code>newname</code>.</p></li>
+</ul>
+
+<p>There are some other useful tricks when navigating on command line:</p>
+
+<ul>
+  <li>UNIX can complete file names and directory names for you with <em>tab completion</em>.
+  When you have an incomplete name (for something that already exists), try
+  pressing the <code>tab</code> key for autocomplete or a list of possible names.</li>
+  <li>If you want to retype the same instruction used recently, press the <code>up</code> key
+  on your keyboard until you see the correct instruction. This saves typing time
+  if you are doing repetitive instructions (like running Java programs on command
+  line while testing).</li>
+</ul>
+    </main>

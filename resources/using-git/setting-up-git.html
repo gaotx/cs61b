@@ -1,0 +1,75 @@
+---
+layout: resource
+title: Setting up git
+---
+
+<main class="content">
+        <header class="title">Setting Up Git</header>
+        <div class="due-date">Author: Alex Chou</div>
+<h2 id="a-windows">A. Windows</h2>
+
+
+<p>Below are some instructions for installing Git for Windows which will come with
+Git Bash (a Unix-like shell for Windows bundled with some common Linux Tools) and
+Git GUI (a GUI for Git on Windows). You will want to install at least one of these
+tools in order to use Git this semester.</p>
+
+<ol>
+  <li>Head over to git-scm.com/download/win to download the latest version of Git
+  for Windows.</li>
+  <li>When the Git-*.exe file has finished downloading, execute it and continue
+  through the installation. When you reach 'Select Components', make sure 'Windows
+  Explorer integration' is checked.
+  Note: It is recommended to select 'Advanced context menu', which will include both
+  Git Bash and Git GUI (this option allows you to make use of additional Git features
+  when you right-click files). If you do not wish for this, choose 'Simple context
+  menu'.</li>
+  <li>Complete the rest of the installation (none of the remaining settings need to
+  be changed).</li>
+  <li>Now, to check that the installation has succeeded, you will be able to find
+  Git Bash / GUI in your Start menu (Start -&gt; All Programs -&gt; Git -&gt; Git Bash / GUI).</li>
+</ol>
+
+<ul>
+  <li>If you are running Windows 8, then you can either press Windows + s and type
+  in 'Git' and you should see Git Bash / GUI or do Start -&gt; Apps and Git Bash / GUI
+  will be listed under Git.</li>
+</ul>
+
+<p>Congratulations! You have successfully installed Git Bash / GUI onto your Windows
+machine.</p>
+
+
+<h2 id="b-osx-mac">B. OSX/Mac</h2>
+
+
+
+<h4 id="homebrew">Homebrew</h4>
+
+
+<p>If you already have <a href="http://brew.sh/">Homebrew</a> installed, you should just have
+to type in the following command to get command line Git:</p>
+
+<pre><code>$ brew install git</code></pre>
+
+
+<h4 id="without-homebrew">Without Homebrew</h4>
+
+
+<p>Or you can directly install git <a href="http://git-scm.com/download/mac">here</a>.</p>
+
+
+<h2 id="c-linux-ubuntu">C. Linux/Ubuntu</h2>
+
+
+<p>For Linux (Ubuntu / Debian) users, Git is available via apt-get. To install Git
+on a non-root user, run the following command:</p>
+
+<pre><code>$ sudo apt-get install git</code></pre>
+
+<p>After installation, type</p>
+
+<pre><code>$ git</code></pre>
+
+<p>and you should see a usage message!</p>
+    </main>
