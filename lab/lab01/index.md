@@ -1,14 +1,19 @@
-                                  CS 61B  Lab 1
-                               January 23-24, 2014
+---
+layout: resource
+title: Lab 01
+---
+CS 61B  Lab 1
+-------------
+January 23-24, 2014
 
-Goal:  This lab will give you practice editing and running Java programs,
-using Emacs, and accessing online Java documentation.
-
-There are several things you will need to have your TA check off so you can get
+**Goal**:  This lab will give you practice editing and running Java programs,
+using Emacs, and accessing online Java documentation. There are several things you will need to have your TA check off so you can get
 credit for this lab.  You can have them checked off all at once when you are
 finished, but don't wait until the last minute--another lab may start as soon
 as yours ends, so ask to be checked off when there is still plenty of time.
 Checkoffs will not be done outside of your lab time.
+
+**Files**: <a href="Names.java">Names.java</a>, <a href="readme.pdf">readme.pdf</a>, <a href="readme.ps">.readme.ps</a>, <a href="roster.txt" target="blank">.roster.txt</a>
 
 PART I: Getting started (1 point)
 ---------------------------------
