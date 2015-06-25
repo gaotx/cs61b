@@ -13,7 +13,7 @@ finished, but don't wait until the last minute--another lab may start as soon
 as yours ends, so ask to be checked off when there is still plenty of time.
 Checkoffs will not be done outside of your lab time.
 
-**Files**: <a href="Names.java">Names.java</a>, <a href="readme.pdf">readme.pdf</a>, <a href="readme.ps">.readme.ps</a>, <a href="roster.txt" target="blank">.roster.txt</a>
+**Files**: <a href="Names.java">Names.java</a>, <a href="readme.pdf">readme.pdf</a>, <a href="readme.ps">readme.ps</a>, <a href="roster.txt" target="blank">roster.txt</a>
 
 PART I: Getting started (1 point)
 ---------------------------------
@@ -63,6 +63,8 @@ demonstrating your knowledge of the lab to the TA when it's time to check off.
 
 The ampersand tells Unix to run Emacs in the background, so you can still use
 the terminal while Emacs is running.
+
+*Note that: so far the emacs has been running in the background, such as been mimizied, in order to resume it by typing <code>%emacs</code>.*
 
 Then load the program file Names.java into Emacs using C-x C-f.  "C-x" is read
 "control x," and is typed by holding down the control (Ctrl) key while typing
