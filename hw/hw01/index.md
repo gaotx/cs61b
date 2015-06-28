@@ -1,15 +1,17 @@
-                              CS 61B  Homework 1
-                     Due noon Wednesday, January 29, 2014
+---
+layout: resource
+title: Homework 01
+---
+CS 61B  Homework 1
+-------------
+Due noon Wednesday, January 29, 2014
 
-This homework assignment is meant to make sure you can write, compile, and run
+**Goal**: This homework assignment is meant to make sure you can write, compile, and run
 simple Java programs.  This is an individual assignment; you may not share
 code with other students.  You will need to know how to compile and run Java
 programs, as described in Lab 1.
 
-Copy the Homework 1 directory by starting from your home directory and typing
-the following:
-        cp -r ~cs61b/hw/hw1 .
-        cd hw1
+**Files**: <a href="OpenCommercial.java">OpenCommercial.java</a>, <a href="readme.pdf">readme.pdf</a>, <a href="readme.ps">readme.ps</a>
 
 Problem 1
 ---------
