@@ -4,7 +4,6 @@ title: Lab 01
 ---
 CS 61B  Lab 1
 -------------
-January 23-24, 2014
 
 **Goal**: This lab will give you practice editing and running Java programs,
 using Emacs, and accessing online Java documentation. There are several things you will need to have your TA check off so you can get

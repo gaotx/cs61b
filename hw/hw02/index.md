@@ -5,7 +5,6 @@ title: Homework 02
 
 CS 61B  Homework 2
 ------------------
-Due noon Wednesday, February 5, 2014
 
 **Goal**: This homework assignment is designed to help you learn about building Java
 classes and to observe the decomposition of a complicated task into simple

@@ -4,7 +4,6 @@ title: Lab 02
 ---
 CS 61B  Lab 2
 --------------
-January 30-31, 2014
 
 **Goal**:  This lab will give you experience with defining and using classes and
 fields, and with conditionals and recursive functions.

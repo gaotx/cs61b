@@ -4,7 +4,6 @@ title: Lab 03
 ---
 CS 61B Lab 3
 ------------
-February 6-7, 2014
 
 **Goal**:  This lab will give you practice with linked lists.
 

@@ -4,7 +4,6 @@ title: Homework 01
 ---
 CS 61B  Homework 1
 -------------
-Due noon Wednesday, January 29, 2014
 
 **Goal**: This homework assignment is meant to make sure you can write, compile, and run
 simple Java programs.  This is an individual assignment; you may not share
