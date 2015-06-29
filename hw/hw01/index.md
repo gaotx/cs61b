@@ -11,7 +11,7 @@ simple Java programs.  This is an individual assignment; you may not share
 code with other students.  You will need to know how to compile and run Java
 programs, as described in Lab 1.
 
-**Files**: <a href="OpenCommercial.java">OpenCommercial.java</a>, <a href="readme.pdf">readme.pdf</a>, <a href="readme.ps">readme.ps</a>
+**Files**: <a href="OpenCommercial.java">OpenCommercial.java</a>
 
 Problem 1
 ---------
