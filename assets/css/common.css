@@ -1,0 +1,103 @@
+div#disqus_thread {
+  margin: 30px;
+}
+
+a:hover {
+    color: rgba(0, 114, 193, 0.65);
+    text-decoration: none;
+}
+
+.announcements {
+	margin-bottom: 200px;
+}
+
+.announcements ul ul {
+	 list-style: disc;
+}
+
+strong {
+	color: #0072c1;
+}
+
+.navbar-middle {
+    border-top: 1px solid #59a3d7;
+    padding: 10px 30px 0;
+    margin: 20px 40px -10px;
+}
+.navbar-top {
+    position: fixed;
+    top: 0;
+    padding: 10px 0;
+    width: 100%;
+    background-color: rgba(0, 114, 193, 0.75);
+    line-height: 20px;
+}
+.navbar-top a {
+    color: white;
+}
+#navitems {
+    width: 545px;
+    margin: 0 auto;
+}
+.navitem {
+    display: inline-block;
+    text-align: center;
+    font-size: 14px;
+    margin: 0 15px;
+}
+
+#coursename {
+	color: #59a3d7;
+	margin: 30px 40px 20px;
+	font-size: 50px;
+	line-height: 50px;
+}
+#courseid {
+	color: #0072c1;
+	font-size: 80px;
+	margin-right: 20px;
+}
+#courseinfo {
+    margin-left: 40px;
+}
+
+.segment {
+    margin-top: 20px;
+    border-top: 1px solid #59a3d7;
+    padding-top: 20px;
+}
+.segmenttitle {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+table {
+    margin: 20px 0;
+    width: 100%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+td {
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 300;
+    text-align: center;
+    min-width: 80px;
+    padding: 0 10px;
+}
+
+/* resource */
+.column {
+    float: left;
+    margin: 5px;
+    width: 32%;
+}
+.special {
+    color: #29b336;
+}
+.special:hover {
+    color: rgba(41, 179, 54, 0.65);
+}
