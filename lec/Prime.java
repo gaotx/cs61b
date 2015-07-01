@@ -16,7 +16,7 @@ class Prime {
 			primes[i] = true;
 		}
 
-		for (int divisor = 2; divisor * divisor <= n; divisor++) {
+		for (int divisor = 2; divisor * divisor <= n; divisor++) {// if n not prime, then n = a*b, then a or b < sqrt(n) 
 			if (primes[divisor]) {
 				for(int i = 2*divisor; i <= n; i = i + divisor) {
 					primes[i] = false;
