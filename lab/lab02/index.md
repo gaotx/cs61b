@@ -24,16 +24,22 @@ Look at the main method in the Fraction class, which declares and constructs
 four Fraction objects.  Four different constructors are used, each with
 different parameters.
 
+<pre>
+
   Fraction f0 = new Fraction();
   Fraction f1 = new Fraction(3);
   Fraction f2 = new Fraction(12, 20);
   Fraction f3 = new Fraction(f2);
 
+</pre>
+
 Look at the implementations of the constructors.  The two-parameter constructor
 is straightforward.  It assigns the parameters to the numerator and denominator
 fields.  The constructor with one int parameter uses some new syntax:
 
+<pre>
   this(n, 1);
+</pre>
 
 The effect of this statement is to call the two-parameter constructor, passing
 n and 1 as parameters.  "this" is a keyword in Java, which normally refers to
@@ -42,6 +48,7 @@ above) to invoke a constructor from within another constructor.
 
 We could have written the one-parameter constructor thusly:
 
+<pre><code>
   public Fraction(int n) {
     if (n < 0) {
       System.out.println("Fatal error:  Negative numerator.");
@@ -51,7 +58,7 @@ We could have written the one-parameter constructor thusly:
     numerator = n;
     denominator = 1;
   }
-
+</code></pre>
 Why call the two-parameter constructor instead?  The reason is one of good
 software engineering:  by having three of the constructors call the fourth, we
 have reduced duplicate code--namely, the error-checking code and fraction
@@ -84,12 +91,12 @@ word.  These changes may or may not be in the methods themselves.
 Part IV:  Conditionals and Recursive Functions (1 point)
 --------------------------------------------------------
 The main method prints the Fractions thusly:
-
+<pre><code>
   System.out.println("The fraction f0 is " + f0.toString()); 
   System.out.println("The fraction f1 is " + f1);   // toString is implicit
   System.out.println("The fraction f2 is " + f2);
   System.out.println("The fraction f3 is " + f3 + ", which should equal f2");
-
+</code></pre>
 How does Java know what to do when printing the fractions f1, f2, and f3?  In
 the case of f0, we have invoked the toString method; please read the toString()
 code.
@@ -111,13 +118,14 @@ a recursive function that correctly computes the GCD.  Recompile and run your
 program.
 
 Here is pseudocode for a recursive GCD function.  a and b must be nonnegative.
-
+<pre><code>
   function gcd(a, b)
     if b = 0
       return a
     else
       return gcd(b, a mod b)
-
+</code></pre>
+
 Check-off
 ---------
 1 point:  Show the TA or lab assistant your last two Fraction constructors.
