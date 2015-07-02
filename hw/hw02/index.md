@@ -67,7 +67,7 @@ year is any year divisible by 4, except that a year divisible by 100 is not a
 leap year, except that a year divisible by 400 is a leap year after all.
 Hence, 1800 and 1900 are not leap years, but 1600 and 2000 are.  (Implement
 this rule in your program even if you know information to the contrary.)
-
+<pre><code>
   /** Checks whether the given year is a leap year.
    *  @return true if and only if the input year is a leap year.
    */
@@ -92,6 +92,7 @@ this rule in your program even if you know information to the contrary.)
   public static boolean isValidDate(int month, int day, int year) {
     ...
   }
+</code></pre>
 
 Part II
 -------
@@ -102,6 +103,7 @@ a caller attempts to construct an invalid date, the program should halt after
 printing an error message of your choosing.  To halt the program, include the
 line:
 
+<pre><code>
   System.exit(0);
 
 
@@ -123,11 +125,14 @@ line:
   public String toString() {
     ...
   }
-
+
+</code></pre>
+
 Part III
 --------
 Implement the following methods.
 
+<pre><code>
   /** Determines whether this Date is before the Date d.
    *  @return true if and only if this Date is before d. 
    */
@@ -160,6 +165,8 @@ Implement the following methods.
     ...
   }
 
+</code></pre>
+
 Hint 1:  once you've implemented isBefore(), it's possible to implement
 isAfter() with just one line of code.  You need to think carefully, though:
 "return !isBefore(d)" is incorrect.  Can you see why?
@@ -167,11 +174,13 @@ isAfter() with just one line of code.  You need to think carefully, though:
 Hint 2:  all the methods in the Date class can read all the private fields in
 _any_ Date object (not just "this" Date object).
 
+
 Part IV
 -------
 Implement the final missing piece of your class, a second constructor that
 takes a String argument.
 
+<pre><code>
   /** Constructs a Date object corresponding to the given string.
    *  @param s should be a string of the form "month/day/year" where month must
    *  be one or two digits, day must be one or two digits, and year must be
@@ -181,6 +190,7 @@ takes a String argument.
   public Date(String s) {
     ...
   }
+</code></pre>
 
 We're flexible on how you handle dates that are "almost correct".  For example,
 the string "  011/4/2010 AD" is technically not valid because of the spaces and
