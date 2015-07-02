@@ -8,7 +8,7 @@ CS 61B  Lab 2
 **Goal**:  This lab will give you experience with defining and using classes and
 fields, and with conditionals and recursive functions.
 
-**Files**: <a href="Fraction.java">Fraction.java</a>.
+**Files**: <a href="Fraction.java">Fraction.java</a>, <a href="readme.pdf" target="blank">readme.pdf</a>, <a href="readme.ps" target="blank">readme.ps</a>
 
 Getting Started
 ---------------

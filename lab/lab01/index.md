@@ -12,7 +12,7 @@ finished, but don't wait until the last minute--another lab may start as soon
 as yours ends, so ask to be checked off when there is still plenty of time.
 Checkoffs will not be done outside of your lab time.
 
-**Files**: <a href="Names.java">Names.java</a>, <a href="roster.txt" target="blank">roster.txt</a>
+**Files**: <a href="Names.java">Names.java</a>, <a href="roster.txt" target="blank">roster.txt</a>, <a href="readme.pdf" target="blank">readme.pdf</a>, <a href="readme.ps" target="blank">readme.ps</a>
 
 PART I: Getting started (1 point)
 ---------------------------------
