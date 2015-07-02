@@ -25,27 +25,27 @@ operations, even if some of the higher level operations do not work properly.
 
 Please observe these notes on grading.
 
-1)  Your program must compile without errors to receive any partial credit on
+1.  Your program must compile without errors to receive any partial credit on
     this assignment.  If only one or two of your methods work, remove any code
     that causes problems for "javac" before submitting your solution.  However,
     don't remove any of the method declarations that appear in the skeletal
     Date.java we give you.
-2)  We have provided a main method in the Date class that tests some of your
+2.  We have provided a main method in the Date class that tests some of your
     methods.  You are welcome to modify the main method as you please, perhaps
     to add further tests of your own.  We will not be testing or grading the
     main method in this assignment.  (It does, of course, need to compile.)
-3)  You are welcome to add new methods to the Date class.  Since they will
+3.  You are welcome to add new methods to the Date class.  Since they will
     presumably be "helping" methods, declare them "private", not "public".
-4)  Do not change the prototype (interface) of any method.  If you change
+4.  Do not change the prototype (interface) of any method.  If you change
     the arguments or the return type, or you change a method from static to
     non-static, your program will not compile with our test cases, and will
     not receive credit.
-5)  Do not have any extraneous print statements in your program, including
+5.  Do not have any extraneous print statements in your program, including
     error messages.  Your program should print out exactly what is specified
     and nothing else.  (If the comment prefixing a method does not mention
     printing, the method should not print anything.)  The only exception here
     is the main method, which can do anything you like, so long as it compiles.
-6)  Although some test cases are provided in the main method, we will add
+6.  Although some test cases are provided in the main method, we will add
     trickier ones to our grading test suite, which won't be run until _after_
     the due date.  It is your responsibility to ensure that your methods work
     correctly on any input, not just the test cases.  So you might want to add
@@ -67,6 +67,7 @@ year is any year divisible by 4, except that a year divisible by 100 is not a
 leap year, except that a year divisible by 400 is a leap year after all.
 Hence, 1800 and 1900 are not leap years, but 1600 and 2000 are.  (Implement
 this rule in your program even if you know information to the contrary.)
+
 <pre><code>
   /** Checks whether the given year is a leap year.
    *  @return true if and only if the input year is a leap year.
