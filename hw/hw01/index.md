@@ -25,16 +25,16 @@ lines, so that there's a carriage return at the end of each line.
 
 To receive credit for this problem, you must follow these directions exactly:
 
-        1) Your solution must be in a file called OpenCommercial.java .
-        2) Do not edit any of the lines before the line that says 
-           "Replace this comment with your solution."
-        3) Your program must print only five lines from the given home page,
-           and must print them in reverse order.  Do not add any extraneous
-           println statements.  Do not modify the lines before printing them.
-           The program skeleton we've given you prints a prompt before reading
-           the String; don't change this prompt.  Your program must produce
-           EXACTLY the same output as our solution, because we will be using an
-           automatic grading program dumber than a microwave oven.
+  1. Your solution must be in a file called OpenCommercial.java .
+  2. Do not edit any of the lines before the line that says 
+     "Replace this comment with your solution."
+  3. Your program must print only five lines from the given home page,
+     and must print them in reverse order.  Do not add any extraneous
+     println statements.  Do not modify the lines before printing them.
+     The program skeleton we've given you prints a prompt before reading
+     the String; don't change this prompt.  Your program must produce
+     EXACTLY the same output as our solution, because we will be using an
+     automatic grading program dumber than a microwave oven.
 
 Before you submit your solution, be sure to try compiling your program ON THE
 LAB MACHINES with "javac -g OpenCommercial.java", and be sure to try running
@@ -59,11 +59,11 @@ work correctly on strings at least two characters long.)
 
 To receive credit for this problem, you must follow these directions exactly:
 
-        1) Your solution must be in a file called Nuke2.java, and the main
-           program must be in a class called Nuke2.
-        2) Your program must read just one string, then print the same string
-           with the second character omitted, then exit.  Do not print anything
-           else.  In particular, DO NOT PRINT A PROMPT.
+  1. Your solution must be in a file called Nuke2.java, and the main
+     program must be in a class called Nuke2.
+  2. Your program must read just one string, then print the same string
+     with the second character omitted, then exit.  Do not print anything
+     else.  In particular, DO NOT PRINT A PROMPT.
 
 Again, be certain that your program compiles and runs correctly on the lab
 machines before you submit it!  The automatic grader is not charitable.

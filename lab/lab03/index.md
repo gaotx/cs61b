@@ -16,9 +16,9 @@ Please make sure you have a partner for this lab.
 The files in the directory lab3/ contain the classes SList and SListNode, which
 implement a singly-linked list.  Compile SList.java with "javac -g SList.java".
 Run the test code with
-
-    java SList
-
+<pre>
+java SList
+</pre>
 The main() method of SList includes test code, which can be used to help debug
 the list code before SLists are used in other programs.
 
@@ -28,11 +28,15 @@ SLists.  Items in our SLists are indexed starting from 1, unlike Java arrays.
 Part I:  Using SLists (1 point)
 -------------------------------
 In the main() method, construct a list that looks like:
+
     [ 6 9 12 ] 
+
 and print the resulting list.
 
 Add more lines to change this list to:
+
     [ 3 6 9 12 15 ] 
+    
 and print the resulting list.
 
 Part II:  Adding to the End of a SList (3 points)
@@ -50,8 +54,8 @@ Check-off
 Show your TA or Lab Assistant your main() and insertEnd() methods and run the
 program.
 
-1 point:   Show your main() method, and show that it is printing the proper
+* 1 point:   Show your main() method, and show that it is printing the proper
            output for Part I.
-3 points:  Show your insertEnd() method, and explain how you got it to work in
+* 3 points:  Show your insertEnd() method, and explain how you got it to work in
            constant time.  Show that your program still prints the right
            output.  Which other methods had to be modified?

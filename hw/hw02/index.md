@@ -68,32 +68,32 @@ leap year, except that a year divisible by 400 is a leap year after all.
 Hence, 1800 and 1900 are not leap years, but 1600 and 2000 are.  (Implement
 this rule in your program even if you know information to the contrary.)
 
-<pre><code>
-  /** Checks whether the given year is a leap year.
-   *  @return true if and only if the input year is a leap year.
-   */
-  public static boolean isLeapYear(int year) {
-    ...
-  }
+<pre>
+/** Checks whether the given year is a leap year.
+ *  @return true if and only if the input year is a leap year.
+ */
+public static boolean isLeapYear(int year) {
+  ...
+}
 
-  /** Returns the number of days in a given month.
-   *  @param month is a month, numbered in the range 1...12.
-   *  @param year is the year in question, with no digits omitted.
-   *  @return the number of days in the given month.
-   */
-  public static int daysInMonth(int month, int year) {
-    ...
-  }
+/** Returns the number of days in a given month.
+ *  @param month is a month, numbered in the range 1...12.
+ *  @param year is the year in question, with no digits omitted.
+ *  @return the number of days in the given month.
+ */
+public static int daysInMonth(int month, int year) {
+  ...
+}
 
-  /** Checks whether the given date is valid.
-   *  @return true if and only if month/day/year constitute a valid date.
-   *
-   *  Years prior to A.D. 1 are NOT valid.
-   */
-  public static boolean isValidDate(int month, int day, int year) {
-    ...
-  }
-</code></pre>
+/** Checks whether the given date is valid.
+ *  @return true if and only if month/day/year constitute a valid date.
+ *
+ *  Years prior to A.D. 1 are NOT valid.
+ */
+public static boolean isValidDate(int month, int day, int year) {
+  ...
+}
+</pre>
 
 Part II
 -------
@@ -104,69 +104,68 @@ a caller attempts to construct an invalid date, the program should halt after
 printing an error message of your choosing.  To halt the program, include the
 line:
 
-<pre><code>
-  System.exit(0);
+<pre>
+System.exit(0);
 
 
-  /** Constructs a date with the given month, day and year.   If the date is
-   *  not valid, the entire program will halt with an error message.
-   *  @param month is a month, numbered in the range 1...12.
-   *  @param day is between 1 and the number of days in the given month.
-   *  @param year is the year in question, with no digits omitted.
-   */
-  public Date(int month, int day, int year) {
-    ...
-  }
+/** Constructs a date with the given month, day and year.   If the date is
+ *  not valid, the entire program will halt with an error message.
+ *  @param month is a month, numbered in the range 1...12.
+ *  @param day is between 1 and the number of days in the given month.
+ *  @param year is the year in question, with no digits omitted.
+ */
+public Date(int month, int day, int year) {
+  ...
+}
 
-  /** Returns a string representation of this date in the form month/day/year.
-   *  The month, day, and year are expressed in full as integers; for example,
-   *  12/7/2006 or 3/21/407.
-   *  @return a String representation of this date.
-   */
-  public String toString() {
-    ...
-  }
+/** Returns a string representation of this date in the form month/day/year.
+ *  The month, day, and year are expressed in full as integers; for example,
+ *  12/7/2006 or 3/21/407.
+ *  @return a String representation of this date.
+ */
+public String toString() {
+  ...
+}
 
-</code></pre>
+</pre>
 
 Part III
 --------
 Implement the following methods.
 
-<pre><code>
-  /** Determines whether this Date is before the Date d.
-   *  @return true if and only if this Date is before d. 
-   */
-  public boolean isBefore(Date d) {
-    ...
-  }
+<pre>
+/** Determines whether this Date is before the Date d.
+ *  @return true if and only if this Date is before d. 
+ */
+public boolean isBefore(Date d) {
+  ...
+}
 
-  /** Determines whether this Date is after the Date d.
-   *  @return true if and only if this Date is after d. 
-   */
-  public boolean isAfter(Date d) {
-    ...
-  }
+/** Determines whether this Date is after the Date d.
+ *  @return true if and only if this Date is after d. 
+ */
+public boolean isAfter(Date d) {
+  ...
+}
 
-  /** Returns the number of this Date in the year.
-   *  @return a number n in the range 1...366, inclusive, such that this Date
-   *  is the nth day of its year.  (366 is used only for December 31 in a leap
-   *  year.)
-   */
-  public int dayInYear() {
-    ...
-  }
+/** Returns the number of this Date in the year.
+ *  @return a number n in the range 1...366, inclusive, such that this Date
+ *  is the nth day of its year.  (366 is used only for December 31 in a leap
+ *  year.)
+ */
+public int dayInYear() {
+  ...
+}
 
-  /** Determines the difference in days between d and this Date.  For example,
-   *  if this Date is 12/15/2012 and d is 12/14/2012, the difference is 1.
-   *  If this Date occurs before d, the result is negative.
-   *  @return the difference in days between d and this date.
-   */
-  public int difference(Date d) {
-    ...
-  }
-
-</code></pre>
+/** Determines the difference in days between d and this Date.  For example,
+ *  if this Date is 12/15/2012 and d is 12/14/2012, the difference is 1.
+ *  If this Date occurs before d, the result is negative.
+ *  @return the difference in days between d and this date.
+ */
+public int difference(Date d) {
+  ...
+}
+</pre>
 
 Hint 1:  once you've implemented isBefore(), it's possible to implement
 isAfter() with just one line of code.  You need to think carefully, though:
@@ -181,17 +180,17 @@ Part IV
 Implement the final missing piece of your class, a second constructor that
 takes a String argument.
 
-<pre><code>
-  /** Constructs a Date object corresponding to the given string.
-   *  @param s should be a string of the form "month/day/year" where month must
-   *  be one or two digits, day must be one or two digits, and year must be
-   *  between 1 and 4 digits.  If s does not match these requirements or is not
-   *  a valid date, the program halts with an error message of your choice.
-   */
-  public Date(String s) {
-    ...
-  }
-</code></pre>
+<pre>
+/** Constructs a Date object corresponding to the given string.
+ *  @param s should be a string of the form "month/day/year" where month must
+ *  be one or two digits, day must be one or two digits, and year must be
+ *  between 1 and 4 digits.  If s does not match these requirements or is not
+ *  a valid date, the program halts with an error message of your choice.
+ */
+public Date(String s) {
+  ...
+}
+</pre>
 
 We're flexible on how you handle dates that are "almost correct".  For example,
 the string "  011/4/2010 AD" is technically not valid because of the spaces and
