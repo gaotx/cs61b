@@ -9,7 +9,7 @@ February 27-28, 2014
 **Goal**:  This lab will introduce you to Java's built-in facilities for exception
 handling, and show you why they might be a good idea.
 
-**Files**: <a href="AccountData.java">AccountData.java</a>, <a href="BadAccountException.java">BadAccountException.java</a>, <a href="BankApp.java">BankApp.java</a>, <a href="VirtualTeller.java">VirtualTeller.java</a>, <a href="sortedlist">sortedlist</a>
+**Files**: <a href="AccountData.java">AccountData.java</a>, <a href="BadAccountException.java">BadAccountException.java</a>, <a href="BankApp.java">BankApp.java</a>, <a href="VirtualTeller.java">VirtualTeller.java</a>, <a href="sortedlist.zip">sortedlist.zip</a>
 
 Copy the Lab 6 directory by doing the following, starting from your home
 directory.
@@ -79,8 +79,10 @@ changes in your code.
 
 1 point:   Run your program and show that it behaves well if an invalid
            command is entered.
+
 2 points:  Show that your program behaves well when you try to deposit to a
            nonexistent account.  Explain which method you put the "throw"
            statement in.
+           
 1 point:   Show what happens when you try to deposit or withdraw an invalid
            amount.

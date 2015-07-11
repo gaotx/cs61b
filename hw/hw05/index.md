@@ -11,7 +11,7 @@ method used in Homework 4, and give you practice using it to accomplish tasks
 quickly.  This is an individual assignment; you may not share code with other
 students.
 
-**Files**: <a href="Set.java">Set.java</a>, <a href="list">list</a>
+**Files**: <a href="Set.java">Set.java</a>, <a href="list.zip">list.zip</a>
 
 Copy the Homework 5 directory by doing the following, starting from your home
 directory.
@@ -81,12 +81,13 @@ greatest element.  (You will want to review the Comparable interface on the
 Java API Web page.)
 
 You will need to declare some fields and implement the following methods.
-  public Set()                          // Constructs an empty Set.
-  public int cardinality()              // Number of elements in this Set.
-  public void insert(Comparable c)      // Insert c into this Set.
-  public void union(Set s)              // Assign this = (this union s).
-  public void intersect(Set s)          // Assign this = (this intersect s).
-  public String toString()              // Express this Set as a String.
+
+    public Set()                          // Constructs an empty Set.
+    public int cardinality()              // Number of elements in this Set.
+    public void insert(Comparable c)      // Insert c into this Set.
+    public void union(Set s)              // Assign this = (this union s).
+    public void intersect(Set s)          // Assign this = (this intersect s).
+    public String toString()              // Express this Set as a String.
 
 Two items o1 and o2 are considered duplicates if o1.compareTo(o2) == 0.  By
 convention, Java classes are supposed to have o1.compareTo(o2) == 0 if and only

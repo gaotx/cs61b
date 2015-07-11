@@ -9,7 +9,7 @@ Due noon Wednesday, February 26
 **Goal**: This homework will give you practice with writing doubly-linked lists and using subclasses.  This is an individual assignment; you may not share code with
 other students.
 
-**Files**: <a href="DList.java">DList.java</a>, <a href="DListNode.java">DListNode.java</a>
+**Files**: <a href="list.zip">list.zip</a>
 
 Copy the Homework 4 directory by doing the following, starting from your home
 directory.
@@ -73,8 +73,8 @@ graded.  We'll be testing your DList class, so you should too.
 A quirk of Java is that you must compile and run your code from outside the
 list/ directory by changing to your hw4 directory and typing the following.
 
-  javac -g list/*.java
-  java list.DList
+      javac -g list/*.java
+      java list.DList
 
 Part II  (1 point)
 ------------------
@@ -102,7 +102,7 @@ DListNode constructor to avoid code duplication.
 Second, define a LockDList class that extends DList and includes an additional
 method
 
-    public void lockNode(DListNode node) { ... }
+        public void lockNode(DListNode node) { ... }
 
 that permanently locks "node".
 
@@ -113,8 +113,9 @@ having to cast every node they want to lock.  Instead, it's your job to take
 care of that cast (from DListNode to LockDListNode).
 
 Your LockDList class should override just enough methods to ensure that
-(1)  LockDListNodes are always used in LockDLists (instead of DListNodes), and
-(2)  locked nodes cannot be removed from a list.
+
+1.  LockDListNodes are always used in LockDLists (instead of DListNodes), and
+2.  locked nodes cannot be removed from a list.
 
 WARNING:  To override a method, you must write a new method in the subclass
 with EXACTLY the same prototype.  You can't change a parameter's type to a
