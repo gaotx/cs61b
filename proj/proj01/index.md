@@ -9,7 +9,7 @@ CS 61B Project 1: Color Images, Edge Detection, and Run-Length Encodings
 
 This is an individual assignment; you may not share code with other students.
 
-**Getting started**:  You will find the code for this assignment in [proj01.zip](proj01.zip).
+**Getting started**:  You will find the code for this assignment in [proj01.zip](../proj01.zip).
 
 In this project you will implement two simple image processing operations on
 color images:  blurring and edge detection.  You will use libraries to read and
