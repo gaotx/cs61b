@@ -1,0 +1,3 @@
+A DListNode node, when passed as a parameter to insertAfter(), insertBefore(), remove(), may not even be part of "this" DList instance.
+
+One way would be add an extra field in DListNode to record which list it belongs to.
