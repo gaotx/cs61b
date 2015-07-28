@@ -177,7 +177,7 @@ public class DList {
   public void insertAfter(Object item, DListNode node) {
     // Your solution here.
     if (node == null) return;
-    DListNode temp = newNode(item, node.prev, node.next);
+    DListNode temp = newNode(item, node, node.next);
     node.next.prev = temp;
     node.next = temp;
     size++;
@@ -208,6 +208,8 @@ public class DList {
     if (node == null) return;
     node.prev.next = node.next;
     node.next.prev = node.prev;
+    node.next = null;
+    node.prev = null;
     size--;
   }
 

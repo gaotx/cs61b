@@ -21,7 +21,7 @@ public class SafeDList extends DList {
 
 	public void remove(DListNode node) {
 		if (((SafeDListNode)node).lst != this) return;
-		super.remove(item, node);
+		super.remove(node);
 	}
 
 	public static void main(String[] args) {

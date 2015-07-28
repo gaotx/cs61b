@@ -4,6 +4,10 @@ package list;
 
 public class LockDList extends DList {
 
+	protected DListNode newNode(Object item, DListNode prev, DListNode next) {
+		return new LockDListNode(item, prev, next);
+	}
+
 	public void lockNode(DListNode node) {
 		if (node instanceof LockDListNode) {
 			((LockDListNode)node).locked = true;
@@ -11,7 +15,7 @@ public class LockDList extends DList {
 	}
 
 	public void remove(DListNode node) {
-		if (node == null && node instanceof LockDListNode && ((LockDListNode)node).locked) return;
+		if (node == null || node instanceof LockDListNode && ((LockDListNode)node).locked) return;
 		super.remove(node);
 	}
 
@@ -38,14 +42,14 @@ public class LockDList extends DList {
 	    DListNode midNode = lst.next(lst.front());
 	    lst.insertBefore("hello",midNode);
 	    System.out.println("Testing insertBefore of 3: "+lst);
-	    lst.insertAfter("what-ever",midNode);
+	    lst.insertAfter("whatever",midNode);
 	    System.out.println("Testing insertAfter of 3: "+lst);
 	    // test remove
+	    lst.lockNode(lst.next(lst.front()));
 	    lst.remove(lst.next(lst.front()));
-	    System.out.println("Testing remove 'hello': " + lst);
+	    System.out.println("Testing remove locked 'hello': " + lst);
 	    // test remove locked node
-	    lst.lockNode(lst.prev(lst.back()));
 	    lst.remove(lst.prev(lst.back()));
-	    System.out.println("Testing remove locked 'what-ever': " + lst);
+	    System.out.println("Testing remove 'whatever': " + lst);
 	}
 }
