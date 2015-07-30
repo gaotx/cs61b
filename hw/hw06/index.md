@@ -142,9 +142,11 @@ insert key i + 1, the probability that the new key does NOT collide with any
 old key is (1 - 1/N)^i.  If you insert n distinct items, the expected number
 that WON'T collide with any previous item is
 
+<pre>
   n-1
   sum (1 - 1/N)^i = N - N (1 - 1/N)^n,
   i=0
+</pre>
 
 so the expected number of collisions is
 
