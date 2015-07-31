@@ -111,9 +111,13 @@ The functions |cos(n)| and |sin(n)| are interesting, because neither is
 dominated by the other.  Can you informally suggest why |cos(n)| is not in
 O(|sin(n)|), and |sin(n)| is not in O(|cos(n)|)?
 
-**Solution**: We known that neither |cos(n)| or |sin(n)| is monotonically increasing or decreasing. Instead, they are periodic function and greater than or equal to zero. Whenever n is equals to kpi, where k is a integer, |sin(n)| = 0 and |cos(n)| > 0. On the other hand, whenever n is equals kpi + pi/2, |cos(n)| = 0 and |sin(n)| > 0. Even we scale the functions, this property does not change. So 
-|cos(n)| is not in O(|sin(n)|), and |sin(n)| is not in O(|cos(n)|).
+**Solution**: 
+We known that neither |cos(n)| or |sin(n)| is monotonically increasing or decreasing. 
+Instead, they are periodic function and greater than or equal to zero. Whenever n is equals to kpi, 
+where k is an nonnegative integer, |sin(n)| = 0 and |cos(n)| > 0. On the other hand, whenever n is equals 
+kpi + pi/2, |cos(n)| = 0 and |sin(n)| > 0. Even we scale the functions, this property does not change. 
+So |cos(n)| is not in O(|sin(n)|), and |sin(n)| is not in O(|cos(n)|).
 
 How would you prove that, for all n >=1, 2^n >= 1?  (Hint:  use calculus.)
 
-**Solution**: We know that f'(n) = n 2^(n-1) and whenever n > 0, f'(n) > 0. In another work, f(n) monotonically increases when n > 0. Moreover, f(1) = 2. So f(n) = 2^n >= 1 for all n >= 1. 
+**Solution**: We know that f'(n) = n 2^(n-1) and whenever n > 0, f'(n) > 0. In another word, f(n) monotonically increases when n > 0. Moreover, f(1) = 2. So f(n) = 2^n >= 1 for all n >= 1. 
