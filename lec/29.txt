@@ -42,6 +42,18 @@ accomplishes both these tasks.             }
 When an edge (v, w) is traversed to visit a Vertex w, the depth of w is set to
 the depth of v plus one, and v is set to become the _parent_ of w.
 
+        --------      ------------
+        |Albany|------|Kensington|
+        --------      ------------
+                \       /
+------------     ----------
+|Emeryville|-----|Berkeley|
+------------     ----------
+         \      /
+       ---------     ----------
+       |Oakland|-----|Piedmont|
+       ---------     ----------
+
 The sequence of figures below shows BFS running on the city adjacency graph
 (Albany, Kensington, Emeryville, Berkeley, Oakland, Piedmont) from last
 lecture, starting from Albany.  A "V" is currently visited; a digit shows the
