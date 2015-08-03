@@ -1,0 +1,203 @@
+                              CS61B: Lecture 39
+                             Wednesday, April 26
+
+C/C++ MEMORY MANAGEMENT (continued)
+=======================
+
+Static Storage
+--------------
+C/C++ (unlike Java) has "global variables," which are declared outside any
+procedure and can be accessed from anywhere.
+
+  int globalInt;         void proc1() {             void proc2() {
+                           globalInt = 1;             printf("%d", globalInt);
+                         }                          }
+
+Global variables are kept in "static storage," memory which is allocated for
+the entire duration of a program.  Hence, pointers to global variables are
+always safe to use.  Unfortunately, global variables are such a rich source of
+bugs and design problems that the designers of Java chose not to have them.
+Here are the main reasons.
+
+  [1]  If two different modules each have a public global variable with the
+       same name, you can't put the modules together into a single program.
+
+  [2]  Global variables make "reentrancy" difficult.  Reentrancy is the ability
+       to have your program call itself, or to have multiple versions running
+       simultaneously as different threads.  Moreover, suppose you wrote a
+       Graph class in which the Graph fields were global variables.  You can't
+       use your Graph class to develop an algorithm that uses two different
+       graphs at the same time.  For instance, both graphs would be trying to
+       store their vertex count in the same slot of memory.
+
+  [3]  Because global variables can be read or written from anywhere, it is
+       difficult to analyze their effect on a program's behavior, and
+       impossible to enforce invariants on them.  Debugging code is easiest if
+       it is easy to trace the flow of data in and out of each class and
+       procedure.  Global variables provide a stealthy way for procedures to
+       have unexpected "side effects" affecting seemingly unrelated procedures.
+
+The global-variable-free programming style you've developed in this course will
+serve you well if you carry it with you to C or C++, though it will take much
+more self-discipline, so rich are the temptations that surround you.
+
+The Heap Manager (in C/C++)
+----------------
+The figure at right illustrates the internal              &&   boundary tags   
+contents of a heap, laid out as a linear                 ****  allocated memory
+block of memory.  Most of this memory is                 ....  free memory     
+partitioned into individually allocated
+chunks, currently in use by the          --> memory addresses increase this way
+program, and free chunks that     ---------------------------------------------
+are ready to be allocated to      |&&***&&*********&&...........&&****&&.......
+satisfy a "malloc()" or "new"     ---------------------------------------------
+command.  However, immediately     ^^   ^^         ^^           ^^    ^^
+before each allocated/allocatable  | \-/  \-------/  \---------/  \--/ |
+chunk of memory is a "boundary     \    circular doubly-linked list    /
+tag" associated with the chunk.     \---------------------------------/
+The boundary tags form a linked
+list (circularly- and doubly-linked in this example, but in practice there are
+many different ways to implement a heap manager).
+
+The boundary tags are list nodes, but are rather primitive compared to the list
+nodes you're accustomed to.  A boundary tag doesn't have a pointer to the
+memory chunk it represents.  It doesn't need one, because the memory chunk
+always begins in the next address following the end of the boundary tag.  A
+boundary tag may consist of nothing more than two pointers, which point to the
+previous and next boundary tag, and a one-bit flag that tells whether the
+associated chunk is allocated or free.
+
+                    address returned by malloc() ----|
+                                                     v
+In response to an allocation      ---------------------------------------------
+request (malloc() or new), the    |&&***&&*********&&******&&...&&****&&.......
+heap manager finds an empty       ---------------------------------------------
+chunk of memory large enough       ^^   ^^         ^^      ^^   ^^    ^^
+to satisfy the request.  If the    | \-/  \-------/  \----/  \-/  \--/ |
+empty chunk is larger than the     \-----------------------------------/
+number of bytes requested by a
+sufficient margin, it is subdivided into two chunks.  The first chunk is
+allocated to the caller, and the second chunk remains free (as illustrated).
+The address returned by malloc() or new points to the chunk itself, not the
+boundary tag!  The caller should be oblivious to the existence of the tags.
+                                                                v
+If no chunk is big        -----------------------------------------------------
+enough, the heap manager  |&&***&&*********&&******&&...&&****&&***********&&..
+asks the operating system -----------------------------------------------------
+for more memory, which     ^^   ^^         ^^      ^^   ^^    ^^           ^^
+is appended to the end     | \-/  \-------/  \----/  \-/  \--/  \---------/ |
+of the heap (through the   \------------------------------------------------/
+magic of virtual memory,
+which you'll learn about if you take an operating systems course).  The extra
+memory is used to meet the allocation request (as illustrated.)  If the
+operating system has no more memory to spare, you're out of luck.
+
+The heap manager             address passed to free() ----|
+responds to deallocation                                  v
+requests (free() or       -----------------------------------------------------
+delete) by converting     |&&***&&*********&&******&&.........&&***********&&..
+the chunk of memory from  -----------------------------------------------------
+an allocated to a free     ^^   ^^         ^^      ^^         ^^           ^^
+state.  The first step     | \-/  \-------/  \----/  \-------/  \---------/ |
+in doing this is to find   \------------------------------------------------/
+the boundary tag
+associated with the memory address being freed.  This is done by taking the
+address of the chunk (passed as a parameter to free()), and subtracting the
+number of bytes in a boundary tag, thus yielding the tag's address.  The heap
+manager toggles the bit that indicates that the chunk is now free, and then it
+performs "coalescing":  if the blocks before or after the newly freed block are
+also free, they are combined into one larger free block (see above).  (Recall
+that you did something very similar in your addFish() method in Project 1.)
+
+If you try to free an address that was never allocated, the heap manager will
+take you on faith and try to modify its nonexistent boundary tag, probably
+causing your program to crash.  If you try to free an address that was already
+freed, you may or may not achieve the same result.
+
+Much research has focused on how to find a chunk of memory to satisfy an
+allocation request.  The simplest method is "first-fit": walk through the
+linked list of tags and return the first empty chunk that's big enough.
+First-fit generally uses a "roving pointer," which means that instead of
+starting at the beginning of the list upon every call to malloc(), we start
+wherever the previous search left off.
+
+Another strategy is "best-fit":  return the smallest chunk that fits.  In its
+simplest form, this strategy is quite slow, because we have to walk through the
+entire list (unless we get lucky and find a chunk that's exactly the right
+size).  However, speed is not the only consideration.  We are also interested
+in minimizing "fragmentation," the tendency of the free space to get broken up
+into lots of small pieces.  Fragmentation can render us unable to allocate a
+large contiguous chunk of memory
+despite having lots of memory     ---------------------------------------------
+available (as illustrated at      |&&**&&......&&**&&....&&*&&.....&&**&&......
+right).  Surprisingly, a naive    ---------------------------------------------
+first-fit implementation generally
+causes less fragmentation than a naive best-fit implementation, though a
+sophisticated one can do better (see http://g.oswego.edu/dl/html/malloc.html ).
+
+Structures, Classes, and Memory Layout
+--------------------------------------
+Let's consider what effect various statements in C/C++ and Java have on memory.
+
+[1]  First, there are _structure_declarations_ and _class_declarations_ that
+state what a structure or object should look like, but don't allocate memory.
+
+struct DListNode {         | class DListNode {  |  
+  void *item;              |   Object item;     |  These declarations do not
+  struct DListNode *next;  |   DListNode next;  |  cause memory to be allocated
+  struct DListNode *prev;  |   DListNode prev;  |  anywhere.
+};                         | }                  |  
+
+[2]  Second, a _variable_declaration_ in a procedure or method causes memory to
+be allocated for the variable on the stack.  (In C/C++, a variable declaration
+_outside_ any procedure causes memory to be allocated in static storage.)
+
+struct DListNode *nodePtr; | DListNode nodePtr; |               |          |
+        [C/C++]            |       [Java]       |               |  [?] nodePtr
+                                                                |          |
+In C/C++ (but not Java), it's also possible to                  |          |
+allocate a whole structure (and not just a reference)           |          |
+on the stack or in static storage.                              | -------- |
+                                                                | |item ?| |
+  struct DListNode theNode;                               TheNode |next ?| |
+                                                                | |prev ?| |
+Whether it's on the stack or in static storage, you can         | -------- |
+address its fields with the "." operator, as in Java:           ------------
+                                                                   stack
+  thingy = theNode.item;
+
+However, when you use a _pointer_ to a structure (no matter where the structure
+is stored), you must dereference the pointer before using its fields.
+
+  nodePtr = &theNode;                   nodePtr = &theNode;
+  thingy = (*nodePtr).item;    [OR]     thingy = nodePtr->item;
+
+The second notation ("->") is more common in practice, because it avoids the
+annoying parentheses.  IMPORTANT NOTE:  The C/C++ "->" operator is analogous
+to the Java "." operator.  The C/C++ "." operator is _not_.  This is confusing.
+
+Java:                thingy = nodePtr.next.next.item;
+C/C++:               thingy = nodePtr->next->next->item;
+more confusingly:    thingy = theNode.next->next->item;  (has no Java analogue)
+
+In the previous lecture, I gave you a rather contrived example in which a
+procedure returned a pointer to one of its local variables, leading to odd
+behavior.  A mistake you are more likely to be tempted to make in practice is
+to declare a list node on the stack (as illustrated above), and insert it into
+a linked list.  After the procedure returns, the structure will likely be
+overwritten by other procedure calls, thereby corrupting your list.  You can
+save yourself this fate by refusing to apply the "&" operator to local
+variables (e.g., "nodePtr = &theNode;").
+
+[3]  Third, _dynamic_memory_allocation_ allocates memory on the heap.
+
+C/C++:  nodePtr = (struct DListNode *)  malloc(sizeof(struct DListNode));
+Java:   nodePtr = new DListNode();
+                                                |         |   /---------------\
+Here we have a pointer/reference on the stack   | nodePtr |   |    --------   |
+pointing to a structure/object on the heap,     |   [.]---+---+--->|item ?|   |
+which is the usual way of life in Java and      |         |   |    |next ?|   |
+C++ programs, and is also quite common in C     |         |   |    |prev ?|   |
+programs.                                       |         |   |    --------   |
+                                                -----------   \---------------/
+                                                   stack             heap

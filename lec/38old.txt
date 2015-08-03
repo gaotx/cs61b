@@ -1,0 +1,179 @@
+                              CS61B:  Lecture 38
+                               Monday, April 24
+
+C/C++ MEMORY MANAGEMENT (tales of the stack and the heap)
+=======================
+In C and C++, unlike Java, you need to remain brutally cognizant of where in
+memory your variables, structures, and objects reside.  There are three pools
+of memory where any of these might be.
+
+  - "Static storage," where global variables reside throughout a program.
+  - "The stack," where local variables and procedural parameters transiently
+    reside for the duration of a procedure call (recall Lecture 9).  Memory on
+    the stack is allocated for stack frames (activation records), which store
+    oddities like procedure call return addresses and debugging information as
+    well as local variables.
+  - "The heap," also known as "dynamic storage," from which memory can be
+    allocated with statements like the C++ "new" command (similar to Java's).
+    Variables allocated on the heap reside there until they're explicitly
+    deallocated.  "The heap" has NOTHING to do with the binary heaps you
+    learned in the lectures on data structures.
+
+The Stack
+---------
+In almost any operating system, each process and each thread has its own stack
+for storing stack frames.  When a computer executes a procedure/method call, it
+places on the stack a stack frame that includes the "return address" of the
+calling procedure, the parameters to the procedure call, and memory space for
+the other local variables.  When the procedure is completed, the CPU uses the
+return address to figure out how to get back to where it came from, and the
+stack frame is popped.
+
+There's a big difference between the stack and the Stack data  |     |         
+structures you've seen.  A Stack is composed of linked         |unused         
+ListNodes that can be scattered throughout memory and can      |     |         
+point to objects scattered throughout memory.  _The_ stack is  |-----| <- Stack
+a single contiguous block of memory, arranged in a strictly    |     |  pointer
+linear fashion, and is not reference-based at all.  The only   |frame|  (SP)
+information the stack has, besides the bytes it contains, is   |-----|         
+a "stack pointer" that indicates which memory address is the   |     |         
+top of the stack.                                              |frame|         
+                                                               |     |         
+Whenever a procedure is called, a "stack frame" is pushed      |-----|         
+onto the stack.  Stack frames vary in size and do not refer    |frame|         
+to other stack frames.  The size of each stack frame (in       ------- Stack
+bytes) depends on the number of type of local variables      
+declared by the procedure.  Pushing a stack frame may mean nothing more than
+adjusting the stack pointer by the appropriate number of bytes, and writing in
+the return address.  If there are parameters, these are written in as well.
+
+When a procedure returns, its stack frame is deallocated.  The stack pointer is
+readjusted back to where it was before the procedure was called.  This frees up
+those bytes for use by later procedure calls.  Hence, later procedure calls can
+overwrite the local variables of the terminated procedure.  In Java, this was
+irrelevant to you, because you had no way of referring to the local variables
+of a method after it terminated.
+
+In C, on the other hand, the possibilities for perversity are unlimited, as the
+example below illustrates.  The function ptr() creates a local variable y,
+assigns it a value of 3, and returns a pointer to y.  main() dereferences that
+pointer ("content1 = *stackAddr;") and prints the value; a 3 is printed.  But
+when the pointer is dereferenced again, the value is 134515146 (your results
+may vary depending on your compiler, operating system, and so forth; I ran the
+code on poona.cs.berkeley.edu).  What the ?@*$&#!? is going on?
+
+int *ptr() {                  |    |           |    |   |    |           |    |
+  int y;                      |    | Stack     |    |   |printf          |    |
+                              |ptr | pointer   |    |   |----| <-SP      |    |
+  y = 3;                      |----| <-SP      |    |   |@*#2|           |@*#2|
+  return &y;         <----\   |+4@%|           |    |   |x-%d|           |x-%d|
+}                         |   | y=3|<stackAddr>|   3|   |5.~r|<stackAddr>|5.~r|
+                          |   |----|      SP-> |----|   |----|      SP-> |----|
+main() {                  |   |    |           |    |   |    |           |    |
+  int *stackAddr;         |   |main|           |main|   |main|           |main|
+  int content;            |   ------           ------   ------           ------
+                          \---- 1                2        3                4   
+  stackAddr = ptr();                             |        |                |
+  content = *stackAddr;                   <------/        |                |
+  printf("%d ", content);  /* prints 3 */ <---------------/                |
+  content = *stackAddr;                   <--------------------------------/
+  printf("%d ", content);  /* prints 134515146 */
+}
+
+As stack {1} illustrates, ptr() is allocated a stack frame, which includes room
+for the variable y.  After ptr() terminates we have stack {2}, in which the
+stack frame for ptr() has been popped.  However, the popping of the stack frame
+did not change the bits actually stored in it, and the pointer "stackAddr"
+still points to a 3.  When we call the printf() procedure, though, its stack
+frame occupies the same space as ptr()'s frame once did, and the contents are
+overwritten by printf()'s local variables, as stack {3} illustrates.  After
+printf() terminates, the pointer "stackAddr" points to garbage (see stack {4}).
+
+An important lesson here is that it's somewhat dangerous to apply the "&"
+operator to any local variable or parameter.  If you ever do it, make sure that
+the address computed by "&" does not outlive the datum it points to.  If speed
+is not critical, any variable you want a reference to is better allocated on
+the heap (see below), and not on the stack.
+
+Although Java also uses a stack for local variables, this bizarre behavior is
+impossible, because no Java reference can ever refer to anything on the stack.
+
+The Heap (also known as "dynamic storage")
+--------
+Each process also has its own heap, which, we remind you, has nothing to do
+with the data structural heaps we've discussed in this course.  The heap, like
+the stack, is a large pool of memory.  Unlike the stack, the heap is not
+allocated in a contiguous order.  A request for memory could be satisfied by
+any sufficiently large unused chunk of memory in the heap.  Two consecutive
+allocations might have widely separated locations in memory.
+
+Every object created by Java's "new" command uses memory taken from the heap.
+C++ also creates objects on the heap with the "new" command.  Suppose "DList"
+is a C++ class (we'll discuss C++ classes on Friday):
+
+  DList *myList;            // myList is a pointer to a DList object
+  myList = new DList();     // Create a DList object for myList to point to
+
+Observe that "myList" is explicitly declared to be a pointer (using the "*"
+declarator).  C does not have classes, but C also allows chunks of memory to be
+allocated and assigned to a pointer.  In both C and C++, we can actually
+specify how many bytes of memory we want:
+
+  int *ptr;                   /* ptr is a pointer to an int          */
+  ptr = (int *) malloc(4);    /* Request 4 bytes for ptr to point to */
+
+The malloc() procedure allocates raw, uninitialized memory from the heap, and
+does not invoke a constructor.  malloc() returns a pointer of type "void *",
+because it has no idea what you're going to put into the memory it returns.
+Hence, we are technically required to cast it to "int *" in the example above,
+but few C/C++ compilers would refuse to compile this code if we didn't.
+
+Not all machines use 4-byte ints, so the example above is not portable.  It's
+better to use the sizeof() operator to determine how many bytes you'll need to
+represent a particular type.  sizeof() looks like a procedure call, but it's
+not; it's a C language feature that takes a type as its "parameter."
+
+  ptr = (int *) malloc(sizeof(int));   /* Request the right number of bytes */
+
+C doesn't have objects, but we can allocate structures dynamically instead.
+
+  struct DListNode *nodePtr;
+  nodePtr = (struct DListNode *) malloc(sizeof(struct DListNode));
+
+Memory on the heap is dished out by a sophisticated algorithm called the "heap
+manager," and you can happily get through a programming career without ever
+knowing a thing about it.  One of the critical ways in which C/C++ differs from
+Java is that in C/C++, once the heap manager allocates a chunk of memory, it
+will not allocate that memory again until you explicitly deallocate it, much as
+a taken parking space cannot be allocated to a second car until the first car
+drives away.  (In Java, if you lose the keys, someone will come tow you away.)
+
+This isn't a problem if your program doesn't allocate much memory, or only
+allocates it once and uses it all throughout.  If you are constantly allocating
+and throwing away memory, however, which is the norm in data structure code,
+you should explicitly deallocate anything you're not going to use again.
+
+  delete myList;      // "delete" is the opposite of "new" in C++
+  free(ptr);          /* free() is the opposite of malloc() in C and C++ */
+  free(nodePtr);
+
+Unfortunately, the bookkeeping required to make sure that everything gets
+deallocated when it falls into disuse is difficult, because strange bugs or
+core dumps will happen if you (1) try to deallocate a chunk of memory more than
+once, (2) deallocate memory that was never allocated in the first place, or
+(3) unwittingly deallocate memory that you are still using, so that it is
+reallocated and overwritten by other data.
+
+If a program regularly allocates and deallocates memory, and occasionally fails
+to deallocate some of the memory that falls into disuse, you may experience
+what is colorfully known as a "memory leak."  The amount of available memory
+decreases until the process is killed.  Some versions of the X Windows server
+used to have a slow memory leak that would cause it to crash every few weeks or
+months.  This type of bug is very difficult to find.
+
+Unfortunately, there is no pat rule for when to deallocate memory.  When you
+remove a DListNode from a DList, you probably want to deallocate the node.
+When you are deallocating a whole DList, you will have to walk through all its
+nodes and deallocate each one individually.  When possible, try to allocate
+whatever memory you will need for a procedure at its beginning, use the memory
+during the procedure, and deallocate it all at the end of the procedure.

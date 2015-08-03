@@ -1,0 +1,249 @@
+                              CS 61B: Lecture 41
+                                Monday, May 21
+
+THE C AND C++ LANGUAGES
+=======================
+C was developed by Dennis Ritchie of Bell Labs in 1972.  C was motivated by his
+research in operating systems, which wanted for a language that would allow
+programmers to work at a higher level than assembly code (microprocessor
+instructions), without sacrificing speed or access to the hardware.  As a
+result, C allows direct access to memory addresses and emphasizes features that
+can be compiled to run very quickly.  Ritchie and his colleague Ken Thompson
+used C to write their third version of the world's first implementation of
+Unix, and C remains preeminent for low-level systems hacking today.
+
+C++ was also developed at Bell Labs, by Bjarne Stroustrup and collaborators in
+the early 1980s.  Stroustrup was also motivated by operating systems, but his
+OSs were distributed across networks of computers.  To resolve the programming
+problems distributed OSs entail, he decided to design a language that would
+have the higher-level programming features (like object orientation) of Simula
+and other simulation languages, without sacrificing low-level hardware access.
+Hence, he chose to augment C.
+
+Unfortunately, C was not designed with these features in mind, and it wasn't an
+ideal fit.  Worse, Stroustrup succumbed to the temptation to add layer upon
+layer of partly redundant high-level programming constructs.  C++ became the
+kitchen sink of programming languages, a bloated elephantiasis-stricken
+monstrosity whose mother would surely have strangled the mutant freak at birth,
+if only C++ had had a mother.
+
+One of the biggest problems with C++ is that the language is so large and
+complex, any two compilers implement it differently, and every compiler
+implements some part of it wrongly.  C++ programmers typically learn through
+long, hard experience which features or combinations of features they must
+avoid.  A new C++ programmer will fall into hundreds of traps, and spend
+thousands of hours debugging, on the road to truly mastering the language.
+This is why C++ uberhackers are worshipped wherever they work.
+
+Java was developed in the early 1990s at Sun Microsystems in an effort led by
+James Gosling.  The language was originally intended as a portable software
+base for consumer electronics (toasters, microwaves, videogames, etc.).  The
+project had begun with the intention of using C++, but shortcomings in that
+language proved great enough to prompt the group to develop a new language
+stressing features like portability and reliability.  Java is a relatively
+well-designed language, in no small part because its developers had a thorough
+and visceral understanding of the flaws of C++, and chose not to repeat them.
+
+The word "reliability" implies many things, but the most pertinent for you is
+that Java is designed to help you catch your mistakes.  C and C++ are not, and
+you will find that debugging is substantially more difficult.  In compensation,
+code written in C or C++ is notably faster than code written in Java.
+
+In the remainder of this course, we can only teach you a fraction of C and C++.
+The main themes of the next few weeks are pointers and memory management.
+
+Differences Between Java and C
+------------------------------
+Java was designed to be syntactically similar to C, so you're well on your way
+to learning C.  Here are some things that change.
+
+[1]  C files have a suffix of .c; C++ files have a suffix of .cc (or with some
+     compilers. .C or .cpp).  Each C/C++ file must be compiled explicitly
+     (whereas Java figures out which files your file depends on).
+
+[2]  C has no classes.  C++ does have classes.
+
+[3]  C/C++ has pointers.  A pointer is a raw memory address at which some datum
+     resides.  If you want, you can control the value and layout of every bit
+     in a large expanse of memory.  (Java won't let you do that.)
+
+[4]  In C, data fields cannot be "private," "package," or "protected."
+     Encapsulation requires more self-discipline, because there is no mechanism
+     to prevent you from fiddling with an ADT's internal fields.  C++ does give
+     you "private" and "protected" fields, though they're not as well protected
+     as in Java.
+
+[5]  Because C has no classes, any variable that isn't local (defined in a
+     procedure) is "global," which means that any procedure in the program
+     can access it.  This can be convenient, but can also lead to very
+     difficult-to-solve bugs because you don't know which procedure is
+     messing up the value of a variable.  Since C++ has classes, we can
+     associate variables with objects rather than make them global.
+
+     In C, all procedures are public/global.  In C++, all procedures not
+     associated with a class are public/global.
+
+[6]  In C/C++, execution starts at a procedure defined thus:
+
+       int main(int argc, char argv[][])
+
+     Why does main return an int?  This allows it to return an error code to
+     the shell.  Usually, you should just return 0.  Why does main take two
+     parameters?  argc is a count of the number of arguments on the command
+     line; each of these arguments (argv[0]...argv[argc - 1]) is a string.
+
+[7]  C/C++ does not initialize memory.  Variables initially contain garbage.
+     This causes all sorts of weird, difficult, come-and-go bugs.
+
+[8]  C has weak type checking.  Integers, floating point numbers, and pointers
+     to different things can be interchanged somewhat.  Function calls don't
+     necessarily have to match the types specified by the function being
+     called.  One consequence is that bugs are easier to produce.  C++ has
+     stronger type checking than C only in the sense that function calls must
+     have the right number of parameters, with the right types.
+
+[9]  "null" is called "NULL" in C/C++.  NULL is a predefined constant, equal to
+     zero (yes, that's an _integer_).  When you assign zero to a pointer, it
+     becomes a null pointer.
+
+[10]  The following statements do the same thing:
+
+Java:    System.out.println("There are " + cityNum + " cities in " + country);
+C/C++:   printf("There are %d cities in %s\n", cityNum, country);
+C++:     cout << "There are " << cityNum << " cities in " << country << endl;
+
+      For the second one to work, you must say "#include <stdio.h>" at the
+      beginning of your C/C++ file, thereby ensuring that the compiler knows
+      how to call the procedure printf().  Note that "%d" denotes an int, "%s"
+      denotes a string, and "\n" is converted to a carriage return.  For the
+      third one to work, "#include <iostream.h>" must appear atop your C++
+      file.
+
+[11]  C doesn't allow "//" for comments (but C++ does).  Use "/*    */".
+
+[12]  Neither arrays nor strings have a length field (except the C++ "string"
+      class), nor do they have run-time bounds checking.  It's up to you to
+      remember how long they are.  That's why main() needs an argc parameter.
+
+[13]  Strings are not a separate data type in C.  Instead, a string is an array
+      of characters.  That's why argv in main() is an array of arrays of
+      characters (and thus an array of strings).  C strings are "null-
+      terminated," meaning that an ASCII zero appears as a character after the
+      last character of the string, which is how you know where the string
+      ends.  If you want strings that can have null characters _in_ them,
+      you'll have to write your own string manipulation routines.
+
+      C++ has its own "string" class, in addition to C strings.
+
+[14]  C/C++ requires you to explicitly deallocate memory you have previously
+      allocated.  If you don't deallocate memory, it won't be reused for other
+      allocations.  Java has "garbage collection," which recycles memory that
+      you are no longer using.  The need for explicit bookkeeping of memory
+      by the programmer is one of the biggest sources of bugs in C/C++.
+
+[15]  C has no boolean type.  C++ calls its boolean type "bool".
+
+[16]  C/C++ characters are 8-bit ASCII, rather than Java's 16-bit Unicode.
+
+C/C++ Pointers
+--------------
+In any modern computer, memory is an array of byte with addresses.
+
+    ---------------------------
+    |   |   |   |   |   |   |  ...
+    ---------------------------
+      0   1   2   3   4   5   6
+
+However, modern computers prefer to read or write four bytes at a time, and
+they do this much faster if the four bytes start at an address divisible by
+four, so that's how things like ints and floats are stored.
+
+Every time you declare a local variable, you are naming a memory location.
+(You pick the name, Java picks the address.)  An assignment statement writes
+something into a memory location.
+
+                  bob
+       -----------------------------                         int bob;
+    ...  |   |   | 3 |   |   |   |  ...
+       -----------------------------                         bob = 3;
+          208 212 216 220 224 228
+
+Sometimes you want to know the address of a memory location.  Java considers
+this confidential information, but C lets you find it out with the & operation.
+For instance, "&bob" evaluates to 216.  "&" means "the address of".
+
+C lets you declare and manipulate "pointers".  The term "pointer" refers to
+either a memory address, or a variable that stores a memory address.  In other
+words, a pointer can be a memory location that points to another location.
+
+                  bob     ptr
+       -----------------------------
+    ...  |   |   | 3 |   |216|   |  ...
+       --------------------+--------
+          208 212 216<-----/  228
+
+"Pointer" is really a type, like int or float.  However, there's more than one
+pointer type.  To declare a pointer, you need to declare what type of object is
+going to be in the memory location the pointer points to.
+
+    int *ptr;        /* Declares a pointer to an int. */
+    void *object;    /* A void pointer can point to anything at all. */
+                     /*   "void *" is the closest thing C has to "Object" */
+    int **eek;       /* A pointer to a pointer to an int. */
+
+You can store a memory address in a pointer variable as follows.
+
+    ptr = &bob;
+    object = ptr;
+    eek = &ptr;
+
+                  bob     ptr             eek
+       -----------------------------------------
+    ...  |   |   | 3 |   |216|   |   |   |224|  ...
+       -----------------------------------------
+          208 212 216 220 224 228 232 236 240
+
+WARNING:  to declare several pointers in one declaration, each one needs a "*".
+
+  int *x, *y, *z;                          /* Declare three pointers to ints */
+
+If you write "int *x, y, z;", then x is a pointer, but y and z are just ints.
+
+Once we have a pointer storing a memory address, we can read or write that
+memory as if it were a variable by "dereferencing" the pointer:
+
+  printf("ptr points to the int %d\n", *ptr);                    /* Prints 3 */
+  *ptr = 5;                                                 /* Sets bob to 5 */
+
+  **eek = 7;                                                /* Sets bob to 7 */
+  *eek = &z;                                 /* Sets ptr to the address of z */
+
+Parameter Passing (important stuff--make sure you understand this!)
+-----------------
+Java, C, and C++ all pass parameters "by value."  This means that when you pass
+a parameter, the called procedure receives a _copy_ of all the parameters.  The
+copy is "shallow"--nothing that the parameters reference or point to is copied.
+                                                         
+The implications are subtle.  The standard example       | void addOne(int y) {
+appears at right.  After the code executes, the value of |   y = y + 1;        
+x is still 3!  Why?  Because when addOne() is called,    | }                   
+its parameter y is a _copy_ of x.  When y is             |                     
+incremented, x doesn't change.  Moreover, addOne()       | int x = 3;          
+still doesn't work if we rename y and call it x.  In     | addOne(x);          
+that case, the caller and callee each have their own     |                     
+copy of the variable, and each calls their copy "x", but |          ---   ---  
+there are still two distinct copies.                     |        x |3|   |4| y
+                                                         |          ---   ---  
+In C/C++, there's a different version of this call that |
+_does_ work, illustrated at right.  Instead of passing  | void addOne(int *y) {
+x, we pass a _pointer_ to x.  The parameter y becomes a |   *y = *y + 1;       
+_copy_ of this pointer to x, but it                     | }                    
+nonetheless points to x.  By                ---   ---   |                      
+incrementing the integer that y           x |4|<--+.| y | int x = 3;           
+points to, we indirectly increment x.       ---   ---   | addOne(&x);          
+After the code executes, x is 4.             ^          |                      
+                                             \------ &x
+Unfortunately, this method of passing
+parameters is somewhat error-prone.  A very common error is to forget the
+asterisks when you implement a function like "addOne".  The C compiler will
+often give you no hint that something is wrong.

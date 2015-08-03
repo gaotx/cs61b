@@ -1,0 +1,246 @@
+                              CS61B:  Lecture 39
+                           Friday, December 1, 2006
+
+RANDOMIZED ANALYSIS
+===================
+Randomized analysis, like amortized analysis, is a mathematically rigorous way
+of saying, "The worst-case running time of this operation is slow, but nobody
+cares, because on average it runs fast."  Unlike amortized analysis, the
+"average" is taken over an infinite number of runs of the program.
+
+Randomized algorithms make decisions based on rolls of the dice.  The random
+numbers actually help to keep the running time low.  A randomized algorithm can
+occasionally run more slowly than expected, but the probability that it will
+run _asymptotically_ slower is extremely low.
+
+The randomized algorithms we've studied are quicksort and quickselect.  Hash
+tables can also be modeled probabilistically, though.
+
+Expectation
+-----------
+Suppose a method x() flips a coin.  If the coin comes up heads, x() takes one
+second to execute.  If it comes up tails, x() takes three seconds.
+
+Let X be the exact running time of one call to x().  With probability 0.5,
+X is 1, and with probability 0.5, X is 3.  For obvious reasons, X is called a
+_random_variable_.
+
+The _expected_ value of X is the average value X assumes in an infinite
+sequence of coin flips,
+
+  E[X] = 0.5 * 1 + 0.5 * 3 = 2 seconds expected time.
+
+Suppose we run the code sequence
+
+  x();     // takes time X
+  x();     // takes time Y
+
+and let Y be the running time of the _second_ call.  The total running time is
+T = X + Y.  (Y and T are also random variables.)  What is the expected total
+running time E[T]?
+
+The main idea from probability we need is called _linearity_of_expectation_,
+which says that expected running times sum linearly.
+
+  E[X + Y] = E[X] + E[Y]
+           = 2 + 2
+           = 4 seconds expected time.
+
+The interesting thing is that linearity of expectation holds true whether or
+not X and Y are _independent_.  Independence means that the first coin flip has
+no effect on the outcome of the second.  If X and Y are independent, the code
+will take four seconds on average.  But what if they're not?  Suppose the
+second coin flip always matches the first--we always get two heads, or two
+tails.  Then the code still takes four seconds on average.  If the second coin
+flip is always the opposite of the first--we always get one head and one tail--
+the code still takes four seconds on average.
+
+So if we determine the expected running time of each individual operation, we
+can determine the expected running time of a whole program by adding up the
+expected costs of all the operations.
+
+Hash Tables
+-----------
+The implementations of hash tables we have studied don't use random numbers,
+but we can model the effects of collisions on running time by pretending we
+have a random hash code.
+
+A _random_hash_code_ maps each possible key to a number that's chosen randomly.
+This does _not_ mean we roll dice every time we hash a key.  A hash table can
+only work if a key maps to the same bucket every time.  Each key hashes to a
+randomly chosen bucket in the table, but a key's random hash code never
+changes.
+
+Unfortunately, it's hard to choose a hash code randomly from all possible hash
+codes, because you need to remember a random number for each key, and that
+would seem to require another hash table.  However, random hash codes are
+a good _model_ for how a good hash code will perform.  The model isn't perfect,
+and it doesn't apply to bad hash codes, but for a hash code that proves
+effective in experiments, it's a good rough guess.  Moreover, there is a sneaky
+number-theoretical trick called _universal_hashing_ that generates random hash
+codes.  These random hash codes are chosen from a relatively small set of
+possibilities, yet they perform just as well as if they were chosen from the
+set of all possible hash codes.  (If you're interested, you can read about it
+in Cormen/Leiserson/Rivest/Stein, the CS 170 textbook.)
+
+Assume our hash table uses chaining and does not allow duplicate keys.
+If an entry is inserted whose key matches an existing entry, the old entry is
+replaced.
+
+Suppose we perform the operation find(k), and the key k hashes to a bucket b.
+Bucket b contains at most one entry with key k, so the cost of the search is
+one dollar, plus an additional dollar for every entry stored in bucket b whose
+key is not k.  (Recall from last lecture that a _dollar_ is a unit of time
+chosen large enough to make this true.)
+
+Suppose there are n keys in the table that are not k.  Let V1, V2, ..., Vn be
+random variables such that for each key ki, the variable Vi is one if key ki
+hashes to bucket b, and zero otherwise.  Then the cost of find(k) is
+
+  T = 1 + V1 + V2 + ... + Vn.
+
+The expected cost of find(k) is
+
+  E[T] = 1 + E[V1] + E[V2] + ... + E[Vn].
+
+What is E[Vi]?  Since there are N buckets, and the hash code is random, each
+key has a 1/N probability of hashing to bucket b.  So E[Vi] = 1/N, and
+
+  E[T] = 1 + n/N,
+
+which is one plus the load factor!  Because we don't allow the load factor n/N
+to exceed some constant as n grows, find operations cost O(1) expected time.
+
+The same analysis applies to insert and remove operations.  All three hash
+table operations take O(1) expected time (not counting table resizing).
+
+Observe that the running times of hash table operations are _not_ independent.
+If key k1 and key k2 both hash to the same bucket, it increases the running
+time of both find(k1) and find(k2).  Linearity of expectation is important
+because it implies that we can add the expected costs of individual operations,
+and obtain the expected total cost of all the operations an algorithm performs.
+
+Quicksort
+---------
+Assume we're sorting an array in which all the keys are distinct (since this is
+the slowest case).  Quicksort chooses a random pivot.  The pivot is equally
+likely to be the smallest key, the second smallest, the third smallest, ..., or
+the largest.  For each key, the probability is 1/n.
+
+Let T(n) be a random variable equal to the running time of quicksort on n
+distinct keys.  Suppose quicksort picks the ith smallest key as the pivot.
+Then we run quicksort recursively on a list of length i - 1 and on a list of
+length n - i.  It takes O(n) time to partition and concatenate the lists--let's
+say at most n dollars--so the running time is
+
+  T(n) <= n + T(i - 1) + T(n - i).
+
+Here i is a random variable that can be any number from 1 (pivot is the
+smallest key) to n (pivot is largest key), each chosen with probability 1/n, so
+
+              n   1
+  E[T(n)] <= sum  - (n + E[T(i - 1)] + E[T(n - i)]).
+             i=1  n
+
+This equation is called a _recurrence_, and you'll learn how to solve them in
+CS 170.  (No, recurrences won't be on the CS 61B final exam.)  The base cases
+for the recurrence are T(0) = 1 and T(1) = 1.  This means that sorting a list
+of length zero or one takes at most one dollar (unit of time).
+
+Here, we'll solve the recurrence by guessing an answer.  Then we'll prove by
+induction that it works out.  Let's guess that
+
+  E[T(j)] <= 1 + 8j lg j.            <- lg j denotes the base-2 logarithm of j.
+
+To prove this is true, we use induction.  The base cases of the induction are
+T(0) and T(1), for which the guess is true.  For the inductive step, assume
+that the inequality holds for all j < n; we'll prove that it holds for j = n as
+well.  From the original recurrence, we have
+
+             n-1      2
+  E[T(n)] <= sum (1 + - E[T(j)])
+             j=0      n              <- setting j = i - 1 in sum E[T(i - 1)],
+                                            and j = n - i in sum E[T(n - i)].
+                 2 n-1
+          <= n + - sum (1 + 8j lg j)
+                 n j=0
+
+                2 [     n/2        n       n-1           ]
+          < n + - | n + sum (8j lg - ) +   sum (8j lg n) |
+                n [     j=0        2     j=n/2+1         ]
+
+                2 [       2                      2            ]
+          = n + - | n + (n + 2n) (lg n - 1) + (3n  - 6n) lg n |
+                n [                                           ]
+
+          = 8n lg n - n - 8 lg n - 2.
+
+          < 1 + 8n lg n,
+
+which completes the inductive proof that E[T(j)] <= 1 + 8j lg j.
+
+The expression 1 + 8j lg j might be an overestimate, but it doesn't matter.
+The important point is that this proves that E[T(n)] is in O(n log n).
+In other words, the expected running time of quicksort is in O(n log n).
+
+Amortized Time vs. Expected Time
+--------------------------------
+There's a subtle but important difference between amortized running time and
+expected running time.
+
+Quicksort with random pivots takes O(n log n) expected running time, but its
+worst-case running time is in Theta(n^2).  This means that there is a small
+possibility that quicksort will cost Omega(n^2) dollars, but the probability
+that this will happen approaches zero as n grows large.
+
+A splay tree operation takes O(log n) amortized time, but the worst-case
+running time for a splay tree operation is in Theta(n).  Splay trees are not
+randomized, and the "probability" of an Omega(n)-time splay tree operation is
+not a meaningful concept.  If you take an empty splay tree, insert the items
+1...n in order, then run find(1), the find operation _will_ cost n dollars.
+But a sequence of n splay tree operations, starting from an empty tree, _never_
+costs more than O(n log n) actual running time.  Ever.
+
+Hash tables are an interesting case, because they use both amortization and
+randomization.  Resizing takes Theta(n) time.  With a random hash code, there
+is a tiny probability that every item will hash to the same bucket, so the
+worst-case running time of an operation is Theta(n)--even without resizing.
+
+To account for resizing, we use amortized analysis.  To account for collisions,
+we use randomized analysis.  So when we say that hash table operations run in
+O(1) time, we mean they run in O(1) _expected_, _amortized_ time.
+
+  Splay trees                  O(log n) amortized time / operation *
+  Disjoint sets (tree-based)   O(alpha(f + u, u)) amortized time / find op **
+  Quicksort                    O(n log n) expected time ***
+  Quickselect                  Theta(n) expected time ****
+  Hash tables                  Theta(1) expected amortized time / op *****
+
+If you take CS 170, you will learn an amortized analysis of disjoint sets
+there.  Unfortunately, the analyses of both disjoint sets and splay trees are
+complicated.  Goodrich & Tamassia give the amortized analysis of splay trees,
+but you're not required to read or understand it for this class.
+
+*      Worst-case time is in Theta(n), worst-case amortized time is in
+       Theta(log n), best-case time is in Theta(1).
+**     For find operations, worst-case time is in Theta(log u), worst-case
+       amortized time is in Theta(alpha(f + u, u)), best-case time is in
+       Theta(1).  Union operations always take Theta(1) time.
+***    Worst-case time is in Theta(n^2)--if we get worst-case input AND
+       worst-case random numbers.  "Worst-case expected" time is in
+       Theta(n log n)--meaning when the _input_ is worst-case, but we take the
+       average over all possible sequences of random numbers.  Recall that
+       quicksort can be implemented so that keys equal to the pivot go into a
+       separate list, in which case the best-case time is in Theta(n), because
+       the best-case input is one where all the keys are equal.  If quicksort
+       is implemented so that keys equal to the pivot are divided between lists
+       I1 and I2, as is the norm for array-based quicksort, then the best-case
+       time is in Theta(n log n).
+****   Worst-case time is in Theta(n^2)--if we get worst-case input AND worst-
+       case random numbers.  Worst-case expected time, best-case time, and
+       best-case expected time are in Theta(n).
+*****  Worst-case time is in Theta(n), expected worst-case time is in Theta(n)
+       (worst case is when table is resized), amortized worst-case time is in
+       Theta(n) (worst case is when every item is in one bucket), worst-case
+       expected amortized time is in Theta(1), best-case time is in Theta(1).
+       Confused yet?
