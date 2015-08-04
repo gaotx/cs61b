@@ -178,7 +178,7 @@ ten pennies, ten silver coins, and a checkerboard.
 
 Bibliographic note:  Network is taken from Sid Sackson, "A Gamut of Games,"
 Dover Publications (New York), 1992.
-
+ß
 Your Task
 =========
 Your job is to implement a MachinePlayer class that plays Network well.  One
@@ -188,32 +188,32 @@ write a method that finds a move that is likely to win the game.
 The MachinePlayer class is in the player package and extends the abstract
 Player class, which defines the following methods.
 
-  // Returns a new move by "this" player.  Internally records the move (updates
-  // the internal game board) as a move by "this" player.
-  public Move chooseMove();
+    // Returns a new move by "this" player.  Internally records the move (updates
+    // the internal game board) as a move by "this" player.
+    public Move chooseMove();
 
-  // If the Move m is legal, records the move as a move by the opponent
-  // (updates the internal game board) and returns true.  If the move is
-  // illegal, returns false without modifying the internal state of "this"
-  // player.  This method allows your opponents to inform you of their moves.
-  public boolean opponentMove(Move m);
+    // If the Move m is legal, records the move as a move by the opponent
+    // (updates the internal game board) and returns true.  If the move is
+    // illegal, returns false without modifying the internal state of "this"
+    // player.  This method allows your opponents to inform you of their moves.
+    public boolean opponentMove(Move m);
 
-  // If the Move m is legal, records the move as a move by "this" player
-  // (updates the internal game board) and returns true.  If the move is
-  // illegal, returns false without modifying the internal state of "this"
-  // player.  This method is used to help set up "Network problems" for your
-  // player to solve.
-  public boolean forceMove(Move m);
+    // If the Move m is legal, records the move as a move by "this" player
+    // (updates the internal game board) and returns true.  If the move is
+    // illegal, returns false without modifying the internal state of "this"
+    // player.  This method is used to help set up "Network problems" for your
+    // player to solve.
+    public boolean forceMove(Move m);
 
 In addition to the methods above, implement two constructors for MachinePlayer.
 
-  // Creates a machine player with the given color.  Color is either 0 (black)
-  // or 1 (white).  (White has the first move.)
-  public MachinePlayer(int color)
+    // Creates a machine player with the given color.  Color is either 0 (black)
+    // or 1 (white).  (White has the first move.)
+    public MachinePlayer(int color)
 
-  // Creates a machine player with the given color and search depth.  Color is
-  // either 0 (black) or 1 (white).  (White has the first move.)
-  public MachinePlayer(int color, int searchDepth)
+    // Creates a machine player with the given color and search depth.  Color is
+    // either 0 (black) or 1 (white).  (White has the first move.)
+    public MachinePlayer(int color, int searchDepth)
 
 As usual, do not change the signatures of any of these methods; they are your
 interface to other players.  You may add helper methods.
@@ -344,18 +344,20 @@ the project up into multiple modules (tasks).  Decide what high-level methods
 and classes must be implemented, define the interfaces by which these methods
 and classes will communicate, and divide up the work among your team.  Some
 possible modules (these seem reasonably modular) are
-  1)  determining whether a move is valid,
-  2)  generating a list of all valid moves,
-  3)  finding the chips (of the same color) that form connections with a chip,
-  4)  determining whether a game board contains any networks for a given
+
+  1.  determining whether a move is valid,
+  2.  generating a list of all valid moves,
+  3.  finding the chips (of the same color) that form connections with a chip,
+  4.  determining whether a game board contains any networks for a given
       player (very difficult; put your smartest teammate on this),
-  5)  computing an evaluation function for a board (possibly difficult), and
-  6)  performing minimax tree search (difficult).
+  5.  computing an evaluation function for a board (possibly difficult), and
+  6.  performing minimax tree search (difficult).
 
 The file GRADER provided in the pj2 directory includes a questionnaire, which
 you are required to submit.  Once you've worked out your classes, modules, and
 interfaces, write them down at the bottom of GRADER.  Your description should
 include:
+
   -  A list of the classes your program will need.
   -  A list of each of the "modules" used in or by MachinePlayer, which might
      be similar to, but more detailed, than the list above.
@@ -393,22 +395,22 @@ Running Network
 ===============
 You can run Network from your pj2 directory in several ways.
 
-  java Network human random
-    This pits you against a very naive machine player that makes random legal
-    moves.  Use this to learn to play the game.  The human plays white and the
-    random player play black.  To reverse colors, swap "human" and "random".
+    java Network human random
+      This pits you against a very naive machine player that makes random legal
+      moves.  Use this to learn to play the game.  The human plays white and the
+      random player play black.  To reverse colors, swap "human" and "random".
 
-  java Network human human
-    Compete against your project partner.
+    java Network human human
+      Compete against your project partner.
 
-  java Network human machine
-    Compete against your MachinePlayer.
+    java Network human machine
+      Compete against your MachinePlayer.
 
-  java Network machine random
-    Your MachinePlayer competes against the random player.
+    java Network machine random
+      Your MachinePlayer competes against the random player.
 
-  java Network machine machine
-    Your MachinePlayer competes against itself.
+    java Network machine machine
+      Your MachinePlayer competes against itself.
 
 Every combination of "machine", "human", and "random" works.  It's amusing to
 pit two random players against each other.
@@ -423,22 +425,22 @@ Your project will be graded in part on correctness and the quality of moves
 chosen by chooseMove().  This grading will be done with automatic test cases.
 Be sure the following statements apply to your chooseMove().
 
-  1)  forceMove and opponentMove return true if the given move is legal.
-  2)  forceMove and opponentMove return false if the given move is illegal.
-  3)  chooseMove returns only legal moves.
-  4)  If a winning move exists, chooseMove selects one.  (This will happen
+  1.  forceMove and opponentMove return true if the given move is legal.
+  2.  forceMove and opponentMove return false if the given move is illegal.
+  3.  chooseMove returns only legal moves.
+  4.  If a winning move exists, chooseMove selects one.  (This will happen
       automatically if you are searching one level of the game tree.)
-  5)  If you cannot win in this step, but can prevent your opponent from
+  5.  If you cannot win in this step, but can prevent your opponent from
       winning during its next move, chooseMove selects a move that does this.
       (This will happen automatically if you are searching two levels of the
       game tree.)
-  6)  Your player can beat the random player almost every time.  Any reasonable
+  6.  Your player can beat the random player almost every time.  Any reasonable
       search strategy and evaluation function should accomplish this.
 
 You will also be graded on style, documentation, efficiency, and the use of
 encapsulation.
 
-  1)  Every method must be preceded by a comment describing its behavior
+  1.  Every method must be preceded by a comment describing its behavior
       unambiguously.  These comments must include descriptions of what each
       parameter is for, and what the method returns (if anything).
       They must also include a description of what the method does (though
@@ -449,16 +451,16 @@ encapsulation.
       Some methods serve as entry points to the modules you designed when
       you began the project.  The prototypes and behavioral descriptions of
       these methods are interfaces, and should be included in GRADER.
-  2)  All classes, fields, and methods must have the proper public/private/
+  2.  All classes, fields, and methods must have the proper public/private/
       protected/package qualifier.  We will deduct points if you make things
       public that could conceivably allow a user to corrupt the data structure.
-  3)  There are no asymptotic limits on running time.  However, part of your
+  3.  There are no asymptotic limits on running time.  However, part of your
       job is to avoid using inefficient algorithms and data structures.  If
       your MachinePlayer takes longer than 5 seconds to search to a depth of
       two on a Soda lab machine, it's too slow.
-  4)  You should have divided up the tasks into well-defined modules in your
+  4.  You should have divided up the tasks into well-defined modules in your
       GRADER file and in your software.
-  5)  We will deduct points for code that does not match the following style
+  5.  We will deduct points for code that does not match the following style
       guidelines.
 
   - Classes that contain extraneous debugging code, print statements, or
