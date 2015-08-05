@@ -1,6 +1,6 @@
 ---
 layout: resource
-title: Homework 05
+title: Homework 06
 ---
 CS 61B  Homework 6
 ------------------

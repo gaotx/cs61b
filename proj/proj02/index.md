@@ -60,7 +60,7 @@ White's goal areas are 01, 02, 03, 04, 05, 06 and 71, 72, 73, 74, 75, 76; only
 White may play there.  The corner squares--00, 70, 07, and 77--are dead;
 neither player may use them.  Either player may place a chip in any square not
 on the board's border.
-
+
 Object of Play
 ==============
 Each player tries to complete a "network" joining its two goal areas.
@@ -178,7 +178,7 @@ ten pennies, ten silver coins, and a checkerboard.
 
 Bibliographic note:  Network is taken from Sid Sackson, "A Gamut of Games,"
 Dover Publications (New York), 1992.
-ß
+
 Your Task
 =========
 Your job is to implement a MachinePlayer class that plays Network well.  One
