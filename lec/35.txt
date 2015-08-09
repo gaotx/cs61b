@@ -196,7 +196,8 @@ How should we choose the number of queues q?  Let's choose q to be in O(n), so
 each pass of bucket sort or counting sort takes O(n) time.  However, we want
 q to be large enough to keep the number of passes small.  Therefore, let's
 choose q to be approximately n.  With this choice, the number of passes is in
-O(1 + b / log2 n), and radix sort takes
+O(1 + b / log2 n) - 1 is because of ceiling, can't never below one, and radix 
+sort takes
 
           b
   O(n + ----- n) time.
