@@ -1,0 +1,19 @@
+Part I: Identifying Sort Algorithms
+-----------------------------------
+The histograms are numbered 1, 2, 3, and 4, each number corresponding to a different sorting algorithm you have seen in class. Identify each algorithm. 
+
+How can you tell which is which? 
+- First:	Quick sort;
+- Second:	Selection sort;
+- Third:	Merge sort;
+- Fourth:	Insertion sort;
+
+Which is fastest on the random data?
+- Quick sort is the fastest.
+
+What about the presorted data and the reverse sorted data?
+- Insertion sort is the fastest in presorted array
+- Merge sort is the fastest in reverse sorted data
+
+One of the algorithms is quicksort. Which element does it choose for the pivot in a partition? (The pivot is not randomly chosen.) How can you tell?
+- This quick sort always chooses the first element as its pivot because in the reverse-sorted array, the first element is the largest and nothing changes after first scanning.
