@@ -29,25 +29,25 @@ immediate left.  Hence, horizontal wall (i, j) separates cell (i, j) from cell
 (i, j + 1), and vertical wall (i, j) separates cell (i, j) from cell
 (i + 1, j).  Here is a depiction of a 6-by-3 grid.
 
-   +-----------+-----------+-----------+-----------+-----------+-----------+
-   |           |           |           |           |           |           |  
-   |           |           |           |           |           |           |  
-   |   (0,0) (0,0) (1,0) (1,0) (2,0) (2,0) (3,0) (3,0) (4,0) (4,0) (5,0)   |
-   |           |           |           |           |           |           |  
-   |           |           |           |           |           |           |  
-   +---(0,0)---+---(1,0)---+---(2,0)---+---(3,0)---+---(4,0)---+---(5,0)---+
-   |           |           |           |           |           |           |  
-   |           |           |           |           |           |           |  
-   |   (0,1) (0,1) (1,1) (1,1) (2,1) (2,1) (3,1) (3,1) (4,1) (4,1) (5,1)   |
-   |           |           |           |           |           |           |  
-   |           |           |           |           |           |           |  
-   +---(0,1)---+---(1,1)---+---(2,1)---+---(3,1)---+---(4,1)---+---(5,1)---+
-   |           |           |           |           |           |           |  
-   |           |           |           |           |           |           |  
-   |   (0,2) (0,2) (1,2) (1,2) (2,2) (2,2) (3,2) (3,2) (4,2) (4,2) (5,2)   |
-   |           |           |           |           |           |           |  
-   |           |           |           |           |           |           |  
-   +-----------+-----------+-----------+-----------+-----------+-----------+
+     +-----------+-----------+-----------+-----------+-----------+-----------+
+     |           |           |           |           |           |           |  
+     |           |           |           |           |           |           |  
+     |   (0,0) (0,0) (1,0) (1,0) (2,0) (2,0) (3,0) (3,0) (4,0) (4,0) (5,0)   |
+     |           |           |           |           |           |           |  
+     |           |           |           |           |           |           |  
+     +---(0,0)---+---(1,0)---+---(2,0)---+---(3,0)---+---(4,0)---+---(5,0)---+
+     |           |           |           |           |           |           |  
+     |           |           |           |           |           |           |  
+     |   (0,1) (0,1) (1,1) (1,1) (2,1) (2,1) (3,1) (3,1) (4,1) (4,1) (5,1)   |
+     |           |           |           |           |           |           |  
+     |           |           |           |           |           |           |  
+     +---(0,1)---+---(1,1)---+---(2,1)---+---(3,1)---+---(4,1)---+---(5,1)---+
+     |           |           |           |           |           |           |  
+     |           |           |           |           |           |           |  
+     |   (0,2) (0,2) (1,2) (1,2) (2,2) (2,2) (3,2) (3,2) (4,2) (4,2) (5,2)   |
+     |           |           |           |           |           |           |  
+     |           |           |           |           |           |           |  
+     +-----------+-----------+-----------+-----------+-----------+-----------+
 
 Observe that there is an h-by-(v-1) set of horizontal walls, and an (h-1)-by-v
 set of vertical walls.  In your maze, some of these walls will be present and
@@ -67,24 +67,24 @@ Do so as follows.
 
 (2)  Order the interior walls of the maze in a random order.
 
-     One way to do this is to create an array in which every wall (horizontal
-     and vertical) is represented.  (How you represent each wall is up to
-     you.)  Scramble the walls by reodering them into a random permutation.
-     Each possible permutation (ordering) of walls should be equally likely.
+   One way to do this is to create an array in which every wall (horizontal
+   and vertical) is represented.  (How you represent each wall is up to
+   you.)  Scramble the walls by reodering them into a random permutation.
+   Each possible permutation (ordering) of walls should be equally likely.
 
-     Here's how to do that.  Put all the walls into the array.  The idea is to
-     randomly choose (from all the walls) the wall that will be at the end of
-     the array.  Swap it to the end, then never move it again.  From the
-     remaining walls, choose the wall that will come second-last.  Swap it to
-     its final position, then never move it again.  Repeat until you've chosen
-     a wall for each slot in the array.
+   Here's how to do that.  Put all the walls into the array.  The idea is to
+   randomly choose (from all the walls) the wall that will be at the end of
+   the array.  Swap it to the end, then never move it again.  From the
+   remaining walls, choose the wall that will come second-last.  Swap it to
+   its final position, then never move it again.  Repeat until you've chosen
+   a wall for each slot in the array.
 
-     Here's an algorithmic rephrasing of what I just said.  Maintain a counter
-     w, initially set to the number of walls.  Iterate the following procedure:
-     select one of the first w walls in the array at random, and swap it with
-     the wth wall in the array (at index w - 1).  This permanently establishes
-     the randomly chosen wall as the wth wall.  Then decrease w by one.  Repeat
-     this operation until w is one.
+   Here's an algorithmic rephrasing of what I just said.  Maintain a counter
+   w, initially set to the number of walls.  Iterate the following procedure:
+   select one of the first w walls in the array at random, and swap it with
+   the wth wall in the array (at index w - 1).  This permanently establishes
+   the randomly chosen wall as the wth wall.  Then decrease w by one.  Repeat
+   this operation until w is one.
 
 (3)  Visit the walls in the (random) order in which they appear in the array.
      For each wall you visit:
@@ -111,26 +111,26 @@ with Project 3 as well.
 
 All the other methods you need, including test methods, are provided for you.
 
-  toString() converts the maze to a string so you can print it.
-  randInt(c) generates a random number from 0 to c - 1, and is provided to
-      help you write the Maze() constructor.  To keep the mazes interesting,
-      it generates a different sequence of random numbers each time you run the
-      program.
-  diagnose() tests your maze for cycles or unreachable cells with depth-first
-      search.  DON'T CHANGE IT.  YOUR CODE MUST WORK WITH _OUR_ COPY OF THIS
-      METHOD.
-  main() generates a maze (with your constructor), prints it, and tests it.
+    toString() converts the maze to a string so you can print it.
+    randInt(c) generates a random number from 0 to c - 1, and is provided to
+        help you write the Maze() constructor.  To keep the mazes interesting,
+        it generates a different sequence of random numbers each time you run the
+        program.
+    diagnose() tests your maze for cycles or unreachable cells with depth-first
+        search.  DON'T CHANGE IT.  YOUR CODE MUST WORK WITH _OUR_ COPY OF THIS
+        METHOD.
+    main() generates a maze (with your constructor), prints it, and tests it.
 
 diagnose() depends on the following two methods, so don't make changes that
 will prevent these from working:
 
-  horizontalWall(x, y) determines whether a horizontal wall is intact.
-  verticalWall(x, y) determines whether a vertical wall is intact.
+    horizontalWall(x, y) determines whether a horizontal wall is intact.
+    verticalWall(x, y) determines whether a vertical wall is intact.
 
 You may see how you're doing by compiling and running Maze.java.  To look at a
 30 x 10 maze, run:
 
-  java Maze 30 10
+    java Maze 30 10
 
 The default dimensions, if you don't specify any on the command line, are
 39 x 15.

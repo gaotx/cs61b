@@ -1,0 +1,14 @@
+How to modify the depth-first search to generate a random maze, 
+without using disjoint sets at all?
+
+- Each time the method checks for a cycle, if it doesn't find one, it can
+- randomly eliminate one of the interior walls before recursively checking
+- the other cells
+
+How would your algorithm ensure that there is a path between every pair of cells, but no more than one path between any pair of cells (i.e., no cycles)?
+
+- As the original method to check the cycle has not been checked, it will still do the same thing
+
+How does your algorithm use random numbers to generate a different maze each time? Specifically, what decision should be made by random numbers at each recursive invocation of the depth-first search method?
+
+- After the method visits a cell to check a cycle, if it doesn't find one, it has four options to eliminate a interior wall, right, left, up, below. It randomely selects one of them in order to keep randomization.
