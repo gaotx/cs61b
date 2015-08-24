@@ -25,7 +25,7 @@ Part I  (8 points)
 ------------------
 Implement counting sort on int arrays.
 
-  public static int[] countingSort(int[] keys, int whichDigit);
+	  public static int[] countingSort(int[] keys, int whichDigit);
 
 The most important difference between the counting sort you will implement here
 and the one presented in lecture is that this counting sort uses one base-16
@@ -77,7 +77,7 @@ Part II  (2 points)
 Implement radix sort on int arrays.  Your radix sort should use your counting
 sort to do each pass.
 
-  public static int[] radixSort(int[] keys);
+	  public static int[] radixSort(int[] keys);
 
 A small test is provided in Sorts.main, which you can run by typing
 "java sort.Sorts".  We recommend you add more test code of your own.

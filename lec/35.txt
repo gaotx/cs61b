@@ -41,13 +41,13 @@ Begin by counting the keys in x.
     counts[x[i].key]++;
   }
 
-Next, do a _scan_ of the "counts" array so that counts[i] contains the number
-of keys _less_than_ i.
-
                0       1       2       3       4       5       6       7
            -----------------------------------------------------------------
-    counts |   0   |   2   |   3   |   3   |   6   |   6   |   7   |   8   |
+    counts |   2   |   1   |   0   |   3   |   0   |   1   |   1   |   2   |
            -----------------------------------------------------------------
+
+Next, do a _scan_ of the "counts" array so that counts[i] contains the number
+of keys _less_than_ i.
 
   total = 0;
   for (j = 0; j < counts.length; j++) {
@@ -55,6 +55,11 @@ of keys _less_than_ i.
     counts[j] = total;
     total = total + c;
   }
+
+               0       1       2       3       4       5       6       7
+           -----------------------------------------------------------------
+    counts |   0   |   2   |   3   |   3   |   6   |   6   |   7   |   8   |
+           -----------------------------------------------------------------
 
 Let y be the output array, where we will put the sorted objects.  counts[i]
 tells us the first index of y where we should put items with key i.  Walk
@@ -115,7 +120,7 @@ Bucket sort and counting sort both take O(q + n) time.  If q is in O(n), then
 they take O(n) time.  If you're sorting an array, counting sort is slightly
 faster and takes less memory than bucket sort, though it's a little harder to
 understand.  If you're sorting a linked list, bucket sort is more natural,
-because you've already got listnodes ready to put into the buckets.
+because you've already got list nodes ready to put into the buckets.
 
 However, if q is not in O(n)--there are many more _possible_values_ for keys
 than keys--we need a more aggressive method to get linear-time performance.
@@ -179,9 +184,12 @@ radix like q = 256.  Base-256 digits are easier to extract from a key, because
 we can quickly pull out the eight bits that we need by using bit operators
 (which you'll study in detail in CS 61C).
 
-Note that q is both the number of buckets we're using to sort, and the radix of
-the digit we use as a sort key during one pass of bucket or counting sort.
-"Radix" is a synonym for the base of a number, hence the name "radix sort."
+Note that q is both the number of buckets we're using to sort, and the radix 
+(length) of the digit we use as a sort key during one pass of bucket or counting 
+sort. "Radix" is a synonym for the base of a number, hence the name "radix sort."
+
+P.S. For example, for any "int" variable representated in 32 bits, if q = 256, 
+then radix is log2 256 = 8 bits, so there are 4 passes.
 
 How many passes must we perform?  Each pass inspects log2 q bits of each key.
 If all the keys can be represented in b bits, the number of passes is
@@ -192,12 +200,13 @@ ceiling(b / log2 q).  So the running time of radix sort is in
                       log  q
                          2
 
+If increase q, the q from (n+q) make it worse, the q from ceiling make it better. 
 How should we choose the number of queues q?  Let's choose q to be in O(n), so
 each pass of bucket sort or counting sort takes O(n) time.  However, we want
 q to be large enough to keep the number of passes small.  Therefore, let's
 choose q to be approximately n.  With this choice, the number of passes is in
-O(1 + b / log2 n) - 1 is because of ceiling, can't never below one, and radix 
-sort takes
+O(1 + b / log2 n), where 1 is because of ceiling, can't never below one, at least 
+one time bucket sort and radix sort takes
 
           b
   O(n + ----- n) time.

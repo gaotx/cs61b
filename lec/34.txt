@@ -77,9 +77,9 @@ Observe that if n > 0,
   n! = 1 * 2 * ... * (n-1) * n <= n * n * n * ... * n * n * n = n
 
 and (supposing n is even)
-                                  n    n                                n/2
-  n! = 1 * 2 * ... * (n-1) * n >= - * (- + 1) * ... * (n-1) * n >= (n/2)
-                                  2    2
+                                  n    n                           n   n       n       n/2
+  n! = 1 * 2 * ... * (n-1) * n >= - * (- + 1) * ... * (n-1) * n >= - * - ... * - = (n/2)
+                                  2    2                           2   2       2
 
 so n! is between (n/2)^(n/2) and n^n.  Let's look at the logarithms of both
 these numbers: log((n/2)^(n/2)) = (n/2) log (n/2), which is in Theta(n log n),
@@ -103,7 +103,7 @@ answers for each different permutation of 1...n, because it takes a different
 sequence of data movements to sort each permutation.  There are n! different
 permutations, thus n! different sequences of true/false answers.
 
-If a sorting algorithm asks d true/false questions, it generates <= 2^d
+If a sorting algorithm asks <= d true/false questions, it generates <= 2^d
 different sequences of true/false answers.  If it correctly sorts every
 permutation of 1...n, then n! <= 2^d, so log_2 (n!) <= d, and d is in
 Omega(n log n).  The algorithm spends Omega(d) time asking these d questions.
