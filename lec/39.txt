@@ -125,7 +125,7 @@ doesn't have enough memory for it.
 
 Compaction
 ----------
-Typical programs allocate and forget a good many objects.  One problem that
+Typical programs allocate and forget a number of objects.  One problem that
 arises is _fragmentation_, the tendency of the free memory to get broken up
 into lots of small pieces.  Fragmentation can render Java unable to allocate a
 large object despite having lots of free memory available.
